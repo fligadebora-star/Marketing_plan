@@ -41,7 +41,11 @@
       --space-8: 32px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont,
@@ -89,22 +93,19 @@
       justify-content: center;
       box-shadow: 0 8px 20px rgba(31, 138, 112, 0.3);
       color: #ffffff;
-    }
-
-    .brand-logo span {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
     }
 
     .brand-text-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .brand-text-sub {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-soft);
     }
 
@@ -129,7 +130,9 @@
 
     /* LOGIN */
 
-    #login-view { margin-top: var(--space-4); }
+    #login-view {
+      margin-top: var(--space-4);
+    }
 
     .card {
       background: var(--bg-alt);
@@ -150,7 +153,9 @@
       margin-bottom: var(--space-5);
     }
 
-    .field-group { margin-bottom: var(--space-4); }
+    .field-group {
+      margin-bottom: var(--space-4);
+    }
 
     .field-label {
       font-size: 12px;
@@ -224,17 +229,6 @@
       box-shadow: none;
       width: auto;
       padding-inline: 16px;
-    }
-
-    .btn-link {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--primary-strong);
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
     }
 
     .login-error {
@@ -329,72 +323,6 @@
       box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
     }
 
-    /* PRIORIDADE E ESTADOS */
-
-    .priority-pill {
-      border-radius: var(--radius-pill);
-      padding: 2px 8px;
-      font-size: 10px;
-      font-weight: 500;
-    }
-
-    .priority-baixa {
-      background: #e5f3ff;
-      color: #1d4ed8;
-    }
-
-    .priority-normal {
-      background: #eef2ff;
-      color: #4f46e5;
-    }
-
-    .priority-alta {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .priority-critica {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .status-pill {
-      border-radius: var(--radius-pill);
-      padding: 2px 8px;
-      font-size: 10px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .status-Pedido {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-Em-criação {
-      background: #e0f2fe;
-      color: #075985;
-    }
-
-    .status-Em-aprovação {
-      background: #ede9fe;
-      color: #5b21b6;
-    }
-
-    .status-Aprovado {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-Publicado {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    /* LISTA TAREFAS */
-
     .status-filters {
       display: flex;
       overflow-x: auto;
@@ -404,7 +332,9 @@
       scrollbar-width: none;
     }
 
-    .status-filters::-webkit-scrollbar { display: none; }
+    .status-filters::-webkit-scrollbar {
+      display: none;
+    }
 
     .chip {
       flex: 0 0 auto;
@@ -446,20 +376,29 @@
       display: flex;
       justify-content: space-between;
       gap: 6px;
-      align-items: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
     }
 
     .task-title {
       font-size: 14px;
       font-weight: 600;
+      flex: 1;
+    }
+
+    .task-tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
     }
 
     .task-tag {
       font-size: 10px;
       padding: 4px 8px;
       border-radius: var(--radius-pill);
-      background: var(--bg-soft);
-      color: var(--text-soft);
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+      font-weight: 500;
     }
 
     .task-meta {
@@ -501,11 +440,20 @@
       align-items: center;
       gap: 8px;
       margin-top: 4px;
-    }
-
-    .task-footer span {
       font-size: 10px;
       color: var(--text-muted);
+    }
+
+    .btn-link {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-strong);
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      font-weight: 600;
     }
 
     .empty-state {
@@ -517,7 +465,9 @@
 
     /* COLABORADORES */
 
-    #tab-colaboradores-view { display: none; }
+    #tab-colaboradores-view {
+      display: none;
+    }
 
     .collab-list {
       display: flex;
@@ -540,6 +490,12 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      flex: 1;
+    }
+
+    .collab-email {
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
     .pill-role {
@@ -549,6 +505,8 @@
       background: var(--primary-soft);
       color: var(--primary-strong);
       display: inline-block;
+      width: fit-content;
+      font-weight: 500;
     }
 
     .pill-role.secondary {
@@ -594,109 +552,15 @@
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
     }
 
-    input:checked + .slider { background-color: var(--primary); }
-    input:checked + .slider:before { transform: translateX(18px); }
-
-    /* CALENDÁRIO */
-
-    .calendar-wrapper {
-      background: var(--bg-alt);
-      border-radius: var(--radius-lg);
-      padding: var(--space-5);
-      box-shadow: var(--shadow-soft);
+    input:checked + .slider {
+      background-color: var(--primary);
     }
 
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-3);
+    input:checked + .slider:before {
+      transform: translateX(18px);
     }
 
-    .calendar-month-label {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .calendar-nav-btn {
-      border: none;
-      background: var(--bg-soft);
-      border-radius: var(--radius-pill);
-      padding: 6px 10px;
-      font-size: 11px;
-      color: var(--text-soft);
-      cursor: pointer;
-    }
-
-    .calendar-weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      font-size: 10px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 4px;
-    }
-
-    .calendar-weekdays div {
-      text-align: center;
-      padding-bottom: 4px;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-    }
-
-    .calendar-day {
-      min-height: 54px;
-      border-radius: 14px;
-      background: var(--bg-soft);
-      padding: 4px 4px 6px;
-      font-size: 11px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .calendar-day.other-month { opacity: 0.45; }
-
-    .calendar-day.today {
-      border: 1px solid var(--primary);
-      box-shadow: 0 0 0 2px rgba(31, 138, 112, 0.15);
-    }
-
-    .calendar-day-number {
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .calendar-day-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-      margin-top: 2px;
-    }
-
-    .calendar-day-badge {
-      border-radius: 999px;
-      font-size: 9px;
-      padding: 2px 6px;
-      max-width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .calendar-day-count {
-      font-size: 9px;
-      color: var(--text-muted);
-      text-align: right;
-      margin-top: 2px;
-    }
-
-    /* FAB E MODAL */
+    /* MODAL E FAB */
 
     .fab {
       position: fixed;
@@ -739,18 +603,28 @@
       background: #ffffff;
       padding: var(--space-5) var(--space-5) calc(var(--space-6) + 12px);
       box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.35);
+      max-height: 85vh;
+      overflow-y: auto;
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: var(--space-4);
+      gap: 10px;
     }
 
     .modal-title {
       font-size: 15px;
       font-weight: 600;
+      flex: 1;
+    }
+
+    .modal-title-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 2px;
     }
 
     .modal-close {
@@ -759,6 +633,7 @@
       font-size: 20px;
       cursor: pointer;
       color: var(--text-soft);
+      flex-shrink: 0;
     }
 
     .modal-footer {
@@ -778,8 +653,14 @@
     .history-item {
       font-size: 11px;
       color: var(--text-soft);
-      padding: 4px 0;
+      padding: 8px 0;
       border-bottom: 1px dashed rgba(209, 213, 219, 0.6);
+      line-height: 1.4;
+    }
+
+    .history-item strong {
+      color: var(--primary-strong);
+      font-weight: 600;
     }
 
     .badge-status {
@@ -791,12 +672,57 @@
       border-radius: var(--radius-pill);
       background: var(--bg-soft);
       color: var(--text-soft);
+      font-weight: 500;
+      margin-top: 2px;
+      margin-bottom: 4px;
     }
 
-    .hidden { display: none !important; }
+    /* UTIL */
+
+    .hidden {
+      display: none !important;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: var(--space-4);
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .checkbox-item label {
+      flex: 1;
+      font-size: 12px;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .duration-info {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-style: italic;
+    }
 
     @media (min-width: 640px) {
-      .app-shell { max-width: 540px; }
+      .app-shell {
+        max-width: 540px;
+      }
     }
   </style>
 </head>
@@ -804,38 +730,35 @@
   <div class="app-shell">
     <header class="app-header">
       <div class="brand">
-        <div class="brand-logo" aria-label="Marca Farmácia da Liga">
-          <span>FL</span>
-        </div>
+        <div class="brand-logo">FL</div>
         <div>
-          <div class="brand-text-title">Calendário Marketing</div>
-          <div class="brand-text-sub">Farmácia da Liga · Equipa</div>
+          <div class="brand-text-title">Calendário</div>
+          <div class="brand-text-sub">Farmácia da Liga</div>
         </div>
       </div>
       <div class="theme-pill">
         <span class="theme-pill-dot"></span>
-        <span>Colaboração em tempo real</span>
+        <span>Colaboração</span>
       </div>
     </header>
 
     <!-- LOGIN -->
     <section id="login-view">
       <div class="card">
-        <div class="card-title">Entrar na área interna</div>
+        <div class="card-title">Entrar</div>
         <div class="card-subtitle">
-          Aceda com o email e palavra‑passe definidos na conta Firebase da
-          equipa.
+          Aceda com o email e palavra‑passe da sua conta.
         </div>
 
         <form id="login-form">
           <div class="field-group">
-            <div class="field-label">Email profissional</div>
+            <div class="field-label">Email</div>
             <input
               type="email"
               id="login-email"
               autocomplete="email"
               required
-              placeholder="ex: bheatriz@farmaciadaliga.pt"
+              placeholder="seu@email.com"
             />
           </div>
 
@@ -850,16 +773,13 @@
             />
           </div>
 
-          <button type="submit" class="btn btn-primary">
-            Entrar
-          </button>
+          <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
 
         <div id="login-error" class="login-error"></div>
 
         <p class="login-hint">
-          A gestão de acessos (criação de emails e passwords) é feita pela
-          administração da Farmácia da Liga na consola Firebase.
+          Gestão de acessos: contacte o administrador (Débora).
         </p>
       </div>
     </section>
@@ -882,75 +802,53 @@
           </div>
         </div>
 
-        <button id="logout-btn" class="logout-btn">Terminar sessão</button>
+        <button id="logout-btn" class="logout-btn">Sair</button>
       </div>
 
       <div class="tabs" id="tabs">
-        <button class="tab active" data-tab="calendario">Calendário</button>
-        <button class="tab" data-tab="tarefas">Lista</button>
+        <button class="tab active" data-tab="tarefas">Tarefas</button>
+        <button class="tab" data-tab="calendario">Mês</button>
         <button class="tab" data-tab="colaboradores" id="tab-colaboradores">
           Equipa
         </button>
       </div>
 
-      <!-- TAB CALENDÁRIO -->
-      <div id="tab-calendario-view">
-        <div class="calendar-wrapper">
-          <div class="calendar-header">
-            <button type="button" class="calendar-nav-btn" id="cal-prev">
-              ◀
-            </button>
-            <div class="calendar-month-label" id="calendar-month-label"></div>
-            <button type="button" class="calendar-nav-btn" id="cal-next">
-              ▶
-            </button>
-          </div>
-
-          <div class="calendar-weekdays">
-            <div>Seg</div>
-            <div>Ter</div>
-            <div>Qua</div>
-            <div>Qui</div>
-            <div>Sex</div>
-            <div>Sáb</div>
-            <div>Dom</div>
-          </div>
-
-          <div class="calendar-grid" id="calendar-grid"></div>
-        </div>
-      </div>
-
-      <!-- TAB LISTA -->
-      <div id="tab-tarefas-view" class="hidden">
+      <!-- TAB TAREFAS -->
+      <div id="tab-tarefas-view">
         <div class="status-filters" id="status-filters"></div>
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">
-          Ainda não há ações de marketing para este período.<br />
-          Toque em “+” para criar a primeira tarefa.
+          Ainda não há ações.<br />
+          Toque em "+" para criar a primeira.
         </div>
       </div>
 
-      <!-- TAB EQUIPA -->
-      <div id="tab-colaboradores-view" class="hidden">
+      <!-- TAB CALENDÁRIO -->
+      <div id="tab-calendario-view" class="hidden">
         <div class="card">
           <div class="card-title" style="font-size: 15px">
-            Colaboradores
+            Resumo por estado
           </div>
-          <div class="card-subtitle" style="margin-bottom: 10px">
-            Ative/anule colaboradores e defina quem tem perfil administrador.
-          </div>
-
           <div
+            id="calendar-summary"
             style="
-              font-size: 11px;
-              color: var(--text-muted);
-              margin-bottom: 8px;
+              font-size: 13px;
+              color: var(--text-soft);
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 8px;
             "
-          >
-            Nota: a criação de contas (email/password) é feita na consola
-            Firebase. Aqui controla apenas o perfil e estado.
-          </div>
+          ></div>
+        </div>
+      </div>
 
+      <!-- TAB COLABORADORES -->
+      <div id="tab-colaboradores-view">
+        <div class="card">
+          <div class="card-title" style="font-size: 15px">Colaboradores</div>
+          <div class="card-subtitle" style="margin-bottom: 10px">
+            Ative/anule colaboradores.
+          </div>
           <div class="collab-list" id="collab-list"></div>
         </div>
       </div>
@@ -962,20 +860,12 @@
 
   <!-- MODAL TAREFA -->
   <div class="modal-backdrop" id="task-modal-backdrop">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
+    <div class="modal" role="dialog" aria-modal="true">
       <div class="modal-header">
         <div>
-          <div id="task-modal-title" class="modal-title">
-            Nova ação de marketing
-          </div>
-          <div
-            style="
-              font-size: 11px;
-              color: var(--text-soft);
-              margin-top: 2px;
-            "
-          >
-            Campos essenciais para planeamento e execução.
+          <div id="task-modal-title" class="modal-title">Nova ação</div>
+          <div class="modal-title-sub">
+            Preencha os dados e o estado da ação.
           </div>
         </div>
         <button class="modal-close" id="task-modal-close">&times;</button>
@@ -990,7 +880,7 @@
             type="text"
             id="task-title"
             required
-            placeholder="ex: Campanha Dia do Pai · Redes sociais"
+            placeholder="ex: Campanha Dia do Pai"
           />
         </div>
 
@@ -1002,8 +892,47 @@
             <option value="Loja online">Loja online</option>
             <option value="Loja física">Loja física</option>
             <option value="Email marketing">Email marketing</option>
+            <option value="Blogue">Blogue</option>
             <option value="Outros">Outros</option>
           </select>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Tipo de ação</div>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-post" value="Post" />
+              <label for="type-post">📱 Post (imagem + texto)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-reel" value="Reel" />
+              <label for="type-reel">🎥 Reel (vídeo curto)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-story" value="Story" />
+              <label for="type-story">✨ Story (efémero)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-video" value="Vídeo" />
+              <label for="type-video">🎬 Vídeo (longa duração)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-carrossel" value="Carrossel" />
+              <label for="type-carrossel">🖼️ Carrossel (múltiplas imagens)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-direto" value="Direto" />
+              <label for="type-direto">📹 Direto (transmissão ao vivo)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-promocao" value="Promoção" />
+              <label for="type-promocao">🎁 Promoção (desconto/oferta)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="type-educacao" value="Educação" />
+              <label for="type-educacao">📚 Educação (dica/tutorial)</label>
+            </div>
+          </div>
         </div>
 
         <div class="field-group">
@@ -1012,36 +941,35 @@
         </div>
 
         <div class="field-group">
-          <div class="field-label">Duração estimada (min)</div>
+          <div class="field-label">Duração estimada (minutos)</div>
           <input
             type="number"
             id="task-duration"
-            min="5"
+            min="10"
             step="5"
             placeholder="ex: 60"
           />
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Prioridade</div>
-          <select id="task-priority">
-            <option value="Normal">Normal</option>
-            <option value="Baixa">Baixa</option>
-            <option value="Alta">Alta</option>
-            <option value="Crítica">Crítica</option>
-          </select>
+          <div class="duration-info">
+            Editável apenas enquanto a ação estiver "Em criação".
+          </div>
         </div>
 
         <div class="field-group">
           <div class="field-label">Estado</div>
-          <select id="task-status" required></select>
+          <select id="task-status" required>
+            <option value="Pedido">Pedido</option>
+            <option value="Em criação">Em criação</option>
+            <option value="Em aprovação">Em aprovação</option>
+            <option value="Aprovado">Aprovado</option>
+            <option value="Publicado">Publicado</option>
+          </select>
         </div>
 
         <div class="field-group">
           <div class="field-label">Notas internas</div>
           <textarea
             id="task-notes"
-            placeholder="Briefing, mensagens-chave, produtos, timings..."
+            placeholder="Briefing, mensagens‑chave, produtos, timings..."
           ></textarea>
         </div>
 
@@ -1051,20 +979,18 @@
             id="task-history-empty"
             style="font-size: 11px; color: var(--text-muted)"
           >
-            Quando a ação começar a ser atualizada, as alterações por
-            colaborador aparecem aqui.
+            Será preenchido com as alterações por colaborador.
           </div>
           <div class="history-list" id="task-history-list"></div>
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">
-            Guardar ação
-          </button>
+          <button type="submit" class="btn btn-primary">Guardar ação</button>
           <button
             type="button"
             class="btn btn-ghost"
             id="task-cancel-btn"
+            style="width: 100%"
           >
             Cancelar
           </button>
@@ -1073,223 +999,197 @@
     </div>
   </div>
 
-  <!-- SDK Firebase v8 (global firebase) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      addDoc,
+      updateDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      Timestamp,
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-  <script>
-    // CONFIG
-    var firebaseConfig = {
+    const firebaseConfig = {
       apiKey: "AIzaSyA5ge2xh4oq0TrPMWQsZgEnYnsaACFsm7w",
       authDomain: "calendario-maketing-fliga.firebaseapp.com",
       projectId: "calendario-maketing-fliga",
       storageBucket: "calendario-maketing-fliga.firebasestorage.app",
       messagingSenderId: "721415238779",
-      appId: "1:721415238779:web:aabed135e117f896b35ede"
+      appId: "1:721415238779:web:aabed135e117f896b35ede",
     };
-    firebase.initializeApp(firebaseConfig); // v8 global[web:19]
-    var auth = firebase.auth();
-    var db = firebase.firestore();
 
-    // ELEMENTOS
-    var loginView = document.getElementById("login-view");
-    var appView = document.getElementById("app-view");
-    var loginForm = document.getElementById("login-form");
-    var loginErrorEl = document.getElementById("login-error");
-    var logoutBtn = document.getElementById("logout-btn");
-    var userNameEl = document.getElementById("user-name");
-    var userRoleEl = document.getElementById("user-role");
-    var userAvatarEl = document.getElementById("user-avatar");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    var tabButtons = document.querySelectorAll(".tab");
-    var tabTarefasView = document.getElementById("tab-tarefas-view");
-    var tabCalendarioView = document.getElementById("tab-calendario-view");
-    var tabColaboradoresView = document.getElementById("tab-colaboradores-view");
-    var tabColaboradoresBtn = document.getElementById("tab-colaboradores");
+    // ELEMENTOS DO DOM
+    const loginView = document.getElementById("login-view");
+    const appView = document.getElementById("app-view");
+    const loginForm = document.getElementById("login-form");
+    const loginErrorEl = document.getElementById("login-error");
+    const logoutBtn = document.getElementById("logout-btn");
+    const userNameEl = document.getElementById("user-name");
+    const userRoleEl = document.getElementById("user-role");
+    const userAvatarEl = document.getElementById("user-avatar");
 
-    var statusFiltersEl = document.getElementById("status-filters");
-    var tasksListEl = document.getElementById("tasks-list");
-    var tasksEmptyEl = document.getElementById("tasks-empty");
+    const tabButtons = document.querySelectorAll(".tab");
+    const tabTarefasView = document.getElementById("tab-tarefas-view");
+    const tabCalendarioView = document.getElementById("tab-calendario-view");
+    const tabColaboradoresView = document.getElementById(
+      "tab-colaboradores-view"
+    );
+    const tabColaboradoresBtn = document.getElementById("tab-colaboradores");
 
-    var calendarMonthLabel = document.getElementById("calendar-month-label");
-    var calendarGrid = document.getElementById("calendar-grid");
-    var calPrevBtn = document.getElementById("cal-prev");
-    var calNextBtn = document.getElementById("cal-next");
+    const statusFiltersEl = document.getElementById("status-filters");
+    const tasksListEl = document.getElementById("tasks-list");
+    const tasksEmptyEl = document.getElementById("tasks-empty");
+    const calendarSummaryEl = document.getElementById("calendar-summary");
+    const collabListEl = document.getElementById("collab-list");
 
-    var collabListEl = document.getElementById("collab-list");
+    const fabAdd = document.getElementById("fab-add");
+    const taskModalBackdrop = document.getElementById("task-modal-backdrop");
+    const taskModalClose = document.getElementById("task-modal-close");
+    const taskCancelBtn = document.getElementById("task-cancel-btn");
+    const taskForm = document.getElementById("task-form");
+    const taskIdInput = document.getElementById("task-id");
+    const taskTitleInput = document.getElementById("task-title");
+    const taskChannelInput = document.getElementById("task-channel");
+    const taskDateInput = document.getElementById("task-date");
+    const taskDurationInput = document.getElementById("task-duration");
+    const taskStatusSelect = document.getElementById("task-status");
+    const taskNotesInput = document.getElementById("task-notes");
+    const taskHistoryList = document.getElementById("task-history-list");
+    const taskHistoryEmpty = document.getElementById("task-history-empty");
 
-    var fabAdd = document.getElementById("fab-add");
-    var taskModalBackdrop = document.getElementById("task-modal-backdrop");
-    var taskModalClose = document.getElementById("task-modal-close");
-    var taskCancelBtn = document.getElementById("task-cancel-btn");
-    var taskForm = document.getElementById("task-form");
-    var taskIdInput = document.getElementById("task-id");
-    var taskTitleInput = document.getElementById("task-title");
-    var taskChannelInput = document.getElementById("task-channel");
-    var taskDateInput = document.getElementById("task-date");
-    var taskDurationInput = document.getElementById("task-duration");
-    var taskStatusSelect = document.getElementById("task-status");
-    var taskPrioritySelect = document.getElementById("task-priority");
-    var taskNotesInput = document.getElementById("task-notes");
-    var taskHistoryList = document.getElementById("task-history-list");
-    var taskHistoryEmpty = document.getElementById("task-history-empty");
-
-    var STATUS_LIST = [
+    const STATUS_LIST = [
       "Pedido",
       "Em criação",
       "Em aprovação",
       "Aprovado",
-      "Publicado"
+      "Publicado",
     ];
 
-    var currentUser = null;
-    var currentCollaborator = null;
-    var tasksMap = {};
-    var collabsMap = {};
-    var tasksUnsub = null;
-    var collabUnsub = null;
-    var activeStatusFilter = "Todas";
+    let currentUser = null;
+    let currentCollaborator = null;
+    let tasksMap = new Map();
+    let tasksUnsub = null;
+    let collabUnsub = null;
+    let collabsMap = new Map();
+    let activeStatusFilter = "Todas";
 
-    var currentMonth = new Date();
-    currentMonth.setDate(1);
-
-    function formatYMD(date) {
-      var d = new Date(date);
-      var y = d.getFullYear();
-      var m = String(d.getMonth() + 1).padStart(2, "0");
-      var day = String(d.getDate()).padStart(2, "0");
-      return y + "-" + m + "-" + day;
-    }
-
-    function monthLabel(date) {
-      return date.toLocaleDateString("pt-PT", {
-        month: "long",
-        year: "numeric"
-      });
-    }
-
-    function statusClass(status) {
-      return (status || "").replace(/\s+/g, "-");
-    }
-
-    function priorityClass(priority) {
-      var p = (priority || "Normal").toLowerCase();
-      if (p === "baixa") return "priority-baixa";
-      if (p === "alta") return "priority-alta";
-      if (p === "crítica" || p === "critica") return "priority-critica";
-      return "priority-normal";
-    }
-
-    function channelIcon(channel) {
-      if (!channel) return "⭐";
-      if (channel.indexOf("Instagram") >= 0) return "📱";
-      if (channel.indexOf("Loja online") >= 0) return "🛒";
-      if (channel.indexOf("Loja física") >= 0) return "🏪";
-      if (channel.indexOf("Email") >= 0) return "✉️";
-      return "⭐";
-    }
-
+    // FILTROS
     function initStatusSelectors() {
       statusFiltersEl.innerHTML = "";
-      ["Todas"].concat(STATUS_LIST).forEach(function(status) {
-        var chip = document.createElement("button");
+      ["Todas", ...STATUS_LIST].forEach((status) => {
+        const chip = document.createElement("button");
         chip.type = "button";
         chip.className =
           "chip" + (status === activeStatusFilter ? " active" : "");
         chip.textContent = status;
         chip.dataset.status = status;
-        chip.addEventListener("click", function() {
+        chip.addEventListener("click", () => {
           activeStatusFilter = status;
-          Array.prototype.forEach.call(
-            document.querySelectorAll(".chip"),
-            function(c) { c.classList.remove("active"); }
-          );
+          document
+            .querySelectorAll(".chip")
+            .forEach((c) => c.classList.remove("active"));
           chip.classList.add("active");
           renderTasks();
         });
         statusFiltersEl.appendChild(chip);
-      });
-
-      taskStatusSelect.innerHTML = "";
-      STATUS_LIST.forEach(function(s) {
-        var opt = document.createElement("option");
-        opt.value = s;
-        opt.textContent = s;
-        taskStatusSelect.appendChild(opt);
       });
     }
 
     initStatusSelectors();
 
     // LOGIN
-    loginForm.addEventListener("submit", function(e) {
+    loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      var email = document.getElementById("login-email").value.trim();
-      var password = document
+      const email = document.getElementById("login-email").value.trim();
+      const password = document
         .getElementById("login-password")
         .value.trim();
 
       loginErrorEl.textContent = "";
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then(function(cred) {
-          console.log("Login OK", cred.user);
-        })
-        .catch(function(error) {
-          console.error("ERRO LOGIN", error);
-          alert("Erro login: " + error.code + " — " + error.message);
-          loginErrorEl.textContent = "Erro: " + error.code;
-        });
-    });
-
-    // LOGOUT
-    logoutBtn.addEventListener("click", function() {
-      auth.signOut();
-    });
-
-    // TABS
-    Array.prototype.forEach.call(tabButtons, function(btn) {
-      btn.addEventListener("click", function() {
-        Array.prototype.forEach.call(tabButtons, function(b) {
-          b.classList.remove("active");
-        });
-        btn.classList.add("active");
-        var tab = btn.dataset.tab;
-        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
-        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
-        tabColaboradoresView.classList.toggle("hidden", tab !== "colaboradores");
+      signInWithEmailAndPassword(auth, email, password).catch((error) => {
+        console.error(error);
+        loginErrorEl.textContent =
+          "Não foi possível iniciar sessão. Verifique os dados.";
       });
     });
 
-    // MODAL TAREFA
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+
+    // TABS
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const tab = btn.dataset.tab;
+        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
+        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
+        tabColaboradoresView.classList.toggle(
+          "hidden",
+          tab !== "colaboradores"
+        );
+      });
+    });
+
+    // MODAL
     function openTaskModal(task) {
       taskModalBackdrop.style.display = "flex";
       if (task) {
         document.getElementById("task-modal-title").textContent =
-          "Editar ação de marketing";
-        taskIdInput.value = task.id;
+          "Editar ação";
+        taskIdInput.value = task.id || "";
         taskTitleInput.value = task.title || "";
         taskChannelInput.value = task.channel || "";
         taskDateInput.value = task.date || "";
         taskDurationInput.value = task.duration || "";
-        taskStatusSelect.value = task.status || STATUS_LIST[0];
-        taskPrioritySelect.value = task.priority || "Normal";
+        taskStatusSelect.value = task.status || "Pedido";
         taskNotesInput.value = task.notes || "";
+
+        // Limpar e preencher checkboxes de tipo
+        document
+          .querySelectorAll(".checkbox-item input[type='checkbox']")
+          .forEach((cb) => {
+            cb.checked = task.types && task.types.includes(cb.value);
+          });
+
         renderHistory(task.history || []);
       } else {
-        document.getElementById("task-modal-title").textContent =
-          "Nova ação de marketing";
+        document.getElementById("task-modal-title").textContent = "Nova ação";
         taskIdInput.value = "";
         taskTitleInput.value = "";
         taskChannelInput.value = "";
-        taskDateInput.value = formatYMD(new Date());
+        taskDateInput.valueAsDate = new Date();
         taskDurationInput.value = "";
         taskStatusSelect.value = "Pedido";
-        taskPrioritySelect.value = "Normal";
         taskNotesInput.value = "";
+
+        // Limpar checkboxes
+        document
+          .querySelectorAll(".checkbox-item input[type='checkbox']")
+          .forEach((cb) => {
+            cb.checked = false;
+          });
+
         renderHistory([]);
       }
+      updateDurationEditability(taskStatusSelect.value);
     }
 
     function closeTaskModal() {
@@ -1298,108 +1198,65 @@
 
     taskModalClose.addEventListener("click", closeTaskModal);
     taskCancelBtn.addEventListener("click", closeTaskModal);
-    taskModalBackdrop.addEventListener("click", function(e) {
+    taskModalBackdrop.addEventListener("click", (e) => {
       if (e.target === taskModalBackdrop) closeTaskModal();
     });
 
-    fabAdd.addEventListener("click", function() { openTaskModal(null); });
+    fabAdd.addEventListener("click", () => openTaskModal(null));
 
-    function renderHistory(history) {
-      taskHistoryList.innerHTML = "";
-      if (!history || !history.length) {
-        taskHistoryEmpty.style.display = "block";
-        return;
+    function updateDurationEditability(status) {
+      if (status === "Em criação") {
+        taskDurationInput.disabled = false;
+        taskDurationInput.placeholder =
+          "ex: 60 (editável apenas em criação)";
+      } else {
+        taskDurationInput.disabled = true;
       }
-      taskHistoryEmpty.style.display = "none";
-      history
-        .slice()
-        .sort(function(a, b) {
-          return (a.at || "").localeCompare(b.at || "");
-        })
-        .forEach(function(h) {
-          var item = document.createElement("div");
-          item.className = "history-item";
-          var dateTxt = h.at
-            ? new Date(h.at).toLocaleString("pt-PT", {
-                day: "2-digit",
-                month: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit"
-              })
-            : "—";
-          var from = h.fromStatus || "—";
-          var to = h.toStatus || "—";
-          item.innerHTML =
-            '<span class="badge-status">' +
-            (h.type === "criação" ? "Criação" : "Atualização") +
-            "</span><br>" +
-            (h.byName || h.byEmail || "—") +
-            " · " +
-            dateTxt +
-            "<br><strong>" +
-            from +
-            "</strong> → <strong>" +
-            to +
-            "</strong>";
-          taskHistoryList.appendChild(item);
-        });
     }
 
-    function changeTaskStatus(id, task, newStatus) {
-      var nowIso = new Date().toISOString();
-      var collName = currentCollaborator.name || currentCollaborator.email;
-      var ref = db.collection("tarefas").doc(id);
-      var history = (task.history || []).slice();
-      history.push({
-        at: nowIso,
-        byUid: currentUser.uid,
-        byName: collName,
-        byEmail: currentCollaborator.email,
-        fromStatus: task.status || null,
-        toStatus: newStatus,
-        type: "estado"
-      });
+    taskStatusSelect.addEventListener("change", (e) => {
+      updateDurationEditability(e.target.value);
+    });
 
-      return ref.update({
-        status: newStatus,
-        lastUpdatedAt: nowIso,
-        lastUpdatedByUid: currentUser.uid,
-        lastUpdatedByName: collName,
-        lastUpdatedByEmail: currentCollaborator.email,
-        history: history
-      });
-    }
-
-    taskForm.addEventListener("submit", function(e) {
+    // FORM TAREFA - CORRIGIDO
+    taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentUser || !currentCollaborator) return;
 
-      var id = taskIdInput.value || null;
-      var title = taskTitleInput.value.trim();
-      var channel = taskChannelInput.value;
-      var date = taskDateInput.value;
-      var duration = taskDurationInput.value
+      const id = taskIdInput.value || null;
+      const title = taskTitleInput.value.trim();
+      const channel = taskChannelInput.value;
+      const date = taskDateInput.value;
+      const duration = taskDurationInput.value
         ? Number(taskDurationInput.value)
         : null;
-      var status = taskStatusSelect.value;
-      var priority = taskPrioritySelect.value || "Normal";
-      var notes = taskNotesInput.value.trim();
+      const status = taskStatusSelect.value;
+      const notes = taskNotesInput.value.trim();
 
-      if (!title || !channel || !date || !status) return;
+      // Recolher tipos selecionados
+      const types = Array.from(
+        document.querySelectorAll(".checkbox-item input[type='checkbox']:checked")
+      ).map((cb) => cb.value);
 
-      var nowIso = new Date().toISOString();
-      var collName = currentCollaborator.name || currentCollaborator.email;
+      if (!title || !channel || !date || !status) {
+        alert("Preencha os campos obrigatórios.");
+        return;
+      }
 
-      if (!id) {
-        db.collection("tarefas")
-          .add({
-            title: title,
-            channel: channel,
-            date: date,
-            duration: duration,
-            status: status,
-            priority: priority,
-            notes: notes,
+      const nowIso = Timestamp.now();
+      const collName = currentCollaborator.name || currentCollaborator.email;
+
+      try {
+        if (!id) {
+          // CRIAR TAREFA
+          const docRef = await addDoc(collection(db, "tarefas"), {
+            title,
+            channel,
+            date,
+            duration,
+            status,
+            types: types.length > 0 ? types : [],
+            notes,
             createdAt: nowIso,
             createdByUid: currentUser.uid,
             createdByName: collName,
@@ -1416,59 +1273,57 @@
                 byEmail: currentCollaborator.email,
                 fromStatus: null,
                 toStatus: status,
-                type: "criação"
-              }
-            ]
-          })
-          .then(function() {
-            closeTaskModal();
-          })
-          .catch(function(err) {
-            console.error("Erro ao guardar tarefa:", err);
-            alert("Erro ao guardar a ação.");
+                type: "criação",
+              },
+            ],
           });
-      } else {
-        var ref = db.collection("tarefas").doc(id);
-        var previous = tasksMap[id];
-        var history = (previous && previous.history) ? previous.history.slice() : [];
-        history.push({
-          at: nowIso,
-          byUid: currentUser.uid,
-          byName: collName,
-          byEmail: currentCollaborator.email,
-          fromStatus: (previous && previous.status) || null,
-          toStatus: status,
-          type: "edição"
-        });
+          console.log("✓ Tarefa criada:", docRef.id);
+        } else {
+          // ATUALIZAR TAREFA
+          const ref = doc(db, "tarefas", id);
+          const previous = tasksMap.get(id);
+          const history = previous?.history ? [...previous.history] : [];
 
-        ref.update({
-          title: title,
-          channel: channel,
-          date: date,
-          duration: duration,
-          status: status,
-          priority: priority,
-          notes: notes,
-          lastUpdatedAt: nowIso,
-          lastUpdatedByUid: currentUser.uid,
-          lastUpdatedByName: collName,
-          lastUpdatedByEmail: currentCollaborator.email,
-          history: history
-        })
-          .then(function() {
-            closeTaskModal();
-          })
-          .catch(function(err) {
-            console.error("Erro ao atualizar tarefa:", err);
-            alert("Erro ao atualizar a ação.");
+          history.push({
+            at: nowIso,
+            byUid: currentUser.uid,
+            byName: collName,
+            byEmail: currentCollaborator.email,
+            fromStatus: previous?.status || null,
+            toStatus: status,
+            type: "edição",
           });
+
+          await updateDoc(ref, {
+            title,
+            channel,
+            date,
+            duration,
+            status,
+            types: types.length > 0 ? types : [],
+            notes,
+            lastUpdatedAt: nowIso,
+            lastUpdatedByUid: currentUser.uid,
+            lastUpdatedByName: collName,
+            lastUpdatedByEmail: currentCollaborator.email,
+            history,
+          });
+          console.log("✓ Tarefa atualizada:", id);
+        }
+
+        closeTaskModal();
+      } catch (error) {
+        console.error("Erro ao guardar:", error);
+        alert("Erro ao guardar. Tente novamente.");
       }
     });
 
-    function renderTasks() {
-      var arr = Object.keys(tasksMap).map(function(id) { return tasksMap[id]; });
+    // RENDERIZAÇÃO
 
-      var visible = arr.filter(function(t) {
+    function renderTasks() {
+      const tasksArr = Array.from(tasksMap.values());
+
+      const visible = tasksArr.filter((t) => {
         if (activeStatusFilter === "Todas") return true;
         return t.status === activeStatusFilter;
       });
@@ -1482,107 +1337,112 @@
       }
 
       visible
-        .sort(function(a, b) {
-          return (a.date || "").localeCompare(b.date || "");
-        })
-        .forEach(function(task) {
-          var card = document.createElement("article");
+        .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
+        .forEach((task) => {
+          const card = document.createElement("article");
           card.className = "task-card";
 
-          var header = document.createElement("div");
+          const header = document.createElement("div");
           header.className = "task-header-row";
 
-          var titleEl = document.createElement("div");
+          const titleEl = document.createElement("div");
           titleEl.className = "task-title";
           titleEl.textContent = task.title;
 
-          var tag = document.createElement("div");
-          tag.className = "task-tag";
-          tag.textContent = task.channel || "—";
+          const tags = document.createElement("div");
+          tags.className = "task-tags";
+
+          const channelTag = document.createElement("div");
+          channelTag.className = "task-tag";
+          channelTag.textContent = task.channel || "—";
+          tags.appendChild(channelTag);
+
+          if (task.types && task.types.length > 0) {
+            task.types.slice(0, 2).forEach((type) => {
+              const typeTag = document.createElement("div");
+              typeTag.className = "task-tag";
+              typeTag.textContent = type;
+              tags.appendChild(typeTag);
+            });
+            if (task.types.length > 2) {
+              const moreTag = document.createElement("div");
+              moreTag.className = "task-tag";
+              moreTag.textContent = `+${task.types.length - 2}`;
+              tags.appendChild(moreTag);
+            }
+          }
 
           header.appendChild(titleEl);
-          header.appendChild(tag);
+          header.appendChild(tags);
           card.appendChild(header);
 
-          var meta = document.createElement("div");
+          const meta = document.createElement("div");
           meta.className = "task-meta";
           if (task.date) {
-            meta.innerHTML += '<span>📅 <strong>' + task.date + "</strong></span>";
+            meta.innerHTML += `<span>📅 ${task.date}</span>`;
           }
           if (task.duration) {
-            meta.innerHTML += "<span>⏱ " + task.duration + " min</span>";
+            meta.innerHTML += `<span>⏱ ${task.duration}min</span>`;
           }
-          meta.innerHTML +=
-            "<span>👤 " +
-            (task.lastUpdatedByName || task.createdByName || "—") +
-            "</span>";
-
-          var priSpan = document.createElement("span");
-          priSpan.className =
-            "priority-pill " + priorityClass(task.priority);
-          priSpan.textContent = task.priority || "Normal";
-          meta.appendChild(priSpan);
-
-          var sSpan = document.createElement("span");
-          sSpan.className =
-            "status-pill status-" + statusClass(task.status || "");
-          sSpan.textContent = task.status || "—";
-          meta.appendChild(sSpan);
-
+          meta.innerHTML += `<span>👤 ${
+            task.lastUpdatedByName || task.createdByName || "—"
+          }</span>`;
           card.appendChild(meta);
 
-          var statusRow = document.createElement("div");
+          const statusRow = document.createElement("div");
           statusRow.className = "task-status-row";
 
-          var select = document.createElement("select");
-          STATUS_LIST.forEach(function(s) {
-            var opt = document.createElement("option");
+          const select = document.createElement("select");
+          STATUS_LIST.forEach((s) => {
+            const opt = document.createElement("option");
             opt.value = s;
             opt.textContent = s;
             if (s === task.status) opt.selected = true;
             select.appendChild(opt);
           });
 
-          select.addEventListener("change", function(e) {
+          select.addEventListener("change", async (e) => {
             if (!currentUser || !currentCollaborator) return;
-            var newStatus = e.target.value;
-            changeTaskStatus(task.id, task, newStatus);
+            const newStatus = e.target.value;
+            await changeTaskStatus(task.id, task, newStatus);
           });
 
-          var statusNote = document.createElement("small");
-          statusNote.textContent = "Mudanças são registadas por colaborador.";
+          const statusNote = document.createElement("small");
+          statusNote.textContent = "Mudanças registadas.";
 
           statusRow.appendChild(select);
           statusRow.appendChild(statusNote);
           card.appendChild(statusRow);
 
-          var footer = document.createElement("div");
+          const footer = document.createElement("div");
           footer.className = "task-footer";
 
-          var last = document.createElement("span");
+          const last = document.createElement("span");
           if (task.lastUpdatedAt && task.lastUpdatedByName) {
-            var d = new Date(task.lastUpdatedAt);
-            var dStr = isNaN(d.getTime())
-              ? task.lastUpdatedAt
+            const d =
+              task.lastUpdatedAt instanceof Timestamp
+                ? task.lastUpdatedAt.toDate()
+                : new Date(task.lastUpdatedAt);
+            const dStr = isNaN(d.getTime())
+              ? ""
               : d.toLocaleString("pt-PT", {
                   day: "2-digit",
                   month: "2-digit",
                   hour: "2-digit",
-                  minute: "2-digit"
+                  minute: "2-digit",
                 });
-            last.textContent =
-              "Última alteração por " + task.lastUpdatedByName + " em " + dStr;
+            last.textContent = `Alterado por ${
+              task.lastUpdatedByName
+            } em ${dStr}`;
           } else {
-            last.textContent = "Ainda sem histórico de alterações.";
+            last.textContent = "Sem alterações ainda.";
           }
 
-          var historyBtn = document.createElement("button");
+          const historyBtn = document.createElement("button");
           historyBtn.type = "button";
           historyBtn.className = "btn-link";
           historyBtn.textContent = "Ver detalhes";
-          historyBtn.addEventListener("click", function() {
-            openTaskModal(task);
-          });
+          historyBtn.addEventListener("click", () => openTaskModal(task));
 
           footer.appendChild(last);
           footer.appendChild(historyBtn);
@@ -1591,127 +1451,143 @@
           tasksListEl.appendChild(card);
         });
 
-      renderCalendar();
+      renderCalendarSummary();
     }
 
-    function renderCalendar() {
-      var arr = Object.keys(tasksMap).map(function(id) { return tasksMap[id]; });
-      var year = currentMonth.getFullYear();
-      var month = currentMonth.getMonth();
+    function renderCalendarSummary() {
+      const tasksArr = Array.from(tasksMap.values());
+      const counts = {};
+      STATUS_LIST.forEach((s) => (counts[s] = 0));
+      tasksArr.forEach((t) => {
+        if (t.status && counts[t.status] != null) counts[t.status] += 1;
+      });
 
-      calendarMonthLabel.textContent = monthLabel(currentMonth);
+      calendarSummaryEl.innerHTML = "";
+      STATUS_LIST.forEach((s) => {
+        const total = counts[s] || 0;
+        const div = document.createElement("div");
+        div.style.padding = "8px 10px";
+        div.style.borderRadius = "14px";
+        div.style.background = "#ffffff";
+        div.style.border = "1px solid var(--border)";
+        div.style.display = "flex";
+        div.style.flexDirection = "column";
+        div.style.gap = "4px";
 
-      var firstDay = new Date(year, month, 1);
-      var startWeekday = firstDay.getDay();
-      if (startWeekday === 0) startWeekday = 7;
-      var daysInMonth = new Date(year, month + 1, 0).getDate();
+        const title = document.createElement("div");
+        title.style.fontSize = "11px";
+        title.style.fontWeight = "600";
+        title.textContent = s;
 
-      var cells = [];
-      var todayYMD = formatYMD(new Date());
+        const num = document.createElement("div");
+        num.style.fontSize = "18px";
+        num.style.fontWeight = "700";
+        num.textContent = total.toString();
 
-      var daysPrev = startWeekday - 1;
-      var prevMonthLastDate = new Date(year, month, 0).getDate();
-
-      for (var i = daysPrev; i > 0; i--) {
-        var dPrev = new Date(year, month - 1, prevMonthLastDate - i + 1);
-        cells.push({ date: dPrev, other: true });
-      }
-
-      for (var d = 1; d <= daysInMonth; d++) {
-        cells.push({ date: new Date(year, month, d), other: false });
-      }
-
-      while (cells.length < 42) {
-        var lastCell = cells[cells.length - 1];
-        var dNext = new Date(lastCell.date);
-        dNext.setDate(dNext.getDate() + 1);
-        cells.push({ date: dNext, other: true });
-      }
-
-      calendarGrid.innerHTML = "";
-
-      cells.forEach(function(c) {
-        var ymd = formatYMD(c.date);
-        var dayNum = c.date.getDate();
-        var dayTasks = arr.filter(function(t) { return t.date === ymd; });
-
-        var cell = document.createElement("div");
-        cell.className = "calendar-day";
-        if (c.other) cell.classList.add("other-month");
-        if (ymd === todayYMD) cell.classList.add("today");
-
-        var top = document.createElement("div");
-        top.className = "calendar-day-number";
-        top.textContent = dayNum;
-
-        var badgesWrap = document.createElement("div");
-        badgesWrap.className = "calendar-day-badges";
-
-        if (dayTasks.length) {
-          dayTasks.slice(0, 4).forEach(function(t) {
-            var b = document.createElement("div");
-            b.className =
-              "calendar-day-badge " + statusClass(t.status || "");
-            b.textContent = channelIcon(t.channel);
-            badgesWrap.appendChild(b);
-          });
-        }
-
-        var count = document.createElement("div");
-        count.className = "calendar-day-count";
-        if (dayTasks.length) {
-          count.textContent =
-            dayTasks.length === 1
-              ? "1 ação"
-              : dayTasks.length + " ações";
-        }
-
-        cell.appendChild(top);
-        cell.appendChild(badgesWrap);
-        cell.appendChild(count);
-
-        calendarGrid.appendChild(cell);
+        div.appendChild(title);
+        div.appendChild(num);
+        calendarSummaryEl.appendChild(div);
       });
     }
 
-    calPrevBtn.addEventListener("click", function() {
-      currentMonth.setMonth(currentMonth.getMonth() - 1);
-      renderCalendar();
-    });
+    function renderHistory(history) {
+      taskHistoryList.innerHTML = "";
+      if (!history || !history.length) {
+        taskHistoryEmpty.style.display = "block";
+        return;
+      }
+      taskHistoryEmpty.style.display = "none";
 
-    calNextBtn.addEventListener("click", function() {
-      currentMonth.setMonth(currentMonth.getMonth() + 1);
-      renderCalendar();
-    });
+      history
+        .slice()
+        .sort((a, b) => {
+          const aTime =
+            a.at instanceof Timestamp ? a.at.toDate() : new Date(a.at);
+          const bTime =
+            b.at instanceof Timestamp ? b.at.toDate() : new Date(b.at);
+          return aTime - bTime;
+        })
+        .forEach((h) => {
+          const item = document.createElement("div");
+          item.className = "history-item";
+          const d =
+            h.at instanceof Timestamp ? h.at.toDate() : new Date(h.at);
+          const dateTxt = isNaN(d.getTime())
+            ? "—"
+            : d.toLocaleString("pt-PT", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+          const from = h.fromStatus || "—";
+          const to = h.toStatus || "—";
+          const badgeText =
+            h.type === "criação" ? "Criação" : h.type === "edição" ? "Edição" : "Estado";
+          item.innerHTML = `<span class="badge-status">${badgeText}</span>
+            <br /><strong>${h.byName || h.byEmail || "—"}</strong> · ${dateTxt}
+            <br />${from} → <strong>${to}</strong>`;
+          taskHistoryList.appendChild(item);
+        });
+    }
+
+    async function changeTaskStatus(id, task, newStatus) {
+      const nowIso = Timestamp.now();
+      const collName = currentCollaborator.name || currentCollaborator.email;
+      const ref = doc(db, "tarefas", id);
+      const history = task.history ? [...task.history] : [];
+      history.push({
+        at: nowIso,
+        byUid: currentUser.uid,
+        byName: collName,
+        byEmail: currentCollaborator.email,
+        fromStatus: task.status || null,
+        toStatus: newStatus,
+        type: "estado",
+      });
+
+      try {
+        await updateDoc(ref, {
+          status: newStatus,
+          lastUpdatedAt: nowIso,
+          lastUpdatedByUid: currentUser.uid,
+          lastUpdatedByName: collName,
+          lastUpdatedByEmail: currentCollaborator.email,
+          history,
+        });
+      } catch (error) {
+        console.error("Erro ao mudar estado:", error);
+      }
+    }
+
+    // COLABORADORES
 
     function renderCollaborators() {
       collabListEl.innerHTML = "";
-      var arr = Object.keys(collabsMap).map(function(id) { return collabsMap[id]; });
-      arr.sort(function(a, b) {
-        return (a.name || a.email || "").localeCompare(b.name || b.email || "");
-      });
+      const arr = Array.from(collabsMap.values()).sort((a, b) =>
+        (a.name || a.email || "").localeCompare(b.name || b.email || "")
+      );
       if (!arr.length) {
         collabListEl.innerHTML =
-          '<div style="font-size:12px;color:var(--text-soft);margin-top:6px;">Nenhum colaborador registado ainda. Assim que alguém entrar com email válido, aparece aqui.</div>';
+          '<div style="font-size:12px;color:var(--text-soft);margin-top:6px;">Nenhum colaborador ainda.</div>';
         return;
       }
 
-      arr.forEach(function(c) {
-        var row = document.createElement("div");
+      arr.forEach((c) => {
+        const row = document.createElement("div");
         row.className = "collab-row";
 
-        var main = document.createElement("div");
+        const main = document.createElement("div");
         main.className = "collab-main";
-        var nameEl = document.createElement("div");
+        const nameEl = document.createElement("div");
         nameEl.textContent = c.name || c.email || "—";
         nameEl.style.fontWeight = "600";
         nameEl.style.fontSize = "12px";
-        var emailEl = document.createElement("div");
+        const emailEl = document.createElement("div");
+        emailEl.className = "collab-email";
         emailEl.textContent = c.email;
-        emailEl.style.fontSize = "11px";
-        emailEl.style.color = "var(--text-muted)";
 
-        var roleEl = document.createElement("span");
+        const roleEl = document.createElement("span");
         roleEl.className =
           "pill-role " + (c.role === "admin" ? "" : "secondary");
         roleEl.textContent =
@@ -1721,42 +1597,49 @@
         main.appendChild(emailEl);
         main.appendChild(roleEl);
 
-        var controls = document.createElement("div");
+        const controls = document.createElement("div");
         controls.style.display = "flex";
         controls.style.flexDirection = "column";
         controls.style.alignItems = "flex-end";
         controls.style.gap = "4px";
 
-        var activeWrap = document.createElement("label");
+        const activeWrap = document.createElement("label");
         activeWrap.className = "switch";
-        var input = document.createElement("input");
+        const input = document.createElement("input");
         input.type = "checkbox";
         input.checked = c.active !== false;
-        var slider = document.createElement("span");
+        const slider = document.createElement("span");
         slider.className = "slider";
         activeWrap.appendChild(input);
         activeWrap.appendChild(slider);
 
-        input.addEventListener("change", function() {
-          db.collection("colaboradores").doc(c.uid).update({
-            active: input.checked
-          });
+        input.addEventListener("change", async () => {
+          const ref = doc(db, "colaboradores", c.id);
+          try {
+            await updateDoc(ref, { active: input.checked });
+          } catch (error) {
+            console.error("Erro ao atualizar colaborador:", error);
+          }
+        });
+
+        const roleBtn = document.createElement("button");
+        roleBtn.type = "button";
+        roleBtn.className = "btn-link";
+        roleBtn.textContent =
+          c.role === "admin" ? "Tornar colaborador" : "Tornar admin";
+
+        roleBtn.addEventListener("click", async () => {
+          const newRole = c.role === "admin" ? "colaborador" : "admin";
+          const ref = doc(db, "colaboradores", c.id);
+          try {
+            await updateDoc(ref, { role: newRole });
+          } catch (error) {
+            console.error("Erro ao mudar role:", error);
+          }
         });
 
         controls.appendChild(activeWrap);
-
-        if (currentCollaborator && currentCollaborator.role === "admin" && c.uid !== currentUser.uid) {
-          var roleBtn = document.createElement("button");
-          roleBtn.type = "button";
-          roleBtn.className = "btn-link";
-          roleBtn.textContent =
-            c.role === "admin" ? "Tornar colaborador" : "Tornar admin";
-          roleBtn.addEventListener("click", function() {
-            var newRole = c.role === "admin" ? "colaborador" : "admin";
-            db.collection("colaboradores").doc(c.uid).update({
-              role: newRole
-            });
-          });
+        if (currentCollaborator?.role === "admin" && c.uid !== currentUser.uid) {
           controls.appendChild(roleBtn);
         }
 
@@ -1766,83 +1649,108 @@
       });
     }
 
+    // SYNC FIRESTORE
+
     function subscribeTasks() {
       if (tasksUnsub) tasksUnsub();
-      tasksUnsub = db
-        .collection("tarefas")
-        .orderBy("date", "asc")
-        .onSnapshot(function(snap) {
-          tasksMap = {};
-          snap.forEach(function(doc) {
-            tasksMap[doc.id] = Object.assign({ id: doc.id }, doc.data());
+      const q = query(collection(db, "tarefas"), orderBy("date", "asc"));
+      tasksUnsub = onSnapshot(
+        q,
+        (snap) => {
+          tasksMap.clear();
+          snap.forEach((d) => {
+            tasksMap.set(d.id, { id: d.id, ...d.data() });
           });
           renderTasks();
-        });
+        },
+        (error) => {
+          console.error("Erro a carregar tarefas:", error);
+        }
+      );
     }
 
     function subscribeCollaborators() {
       if (collabUnsub) collabUnsub();
-      collabUnsub = db
-        .collection("colaboradores")
-        .orderBy("name", "asc")
-        .onSnapshot(function(snap) {
-          collabsMap = {};
-          snap.forEach(function(doc) {
-            collabsMap[doc.id] = doc.data();
+      collabUnsub = onSnapshot(
+        collection(db, "colaboradores"),
+        (snap) => {
+          collabsMap.clear();
+          snap.forEach((d) => {
+            collabsMap.set(d.id, { id: d.id, ...d.data() });
           });
           renderCollaborators();
-        });
-    }
-
-    function ensureCollaboratorDoc(user) {
-      var uid = user.uid;
-      var email = user.email || "";
-      var name = user.displayName || email.split("@")[0] || "Sem nome";
-
-      var role =
-        email.toLowerCase() === "fligadebora@hotmail.com"
-          ? "admin"
-          : "colaborador";
-
-      var docRef = db.collection("colaboradores").doc(uid);
-      return docRef.set(
-        {
-          uid: uid,
-          email: email,
-          name: name,
-          role: role,
-          active: true
         },
-        { merge: true }
-      ).then(function() {
-        currentCollaborator = {
-          uid: uid,
-          email: email,
-          name: name,
-          role: role,
-          active: true
-        };
-
-        var initials = (name || email || "FL")
-          .split(" ")
-          .map(function(p) { return p[0]; })
-          .join("")
-          .slice(0, 2)
-          .toUpperCase();
-        userAvatarEl.textContent = initials;
-        userNameEl.textContent = name || email;
-        userRoleEl.textContent =
-          role === "admin" ? "Administrador" : "Colaborador";
-
-        if (role === "admin") {
-          tabColaboradoresBtn.style.display = "inline-block";
-        } else {
-          tabColaboradoresBtn.style.display = "none";
+        (error) => {
+          console.error("Erro a carregar colaboradores:", error);
         }
-      });
+      );
     }
 
-    auth.onAuthStateChanged(function(user) {
+    async function ensureCollaboratorDoc(user) {
+      const uid = user.uid;
+      const email = user.email || "";
+      const name = user.displayName || email.split("@")[0] || "Sem nome";
+
+      let existing = null;
+      collabsMap.forEach((c) => {
+        if (c.uid === uid) existing = c;
+      });
+
+      if (!existing) {
+        const role =
+          email.toLowerCase() === "fligadebora@hotmail.com"
+            ? "admin"
+            : "colaborador";
+        try {
+          const ref = await addDoc(collection(db, "colaboradores"), {
+            uid,
+            email,
+            name,
+            role,
+            active: true,
+          });
+          currentCollaborator = {
+            id: ref.id,
+            uid,
+            email,
+            name,
+            role,
+            active: true,
+          };
+        } catch (error) {
+          console.error("Erro ao criar colaborador:", error);
+        }
+      } else {
+        currentCollaborator = existing;
+      }
+
+      if (currentCollaborator.active === false) {
+        alert("O seu utilizador está marcado como inativo.");
+        await signOut(auth);
+      }
+
+      const initials = (currentCollaborator.name || email || "FL")
+        .split(" ")
+        .map((p) => p[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+      userAvatarEl.textContent = initials;
+      userNameEl.textContent = currentCollaborator.name || email;
+      userRoleEl.textContent =
+        currentCollaborator.role === "admin"
+          ? "Administrador"
+          : "Colaborador";
+
+      if (currentCollaborator.role === "admin") {
+        tabColaboradoresBtn.style.display = "inline-block";
+      } else {
+        tabColaboradoresBtn.style.display = "none";
+      }
+    }
+
+    // AUTH LISTENER
+    onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
 
       if (!user) {
@@ -1858,19 +1766,13 @@
       appView.style.display = "block";
       fabAdd.classList.remove("hidden");
 
-      ensureCollaboratorDoc(user).then(function() {
-        subscribeCollaborators();
-        subscribeTasks();
-      });
-    });
+      subscribeCollaborators();
+      setTimeout(async () => {
+        await ensureCollaboratorDoc(user);
+      }, 300);
 
-    // INIT
-    (function init() {
-      var y = currentMonth.getFullYear();
-      var m = currentMonth.getMonth();
-      calendarMonthLabel.textContent = monthLabel(currentMonth);
-      renderCalendar();
-    })();
+      subscribeTasks();
+    });
   </script>
 </body>
 </html>
