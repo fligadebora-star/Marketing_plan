@@ -1402,11 +1402,15 @@
 
       loginErrorEl.textContent = "";
 
-      signInWithEmailAndPassword(auth, email, password).catch((error) => {
-        console.error(error);
-        loginErrorEl.textContent = "Não foi possível iniciar sessão.";
-      });
-    });
+signInWithEmailAndPassword(auth, email, password)
+  .then((cred) => {
+    console.log('Login OK', cred.user);
+  })
+  .catch((error) => {
+    console.error('ERRO LOGIN', error);
+    alert('Erro login: ' + error.code + ' — ' + error.message);
+    loginErrorEl.textContent = 'Erro: ' + error.code;
+  });
 
     logoutBtn.addEventListener("click", () => {
       signOut(auth);
