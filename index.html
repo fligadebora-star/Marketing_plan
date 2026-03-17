@@ -1,145 +1,1629 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendário Marketing Farmácia Liga</title>
+  <meta charset="UTF-8" />
+  <title>Calendário Marketing · Farmácia da Liga</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fonte Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
-    body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .login-container, .app { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-    .login-container { max-width: 400px; margin: 50px auto; }
-    input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
-    button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    #login-error { color: red; margin: 10px 0; }
-    #status-panel { background: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background: #f1f1f1; }
+    :root {
+      --bg: #f5f5f7;
+      --bg-alt: #ffffff;
+      --bg-soft: #f0f1f3;
+      --primary: #1f8a70;
+      --primary-soft: #e0f3ee;
+      --primary-strong: #166153;
+      --danger: #c0392b;
+      --text-main: #1f2933;
+      --text-soft: #6b7280;
+      --text-muted: #9ca3af;
+      --border: #e1e4ea;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fdfdfd 0, var(--bg) 40%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      padding: var(--space-6) var(--space-4) var(--space-8);
+    }
+
+    header.app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-6);
+      gap: var(--space-3);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: conic-gradient(
+        from 180deg at 50% 40%,
+        #1f8a70,
+        #58c5a9,
+        #f5f5f7,
+        #1f8a70
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(31, 138, 112, 0.3);
+      color: #ffffff;
+    }
+
+    .brand-logo span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .brand-text-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .theme-pill {
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+      font-size: 11px;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    /* LOGIN */
+
+    #login-view {
+      margin-top: var(--space-4);
+    }
+
+    .card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: var(--space-5);
+    }
+
+    .field-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-soft);
+      margin-bottom: 2px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(31, 138, 112, 0.16);
+      background: #fbfffe;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .btn {
+      border-radius: var(--radius-pill);
+      padding: 12px 18px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease, box-shadow 0.15s ease,
+        transform 0.08s ease;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(31, 138, 112, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 6px 14px rgba(31, 138, 112, 0.3);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.4);
+      color: var(--text-soft);
+      border-radius: var(--radius-pill);
+      border: 1px dashed var(--border);
+      box-shadow: none;
+      width: auto;
+      padding-inline: 16px;
+    }
+
+    .login-error {
+      margin-top: var(--space-3);
+      font-size: 12px;
+      color: var(--danger);
+      min-height: 16px;
+    }
+
+    .login-hint {
+      margin-top: var(--space-3);
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* APP VIEW */
+
+    #app-view {
+      display: none;
+      margin-top: var(--space-2);
+    }
+
+    .top-user-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      gap: var(--space-3);
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--primary-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      font-size: 11px;
+      color: var(--text-soft);
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: var(--space-4);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-soft);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .tab.active {
+      background: #ffffff;
+      color: var(--primary-strong);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .status-filters {
+      display: flex;
+      overflow-x: auto;
+      gap: 6px;
+      padding-bottom: 4px;
+      margin-bottom: var(--space-3);
+      scrollbar-width: none;
+    }
+
+    .status-filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      border: 1px solid transparent;
+      background: #ffffff;
+      color: var(--text-soft);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .task-card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task-header-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .task-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .task-tag {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+      color: var(--text-soft);
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .task-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+    }
+
+    .task-status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .task-status-row select {
+      flex: 1;
+    }
+
+    .task-status-row small {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .task-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .task-footer span {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .btn-link {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-strong);
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .empty-state {
+      padding: var(--space-6);
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    /* COLABORADORES (apenas admin) */
+
+    #tab-colaboradores-view {
+      display: none;
+    }
+
+    .collab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: var(--space-3);
+    }
+
+    .collab-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .collab-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .pill-role {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+      display: inline-block;
+    }
+
+    .pill-role.secondary {
+      background: var(--bg-soft);
+      color: var(--text-soft);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: 0.2s;
+      border-radius: 999px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.2s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    /* MODAL E FAB */
+
+    .fab {
+      position: fixed;
+      right: 18px;
+      bottom: 24px;
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 18px 30px rgba(31, 138, 112, 0.4);
+      cursor: pointer;
+      z-index: 40;
+    }
+
+    .fab:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 10px 18px rgba(31, 138, 112, 0.35);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.35);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 30;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 22px 22px 0 0;
+      background: #ffffff;
+      padding: var(--space-5) var(--space-5) calc(var(--space-6) + 12px);
+      box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.35);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .pill-status {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+      color: var(--text-soft);
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-soft);
+    }
+
+    .modal-footer {
+      margin-top: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-list {
+      margin-top: var(--space-3);
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .history-item {
+      font-size: 11px;
+      color: var(--text-soft);
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(209, 213, 219, 0.6);
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+      color: var(--text-soft);
+    }
+
+    /* UTIL */
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (min-width: 640px) {
+      .app-shell {
+        max-width: 540px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- LOGIN SCREEN -->
-  <div id="login-container">
-    <h2>🔐 Login Farmácia Liga</h2>
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Senha" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <p id="login-error"></p>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo" aria-label="Marca Farmácia da Liga">
+          <span>FL</span>
+        </div>
+        <div>
+          <div class="brand-text-title">Calendário Marketing</div>
+          <div class="brand-text-sub">Farmácia da Liga · Equipa</div>
+        </div>
+      </div>
+      <div class="theme-pill">
+        <span class="theme-pill-dot"></span>
+        <span>Colaboração em tempo real</span>
+      </div>
+    </header>
+
+    <!-- LOGIN -->
+    <section id="login-view">
+      <div class="card">
+        <div class="card-title">Entrar na área interna</div>
+        <div class="card-subtitle">
+          Aceda com o email e palavra‑passe definidos na conta Firebase da
+          equipa.
+        </div>
+
+        <form id="login-form">
+          <div class="field-group">
+            <div class="field-label">Email profissional</div>
+            <input
+              type="email"
+              id="login-email"
+              autocomplete="email"
+              required
+              placeholder="ex: bheatriz@farmaciadaliga.pt"
+            />
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">Palavra‑passe</div>
+            <input
+              type="password"
+              id="login-password"
+              autocomplete="current-password"
+              required
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            Entrar
+          </button>
+        </form>
+
+        <div id="login-error" class="login-error"></div>
+
+        <p class="login-hint">
+          A gestão de acessos (criação de emails e passwords) é feita pela
+          administração da Farmácia da Liga na consola Firebase.
+        </p>
+      </div>
+    </section>
+
+    <!-- APP PRINCIPAL -->
+    <section id="app-view">
+      <div class="top-user-bar">
+        <div class="user-chip">
+          <div class="user-avatar" id="user-avatar">FL</div>
+          <div>
+            <div id="user-name" style="font-size: 11px; font-weight: 600">
+              Utilizador
+            </div>
+            <div
+              id="user-role"
+              style="font-size: 10px; color: var(--text-muted)"
+            >
+              Colaborador
+            </div>
+          </div>
+        </div>
+
+        <button id="logout-btn" class="logout-btn">Terminar sessão</button>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="tarefas">Tarefas</button>
+        <button class="tab" data-tab="calendario">Visão mês</button>
+        <button class="tab" data-tab="colaboradores" id="tab-colaboradores">
+          Equipa
+        </button>
+      </div>
+
+      <!-- TAB TAREFAS -->
+      <div id="tab-tarefas-view">
+        <div class="status-filters" id="status-filters"></div>
+        <div class="tasks-list" id="tasks-list"></div>
+        <div id="tasks-empty" class="empty-state hidden">
+          Ainda não há ações de marketing para este período.<br />
+          Toque em “+” para criar a primeira tarefa.
+        </div>
+      </div>
+
+      <!-- TAB CALENDÁRIO (simplificada: apenas resumo) -->
+      <div id="tab-calendario-view" class="hidden">
+        <div class="card">
+          <div class="card-title" style="font-size: 15px">
+            Resumo por estado
+          </div>
+          <div class="card-subtitle" style="margin-bottom: 12px">
+            Distribuição das ações por estado de workflow.
+          </div>
+          <div id="calendar-summary" style="font-size: 13px; color: var(--text-soft); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <!-- preenchido por JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB COLABORADORES (apenas admin) -->
+      <div id="tab-colaboradores-view">
+        <div class="card">
+          <div class="card-title" style="font-size: 15px">
+            Colaboradores
+          </div>
+          <div class="card-subtitle" style="margin-bottom: 10px">
+            Ative/anule colaboradores e defina quem tem perfil administrador.
+          </div>
+
+          <div
+            style="
+              font-size: 11px;
+              color: var(--text-muted);
+              margin-bottom: 8px;
+            "
+          >
+            Nota: a criação de novas contas (email e password) continua a ser
+            feita na consola Firebase. Aqui controla apenas o perfil e estado
+            dentro da aplicação.
+          </div>
+
+          <div class="collab-list" id="collab-list"></div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- APP PRINCIPAL (escondida até login) -->
-  <div id="app" style="display: none;">
-    <h1>📅 Calendário Marketing Farmácia Liga</h1>
-    
-    <!-- Painel Status (mantido do teu original) -->
-    <div id="status-panel">
-      <h3>Status da Aplicação</h3>
-      <p>Status OAuth: <span id="oauth-status">Verificando...</span></p>
-      <p>Client ID: <span id="client-id">Verificando...</span></p>
-      <p>API Key: <span id="api-key">Verificando...</span></p>
-      <p>Spreadsheet ID: <span id="spreadsheet-id">Verificando...</span></p>
-      <p>Última sincronização: <span id="last-sync">Nunca</span></p>
-      <p>Última cópia de segurança: <span id="last-backup">24/10/2025 13:30</span></p>
+  <!-- BOTÃO FLOTANTE NOVA TAREFA -->
+  <button class="fab hidden" id="fab-add">+</button>
+
+  <!-- MODAL TAREFA -->
+  <div class="modal-backdrop" id="task-modal-backdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
+      <div class="modal-header">
+        <div>
+          <div id="task-modal-title" class="modal-title">
+            Nova ação de marketing
+          </div>
+          <div
+            style="
+              font-size: 11px;
+              color: var(--text-soft);
+              margin-top: 2px;
+            "
+          >
+            Campos essenciais para planeamento e execução.
+          </div>
+        </div>
+        <button class="modal-close" id="task-modal-close">&times;</button>
+      </div>
+
+      <form id="task-form">
+        <input type="hidden" id="task-id" />
+
+        <div class="field-group">
+          <div class="field-label">Título da ação</div>
+          <input
+            type="text"
+            id="task-title"
+            required
+            placeholder="ex: Campanha Dia do Pai · Redes sociais"
+          />
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Canal</div>
+          <select id="task-channel" required>
+            <option value="">Selecionar...</option>
+            <option value="Instagram / Facebook">Instagram / Facebook</option>
+            <option value="Loja online">Loja online</option>
+            <option value="Loja física">Loja física</option>
+            <option value="Email marketing">Email marketing</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Data planeada</div>
+          <input type="date" id="task-date" required />
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            Duração estimada (min) <span style="color: var(--text-muted)"
+              >· editável em “Em criação”</span
+            >
+          </div>
+          <input
+            type="number"
+            id="task-duration"
+            min="10"
+            step="5"
+            placeholder="ex: 60"
+          />
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Estado</div>
+          <select id="task-status" required></select>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Notas internas</div>
+          <textarea
+            id="task-notes"
+            placeholder="Briefing, mensagens-chave, produtos, timings..."
+          ></textarea>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Histórico de alterações</div>
+          <div
+            id="task-history-empty"
+            style="font-size: 11px; color: var(--text-muted)"
+          >
+            Quando a ação começar a ser atualizada, as alterações por
+            colaborador aparecem aqui.
+          </div>
+          <div class="history-list" id="task-history-list"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" id="task-save-btn">
+            Guardar ação
+          </button>
+          <button
+            type="button"
+            class="btn btn-ghost"
+            id="task-cancel-btn"
+            style="width: 100%"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
     </div>
-
-    <!-- Tabela Calendário Marketing -->
-    <h3>Plano de Marketing Mensal</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Mês</th>
-          <th>Promoções</th>
-          <th>Redes Sociais</th>
-          <th>Email Marketing</th>
-          <th>Orçamento</th>
-        </tr>
-      </thead>
-      <tbody id="marketing-table">
-        <tr>
-          <td>Março 2026</td>
-          <td>Suplementos 20% off</td>
-          <td>3 posts/semana</td>
-          <td>Newsletter semanal</td>
-          <td>€500</td>
-        </tr>
-        <!-- mais linhas dinâmicas aqui -->
-      </tbody>
-    </table>
-
-    <button id="logout-btn" style="background: #dc3545;">Sair</button>
   </div>
 
-  <!-- FIREBASE SDK v9 -->
+  <!-- FIREBASE APP -->
   <script type="module">
-    // Import Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import {
       getAuth,
       signInWithEmailAndPassword,
       onAuthStateChanged,
-      signOut
+      signOut,
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      addDoc,
+      updateDoc,
+      onSnapshot,
+      query,
+      orderBy,
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-    // TUA CONFIG FIREBASE (copiada)
+    // CONFIG DO TEU PROJETO
     const firebaseConfig = {
       apiKey: "AIzaSyA5ge2xh4oq0TrPMWQsZgEnYnsaACFsm7w",
       authDomain: "calendario-maketing-fliga.firebaseapp.com",
       projectId: "calendario-maketing-fliga",
       storageBucket: "calendario-maketing-fliga.firebasestorage.app",
       messagingSenderId: "721415238779",
-      appId: "1:721415238779:web:aabed135e117f896b35ede"
+      appId: "1:721415238779:web:aabed135e117f896b35ede",
     };
 
-    // Inicializa Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Elementos DOM
-    const loginContainer = document.getElementById('login-container');
-    const loginForm = document.getElementById('login-form');
-    const errorEl = document.getElementById('login-error');
-    const appDiv = document.getElementById('app');
-    const logoutBtn = document.getElementById('logout-btn');
+    // ELEMENTOS
+    const loginView = document.getElementById("login-view");
+    const appView = document.getElementById("app-view");
+    const loginForm = document.getElementById("login-form");
+    const loginErrorEl = document.getElementById("login-error");
+    const logoutBtn = document.getElementById("logout-btn");
+    const userNameEl = document.getElementById("user-name");
+    const userRoleEl = document.getElementById("user-role");
+    const userAvatarEl = document.getElementById("user-avatar");
 
-    // Login com Email/Senha
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    const tabButtons = document.querySelectorAll(".tab");
+    const tabTarefasView = document.getElementById("tab-tarefas-view");
+    const tabCalendarioView = document.getElementById("tab-calendario-view");
+    const tabColaboradoresView = document.getElementById(
+      "tab-colaboradores-view"
+    );
+    const tabColaboradoresBtn = document.getElementById("tab-colaboradores");
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          console.log('Login OK:', userCredential.user);
-          errorEl.textContent = '';
-        })
-        .catch((error) => {
-          console.error('Erro login:', error);
-          errorEl.textContent = `Erro: ${error.message}`;
+    const statusFiltersEl = document.getElementById("status-filters");
+    const tasksListEl = document.getElementById("tasks-list");
+    const tasksEmptyEl = document.getElementById("tasks-empty");
+    const calendarSummaryEl = document.getElementById("calendar-summary");
+
+    const collabListEl = document.getElementById("collab-list");
+
+    const fabAdd = document.getElementById("fab-add");
+    const taskModalBackdrop = document.getElementById("task-modal-backdrop");
+    const taskModalClose = document.getElementById("task-modal-close");
+    const taskCancelBtn = document.getElementById("task-cancel-btn");
+    const taskForm = document.getElementById("task-form");
+    const taskIdInput = document.getElementById("task-id");
+    const taskTitleInput = document.getElementById("task-title");
+    const taskChannelInput = document.getElementById("task-channel");
+    const taskDateInput = document.getElementById("task-date");
+    const taskDurationInput = document.getElementById("task-duration");
+    const taskStatusSelect = document.getElementById("task-status");
+    const taskNotesInput = document.getElementById("task-notes");
+    const taskHistoryList = document.getElementById("task-history-list");
+    const taskHistoryEmpty = document.getElementById("task-history-empty");
+    const taskSaveBtn = document.getElementById("task-save-btn");
+
+    const STATUS_LIST = [
+      "Pedido",
+      "Em criação",
+      "Em aprovação",
+      "Aprovado",
+      "Publicado",
+    ];
+
+    let currentUser = null;
+    let currentCollaborator = null;
+    let tasksMap = new Map();
+    let tasksUnsub = null;
+    let collabUnsub = null;
+    let collabsMap = new Map();
+    let activeStatusFilter = "Todas";
+
+    // POPULAR ESTADOS
+    function initStatusSelectors() {
+      // Filtro chips
+      statusFiltersEl.innerHTML = "";
+      ["Todas", ...STATUS_LIST].forEach((status) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className =
+          "chip" + (status === activeStatusFilter ? " active" : "");
+        chip.textContent = status;
+        chip.dataset.status = status;
+        chip.addEventListener("click", () => {
+          activeStatusFilter = status;
+          document
+            .querySelectorAll(".chip")
+            .forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          renderTasks();
         });
-    });
-
-    // Controla visibilidade da app
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Utilizador logado
-        loginContainer.style.display = 'none';
-        appDiv.style.display = 'block';
-        document.getElementById('oauth-status').textContent = 'Autenticado (Firebase)';
-      } else {
-        // Sem login
-        loginContainer.style.display = 'block';
-        appDiv.style.display = 'none';
-      }
-    });
-
-    // Logout
-    logoutBtn?.addEventListener('click', () => {
-      signOut(auth).then(() => {
-        console.log('Logout OK');
+        statusFiltersEl.appendChild(chip);
       });
+
+      // Dropdown do formulário
+      taskStatusSelect.innerHTML = "";
+      STATUS_LIST.forEach((s) => {
+        const opt = document.createElement("option");
+        opt.value = s;
+        opt.textContent = s;
+        taskStatusSelect.appendChild(opt);
+      });
+    }
+
+    initStatusSelectors();
+
+    // LOGIN
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document
+        .getElementById("login-password")
+        .value.trim();
+
+      loginErrorEl.textContent = "";
+
+      signInWithEmailAndPassword(auth, email, password).catch((error) => {
+        console.error(error);
+        loginErrorEl.textContent = "Não foi possível iniciar sessão.";
+      });
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+
+    // TABS
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const tab = btn.dataset.tab;
+        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
+        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
+        tabColaboradoresView.classList.toggle(
+          "hidden",
+          tab !== "colaboradores"
+        );
+      });
+    });
+
+    // MODAL
+    function openTaskModal(task) {
+      taskModalBackdrop.style.display = "flex";
+      if (task) {
+        document.getElementById("task-modal-title").textContent =
+          "Editar ação de marketing";
+        taskIdInput.value = task.id;
+        taskTitleInput.value = task.title || "";
+        taskChannelInput.value = task.channel || "";
+        taskDateInput.value = task.date || "";
+        taskDurationInput.value = task.duration || "";
+        taskStatusSelect.value = task.status || STATUS_LIST[0];
+        taskNotesInput.value = task.notes || "";
+        renderHistory(task.history || []);
+      } else {
+        document.getElementById("task-modal-title").textContent =
+          "Nova ação de marketing";
+        taskIdInput.value = "";
+        taskTitleInput.value = "";
+        taskChannelInput.value = "";
+        taskDateInput.valueAsDate = new Date();
+        taskDurationInput.value = "";
+        taskStatusSelect.value = "Pedido";
+        taskNotesInput.value = "";
+        renderHistory([]);
+      }
+      updateDurationEditability(taskStatusSelect.value);
+    }
+
+    function closeTaskModal() {
+      taskModalBackdrop.style.display = "none";
+    }
+
+    taskModalClose.addEventListener("click", closeTaskModal);
+    taskCancelBtn.addEventListener("click", closeTaskModal);
+    taskModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === taskModalBackdrop) closeTaskModal();
+    });
+
+    fabAdd.addEventListener("click", () => openTaskModal(null));
+
+    function updateDurationEditability(status) {
+      if (status === "Em criação") {
+        taskDurationInput.disabled = false;
+        taskDurationInput.placeholder =
+          "ex: 60 (só editável enquanto estiver em criação)";
+      } else {
+        taskDurationInput.disabled = true;
+      }
+    }
+
+    taskStatusSelect.addEventListener("change", (e) => {
+      updateDurationEditability(e.target.value);
+    });
+
+    // FORM TAREFA
+    taskForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentUser || !currentCollaborator) return;
+
+      const id = taskIdInput.value || null;
+      const title = taskTitleInput.value.trim();
+      const channel = taskChannelInput.value;
+      const date = taskDateInput.value;
+      const duration = taskDurationInput.value
+        ? Number(taskDurationInput.value)
+        : null;
+      const status = taskStatusSelect.value;
+      const notes = taskNotesInput.value.trim();
+
+      if (!title || !channel || !date || !status) return;
+
+      const nowIso = new Date().toISOString();
+      const collName = currentCollaborator.name || currentCollaborator.email;
+
+      if (!id) {
+        const docRef = await addDoc(collection(db, "tarefas"), {
+          title,
+          channel,
+          date,
+          duration,
+          status,
+          notes,
+          createdAt: nowIso,
+          createdByUid: currentUser.uid,
+          createdByName: collName,
+          createdByEmail: currentCollaborator.email,
+          lastUpdatedAt: nowIso,
+          lastUpdatedByUid: currentUser.uid,
+          lastUpdatedByName: collName,
+          lastUpdatedByEmail: currentCollaborator.email,
+          history: [
+            {
+              at: nowIso,
+              byUid: currentUser.uid,
+              byName: collName,
+              byEmail: currentCollaborator.email,
+              fromStatus: null,
+              toStatus: status,
+              type: "criação",
+            },
+          ],
+        });
+        console.log("Tarefa criada:", docRef.id);
+      } else {
+        const ref = doc(db, "tarefas", id);
+        const previous = tasksMap.get(id);
+        const history = previous?.history || [];
+        history.push({
+          at: nowIso,
+          byUid: currentUser.uid,
+          byName: collName,
+          byEmail: currentCollaborator.email,
+          fromStatus: previous?.status || null,
+          toStatus: status,
+          type: "edição",
+        });
+
+        await updateDoc(ref, {
+          title,
+          channel,
+          date,
+          duration,
+          status,
+          notes,
+          lastUpdatedAt: nowIso,
+          lastUpdatedByUid: currentUser.uid,
+          lastUpdatedByName: collName,
+          lastUpdatedByEmail: currentCollaborator.email,
+          history,
+        });
+        console.log("Tarefa atualizada:", id);
+      }
+
+      closeTaskModal();
+    });
+
+    // RENDERIZAÇÃO
+
+    function renderTasks() {
+      const tasksArr = Array.from(tasksMap.values());
+
+      const visible = tasksArr.filter((t) => {
+        if (activeStatusFilter === "Todas") return true;
+        return t.status === activeStatusFilter;
+      });
+
+      tasksListEl.innerHTML = "";
+
+      if (!visible.length) {
+        tasksEmptyEl.classList.remove("hidden");
+      } else {
+        tasksEmptyEl.classList.add("hidden");
+      }
+
+      visible
+        .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
+        .forEach((task) => {
+          const card = document.createElement("article");
+          card.className = "task-card";
+
+          const header = document.createElement("div");
+          header.className = "task-header-row";
+
+          const titleEl = document.createElement("div");
+          titleEl.className = "task-title";
+          titleEl.textContent = task.title;
+
+          const tag = document.createElement("div");
+          tag.className = "task-tag";
+          tag.textContent = task.channel || "—";
+
+          header.appendChild(titleEl);
+          header.appendChild(tag);
+          card.appendChild(header);
+
+          const meta = document.createElement("div");
+          meta.className = "task-meta";
+          if (task.date) {
+            meta.innerHTML += `<span>📅 <strong>${task.date}</strong></span>`;
+          }
+          if (task.duration) {
+            meta.innerHTML += `<span>⏱ ${task.duration} min</span>`;
+          }
+          meta.innerHTML += `<span>👤 ${
+            task.lastUpdatedByName || task.createdByName || "—"
+          }</span>`;
+          card.appendChild(meta);
+
+          const statusRow = document.createElement("div");
+          statusRow.className = "task-status-row";
+
+          const select = document.createElement("select");
+          STATUS_LIST.forEach((s) => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            if (s === task.status) opt.selected = true;
+            select.appendChild(opt);
+          });
+
+          select.addEventListener("change", async (e) => {
+            if (!currentUser || !currentCollaborator) return;
+            const newStatus = e.target.value;
+            await changeTaskStatus(task.id, task, newStatus);
+          });
+
+          const statusNote = document.createElement("small");
+          statusNote.textContent = "Mudanças são registadas por colaborador.";
+
+          statusRow.appendChild(select);
+          statusRow.appendChild(statusNote);
+          card.appendChild(statusRow);
+
+          const footer = document.createElement("div");
+          footer.className = "task-footer";
+
+          const last = document.createElement("span");
+          if (task.lastUpdatedAt && task.lastUpdatedByName) {
+            const d = new Date(task.lastUpdatedAt);
+            const dStr = isNaN(d.getTime())
+              ? task.lastUpdatedAt
+              : d.toLocaleString("pt-PT", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+            last.textContent = `Última alteração por ${
+              task.lastUpdatedByName
+            } em ${dStr}`;
+          } else {
+            last.textContent = "Ainda sem histórico de alterações.";
+          }
+
+          const historyBtn = document.createElement("button");
+          historyBtn.type = "button";
+          historyBtn.className = "btn-link";
+          historyBtn.textContent = "Ver detalhes";
+          historyBtn.addEventListener("click", () => openTaskModal(task));
+
+          footer.appendChild(last);
+          footer.appendChild(historyBtn);
+          card.appendChild(footer);
+
+          tasksListEl.appendChild(card);
+        });
+
+      renderCalendarSummary();
+    }
+
+    function renderCalendarSummary() {
+      const tasksArr = Array.from(tasksMap.values());
+      const counts = {};
+      STATUS_LIST.forEach((s) => (counts[s] = 0));
+      tasksArr.forEach((t) => {
+        if (t.status && counts[t.status] != null) counts[t.status] += 1;
+      });
+
+      calendarSummaryEl.innerHTML = "";
+      STATUS_LIST.forEach((s) => {
+        const total = counts[s] || 0;
+        const div = document.createElement("div");
+        div.style.padding = "8px 10px";
+        div.style.borderRadius = "14px";
+        div.style.background = "#ffffff";
+        div.style.border = "1px solid var(--border)";
+        div.style.display = "flex";
+        div.style.flexDirection = "column";
+        div.style.gap = "4px";
+
+        const title = document.createElement("div");
+        title.style.fontSize = "11px";
+        title.style.fontWeight = "600";
+        title.textContent = s;
+
+        const num = document.createElement("div");
+        num.style.fontSize = "18px";
+        num.style.fontWeight = "700";
+        num.textContent = total.toString();
+
+        div.appendChild(title);
+        div.appendChild(num);
+        calendarSummaryEl.appendChild(div);
+      });
+    }
+
+    function renderHistory(history) {
+      taskHistoryList.innerHTML = "";
+      if (!history || !history.length) {
+        taskHistoryEmpty.style.display = "block";
+        return;
+      }
+      taskHistoryEmpty.style.display = "none";
+
+      history
+        .slice()
+        .sort((a, b) => (a.at || "").localeCompare(b.at || ""))
+        .forEach((h) => {
+          const item = document.createElement("div");
+          item.className = "history-item";
+          const dateTxt = h.at
+            ? new Date(h.at).toLocaleString("pt-PT", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "—";
+          const from = h.fromStatus || "—";
+          const to = h.toStatus || "—";
+          item.innerHTML = `<span class="badge-status">${
+            h.type === "criação" ? "Criação" : "Atualização"
+          }</span>
+            <br />${h.byName || h.byEmail || "—"} · ${dateTxt}
+            <br /><strong>${from}</strong> → <strong>${to}</strong>`;
+          taskHistoryList.appendChild(item);
+        });
+    }
+
+    async function changeTaskStatus(id, task, newStatus) {
+      const nowIso = new Date().toISOString();
+      const collName = currentCollaborator.name || currentCollaborator.email;
+      const ref = doc(db, "tarefas", id);
+      const history = task.history ? task.history.slice() : [];
+      history.push({
+        at: nowIso,
+        byUid: currentUser.uid,
+        byName: collName,
+        byEmail: currentCollaborator.email,
+        fromStatus: task.status || null,
+        toStatus: newStatus,
+        type: "estado",
+      });
+
+      await updateDoc(ref, {
+        status: newStatus,
+        lastUpdatedAt: nowIso,
+        lastUpdatedByUid: currentUser.uid,
+        lastUpdatedByName: collName,
+        lastUpdatedByEmail: currentCollaborator.email,
+        history,
+      });
+    }
+
+    // COLABORADORES
+
+    function renderCollaborators() {
+      collabListEl.innerHTML = "";
+      const arr = Array.from(collabsMap.values()).sort((a, b) =>
+        (a.name || a.email || "").localeCompare(b.name || b.email || "")
+      );
+      if (!arr.length) {
+        collabListEl.innerHTML =
+          '<div style="font-size:12px;color:var(--text-soft);margin-top:6px;">Nenhum colaborador registado ainda. Assim que alguém entrar com email válido, aparece aqui.</div>';
+        return;
+      }
+
+      arr.forEach((c) => {
+        const row = document.createElement("div");
+        row.className = "collab-row";
+
+        const main = document.createElement("div");
+        main.className = "collab-main";
+        const nameEl = document.createElement("div");
+        nameEl.textContent = c.name || c.email || "—";
+        nameEl.style.fontWeight = "600";
+        nameEl.style.fontSize = "12px";
+        const emailEl = document.createElement("div");
+        emailEl.textContent = c.email;
+        emailEl.style.fontSize = "11px";
+        emailEl.style.color = "var(--text-muted)";
+
+        const roleEl = document.createElement("span");
+        roleEl.className =
+          "pill-role " + (c.role === "admin" ? "" : "secondary");
+        roleEl.textContent =
+          c.role === "admin" ? "Administrador" : "Colaborador";
+
+        main.appendChild(nameEl);
+        main.appendChild(emailEl);
+        main.appendChild(roleEl);
+
+        const controls = document.createElement("div");
+        controls.style.display = "flex";
+        controls.style.flexDirection = "column";
+        controls.style.alignItems = "flex-end";
+        controls.style.gap = "4px";
+
+        const activeWrap = document.createElement("label");
+        activeWrap.className = "switch";
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = c.active !== false; // por defeito ativo
+        const slider = document.createElement("span");
+        slider.className = "slider";
+        activeWrap.appendChild(input);
+        activeWrap.appendChild(slider);
+
+        input.addEventListener("change", async () => {
+          const ref = doc(db, "colaboradores", c.id);
+          await updateDoc(ref, { active: input.checked });
+        });
+
+        const roleBtn = document.createElement("button");
+        roleBtn.type = "button";
+        roleBtn.className = "btn-link";
+        roleBtn.textContent =
+          c.role === "admin" ? "Tornar colaborador" : "Tornar admin";
+
+        roleBtn.addEventListener("click", async () => {
+          const newRole = c.role === "admin" ? "colaborador" : "admin";
+          const ref = doc(db, "colaboradores", c.id);
+          await updateDoc(ref, { role: newRole });
+        });
+
+        controls.appendChild(activeWrap);
+        if (currentCollaborator?.role === "admin" && c.uid !== currentUser.uid) {
+          controls.appendChild(roleBtn);
+        }
+
+        row.appendChild(main);
+        row.appendChild(controls);
+        collabListEl.appendChild(row);
+      });
+    }
+
+    // SYNC FIRESTORE
+
+    function subscribeTasks() {
+      if (tasksUnsub) tasksUnsub();
+      const q = query(collection(db, "tarefas"), orderBy("date", "asc"));
+      tasksUnsub = onSnapshot(q, (snap) => {
+        tasksMap.clear();
+        snap.forEach((d) => {
+          tasksMap.set(d.id, { id: d.id, ...d.data() });
+        });
+        renderTasks();
+      });
+    }
+
+    function subscribeCollaborators() {
+      if (collabUnsub) collabUnsub();
+      collabUnsub = onSnapshot(collection(db, "colaboradores"), (snap) => {
+        collabsMap.clear();
+        snap.forEach((d) => {
+          collabsMap.set(d.id, { id: d.id, ...d.data() });
+        });
+        renderCollaborators();
+      });
+    }
+
+    async function ensureCollaboratorDoc(user) {
+      const uid = user.uid;
+      const email = user.email || "";
+      const name = user.displayName || email.split("@")[0] || "Sem nome";
+
+      // Procurar doc com id == uid
+      let existing = null;
+      collabsMap.forEach((c) => {
+        if (c.uid === uid) existing = c;
+      });
+
+      if (!existing) {
+        const role =
+          email.toLowerCase() === "fligadebora@hotmail.com"
+            ? "admin"
+            : "colaborador";
+        const ref = await addDoc(collection(db, "colaboradores"), {
+          uid,
+          email,
+          name,
+          role,
+          active: true,
+        });
+        currentCollaborator = {
+          id: ref.id,
+          uid,
+          email,
+          name,
+          role,
+          active: true,
+        };
+      } else {
+        currentCollaborator = existing;
+      }
+
+      // Se estiver inativo, impedir uso
+      if (currentCollaborator.active === false) {
+        alert(
+          "O seu utilizador está marcado como inativo pela administração. Contacte a Débora para reativar."
+        );
+        await signOut(auth);
+      }
+
+      const initials = (currentCollaborator.name || email || "FL")
+        .split(" ")
+        .map((p) => p[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+      userAvatarEl.textContent = initials;
+      userNameEl.textContent = currentCollaborator.name || email;
+      userRoleEl.textContent =
+        currentCollaborator.role === "admin"
+          ? "Administrador"
+          : "Colaborador";
+
+      // Mostrar/ocultar tab de colaboradores
+      if (currentCollaborator.role === "admin") {
+        tabColaboradoresBtn.style.display = "inline-block";
+      } else {
+        tabColaboradoresBtn.style.display = "none";
+      }
+    }
+
+    // LISTENER DE AUTH
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+
+      if (!user) {
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        if (tasksUnsub) tasksUnsub();
+        if (collabUnsub) collabUnsub();
+        return;
+      }
+
+      // Logado
+      loginView.style.display = "none";
+      appView.style.display = "block";
+      fabAdd.classList.remove("hidden");
+
+      subscribeCollaborators();
+      // Aguardar 300ms para sync inicial de colaboradores
+      setTimeout(async () => {
+        await ensureCollaboratorDoc(user);
+      }, 300);
+
+      subscribeTasks();
     });
   </script>
 </body>
