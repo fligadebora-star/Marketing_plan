@@ -41,11 +41,7 @@
       --space-8: 32px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont,
@@ -133,9 +129,7 @@
 
     /* LOGIN */
 
-    #login-view {
-      margin-top: var(--space-4);
-    }
+    #login-view { margin-top: var(--space-4); }
 
     .card {
       background: var(--bg-alt);
@@ -156,9 +150,7 @@
       margin-bottom: var(--space-5);
     }
 
-    .field-group {
-      margin-bottom: var(--space-4);
-    }
+    .field-group { margin-bottom: var(--space-4); }
 
     .field-label {
       font-size: 12px;
@@ -412,9 +404,7 @@
       scrollbar-width: none;
     }
 
-    .status-filters::-webkit-scrollbar {
-      display: none;
-    }
+    .status-filters::-webkit-scrollbar { display: none; }
 
     .chip {
       flex: 0 0 auto;
@@ -527,9 +517,7 @@
 
     /* COLABORADORES */
 
-    #tab-colaboradores-view {
-      display: none;
-    }
+    #tab-colaboradores-view { display: none; }
 
     .collab-list {
       display: flex;
@@ -606,13 +594,8 @@
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
     }
 
-    input:checked + .slider {
-      background-color: var(--primary);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(18px);
-    }
+    input:checked + .slider { background-color: var(--primary); }
+    input:checked + .slider:before { transform: translateX(18px); }
 
     /* CALENDÁRIO */
 
@@ -675,25 +658,13 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      cursor: pointer;
-      position: relative;
-      transition: background 0.12s ease, box-shadow 0.12s ease,
-        transform 0.06s ease;
     }
 
-    .calendar-day.other-month {
-      opacity: 0.45;
-    }
+    .calendar-day.other-month { opacity: 0.45; }
 
     .calendar-day.today {
       border: 1px solid var(--primary);
       box-shadow: 0 0 0 2px rgba(31, 138, 112, 0.15);
-    }
-
-    .calendar-day:hover {
-      background: #ffffff;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.09);
-      transform: translateY(-1px);
     }
 
     .calendar-day-number {
@@ -712,21 +683,10 @@
       border-radius: 999px;
       font-size: 9px;
       padding: 2px 6px;
-      background: rgba(31, 138, 112, 0.06);
-      color: var(--primary-strong);
       max-width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    .calendar-icon-badge {
-      width: 18px;
-      height: 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
     }
 
     .calendar-day-count {
@@ -736,7 +696,7 @@
       margin-top: 2px;
     }
 
-    /* MODAIS E FAB */
+    /* FAB E MODAL */
 
     .fab {
       position: fixed;
@@ -833,78 +793,10 @@
       color: var(--text-soft);
     }
 
-    /* MODAL DIA */
-
-    .day-tasks-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 6px;
-      max-height: 240px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .day-task-row {
-      padding: 8px 0;
-      border-bottom: 1px dashed rgba(209, 213, 219, 0.7);
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .day-task-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .day-task-title {
-      font-weight: 600;
-    }
-
-    .day-task-channel {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .day-task-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    .day-task-status-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .day-task-status-row select {
-      flex: 1;
-    }
-
-    .day-task-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-      margin-top: 2px;
-    }
-
-    /* UTIL */
-
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     @media (min-width: 640px) {
-      .app-shell {
-        max-width: 540px;
-      }
+      .app-shell { max-width: 540px; }
     }
   </style>
 </head>
@@ -1039,7 +931,7 @@
       </div>
 
       <!-- TAB EQUIPA -->
-      <div id="tab-colaboradores-view">
+      <div id="tab-colaboradores-view" class="hidden">
         <div class="card">
           <div class="card-title" style="font-size: 15px">
             Colaboradores
@@ -1181,162 +1073,99 @@
     </div>
   </div>
 
-  <!-- MODAL DIA -->
-  <div class="modal-backdrop" id="day-modal-backdrop">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="day-modal-title">
-      <div class="modal-header">
-        <div>
-          <div id="day-modal-title" class="modal-title">
-            Ações no dia
-          </div>
-          <div
-            style="
-              font-size: 11px;
-              color: var(--text-soft);
-              margin-top: 2px;
-            "
-          >
-            Altere rapidamente os estados ou entre em detalhe em cada ação.
-          </div>
-        </div>
-        <button class="modal-close" id="day-modal-close">&times;</button>
-      </div>
+  <!-- SDK Firebase v8 (global firebase) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-      <div>
-        <div class="field-label">Ações neste dia</div>
-        <div
-          id="day-modal-empty"
-          style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"
-        >
-          Ainda não há ações planeadas para este dia.
-        </div>
-        <div class="day-tasks-list" id="day-tasks-list"></div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="day-add-task-btn">
-          Nova ação neste dia
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- FIREBASE APP -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import {
-      getAuth,
-      signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut,
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-    import {
-      getFirestore,
-      collection,
-      doc,
-      addDoc,
-      updateDoc,
-      setDoc,
-      onSnapshot,
-      query,
-      orderBy,
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-
-    const firebaseConfig = {
+  <script>
+    // CONFIG
+    var firebaseConfig = {
       apiKey: "AIzaSyA5ge2xh4oq0TrPMWQsZgEnYnsaACFsm7w",
       authDomain: "calendario-maketing-fliga.firebaseapp.com",
       projectId: "calendario-maketing-fliga",
       storageBucket: "calendario-maketing-fliga.firebasestorage.app",
       messagingSenderId: "721415238779",
-      appId: "1:721415238779:web:aabed135e117f896b35ede",
+      appId: "1:721415238779:web:aabed135e117f896b35ede"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app); // instância única recomendada[web:79][web:100]
+    firebase.initializeApp(firebaseConfig); // v8 global[web:19]
+    var auth = firebase.auth();
+    var db = firebase.firestore();
 
     // ELEMENTOS
-    const loginView = document.getElementById("login-view");
-    const appView = document.getElementById("app-view");
-    const loginForm = document.getElementById("login-form");
-    const loginErrorEl = document.getElementById("login-error");
-    const logoutBtn = document.getElementById("logout-btn");
-    const userNameEl = document.getElementById("user-name");
-    const userRoleEl = document.getElementById("user-role");
-    const userAvatarEl = document.getElementById("user-avatar");
+    var loginView = document.getElementById("login-view");
+    var appView = document.getElementById("app-view");
+    var loginForm = document.getElementById("login-form");
+    var loginErrorEl = document.getElementById("login-error");
+    var logoutBtn = document.getElementById("logout-btn");
+    var userNameEl = document.getElementById("user-name");
+    var userRoleEl = document.getElementById("user-role");
+    var userAvatarEl = document.getElementById("user-avatar");
 
-    const tabButtons = document.querySelectorAll(".tab");
-    const tabTarefasView = document.getElementById("tab-tarefas-view");
-    const tabCalendarioView = document.getElementById("tab-calendario-view");
-    const tabColaboradoresView = document.getElementById("tab-colaboradores-view");
-    const tabColaboradoresBtn = document.getElementById("tab-colaboradores");
+    var tabButtons = document.querySelectorAll(".tab");
+    var tabTarefasView = document.getElementById("tab-tarefas-view");
+    var tabCalendarioView = document.getElementById("tab-calendario-view");
+    var tabColaboradoresView = document.getElementById("tab-colaboradores-view");
+    var tabColaboradoresBtn = document.getElementById("tab-colaboradores");
 
-    const statusFiltersEl = document.getElementById("status-filters");
-    const tasksListEl = document.getElementById("tasks-list");
-    const tasksEmptyEl = document.getElementById("tasks-empty");
+    var statusFiltersEl = document.getElementById("status-filters");
+    var tasksListEl = document.getElementById("tasks-list");
+    var tasksEmptyEl = document.getElementById("tasks-empty");
 
-    const collabListEl = document.getElementById("collab-list");
+    var calendarMonthLabel = document.getElementById("calendar-month-label");
+    var calendarGrid = document.getElementById("calendar-grid");
+    var calPrevBtn = document.getElementById("cal-prev");
+    var calNextBtn = document.getElementById("cal-next");
 
-    const fabAdd = document.getElementById("fab-add");
-    const taskModalBackdrop = document.getElementById("task-modal-backdrop");
-    const taskModalClose = document.getElementById("task-modal-close");
-    const taskCancelBtn = document.getElementById("task-cancel-btn");
-    const taskForm = document.getElementById("task-form");
-    const taskIdInput = document.getElementById("task-id");
-    const taskTitleInput = document.getElementById("task-title");
-    const taskChannelInput = document.getElementById("task-channel");
-    const taskDateInput = document.getElementById("task-date");
-    const taskDurationInput = document.getElementById("task-duration");
-    const taskStatusSelect = document.getElementById("task-status");
-    const taskPrioritySelect = document.getElementById("task-priority");
-    const taskNotesInput = document.getElementById("task-notes");
-    const taskHistoryList = document.getElementById("task-history-list");
-    const taskHistoryEmpty = document.getElementById("task-history-empty");
+    var collabListEl = document.getElementById("collab-list");
 
-    const calendarMonthLabel = document.getElementById("calendar-month-label");
-    const calendarGrid = document.getElementById("calendar-grid");
-    const calPrevBtn = document.getElementById("cal-prev");
-    const calNextBtn = document.getElementById("cal-next");
+    var fabAdd = document.getElementById("fab-add");
+    var taskModalBackdrop = document.getElementById("task-modal-backdrop");
+    var taskModalClose = document.getElementById("task-modal-close");
+    var taskCancelBtn = document.getElementById("task-cancel-btn");
+    var taskForm = document.getElementById("task-form");
+    var taskIdInput = document.getElementById("task-id");
+    var taskTitleInput = document.getElementById("task-title");
+    var taskChannelInput = document.getElementById("task-channel");
+    var taskDateInput = document.getElementById("task-date");
+    var taskDurationInput = document.getElementById("task-duration");
+    var taskStatusSelect = document.getElementById("task-status");
+    var taskPrioritySelect = document.getElementById("task-priority");
+    var taskNotesInput = document.getElementById("task-notes");
+    var taskHistoryList = document.getElementById("task-history-list");
+    var taskHistoryEmpty = document.getElementById("task-history-empty");
 
-    const dayModalBackdrop = document.getElementById("day-modal-backdrop");
-    const dayModalClose = document.getElementById("day-modal-close");
-    const dayModalTitle = document.getElementById("day-modal-title");
-    const dayTasksListEl = document.getElementById("day-tasks-list");
-    const dayModalEmpty = document.getElementById("day-modal-empty");
-    const dayAddTaskBtn = document.getElementById("day-add-task-btn");
-
-    const STATUS_LIST = [
+    var STATUS_LIST = [
       "Pedido",
       "Em criação",
       "Em aprovação",
       "Aprovado",
-      "Publicado",
+      "Publicado"
     ];
 
-    let currentUser = null;
-    let currentCollaborator = null;
-    let tasksMap = new Map();
-    let tasksUnsub = null;
-    let collabUnsub = null;
-    let collabsMap = new Map();
-    let activeStatusFilter = "Todas";
+    var currentUser = null;
+    var currentCollaborator = null;
+    var tasksMap = {};
+    var collabsMap = {};
+    var tasksUnsub = null;
+    var collabUnsub = null;
+    var activeStatusFilter = "Todas";
 
-    let currentMonth = new Date();
+    var currentMonth = new Date();
     currentMonth.setDate(1);
-    let selectedDayDate = null;
 
     function formatYMD(date) {
-      const d = new Date(date);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      return `${y}-${m}-${day}`;
+      var d = new Date(date);
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, "0");
+      var day = String(d.getDate()).padStart(2, "0");
+      return y + "-" + m + "-" + day;
     }
 
     function monthLabel(date) {
       return date.toLocaleDateString("pt-PT", {
         month: "long",
-        year: "numeric",
+        year: "numeric"
       });
     }
 
@@ -1345,7 +1174,7 @@
     }
 
     function priorityClass(priority) {
-      const p = (priority || "Normal").toLowerCase();
+      var p = (priority || "Normal").toLowerCase();
       if (p === "baixa") return "priority-baixa";
       if (p === "alta") return "priority-alta";
       if (p === "crítica" || p === "critica") return "priority-critica";
@@ -1354,27 +1183,28 @@
 
     function channelIcon(channel) {
       if (!channel) return "⭐";
-      if (channel.includes("Instagram")) return "📱";
-      if (channel.includes("Loja online")) return "🛒";
-      if (channel.includes("Loja física")) return "🏪";
-      if (channel.includes("Email")) return "✉️";
+      if (channel.indexOf("Instagram") >= 0) return "📱";
+      if (channel.indexOf("Loja online") >= 0) return "🛒";
+      if (channel.indexOf("Loja física") >= 0) return "🏪";
+      if (channel.indexOf("Email") >= 0) return "✉️";
       return "⭐";
     }
 
     function initStatusSelectors() {
       statusFiltersEl.innerHTML = "";
-      ["Todas", ...STATUS_LIST].forEach((status) => {
-        const chip = document.createElement("button");
+      ["Todas"].concat(STATUS_LIST).forEach(function(status) {
+        var chip = document.createElement("button");
         chip.type = "button";
         chip.className =
           "chip" + (status === activeStatusFilter ? " active" : "");
         chip.textContent = status;
         chip.dataset.status = status;
-        chip.addEventListener("click", () => {
+        chip.addEventListener("click", function() {
           activeStatusFilter = status;
-          document
-            .querySelectorAll(".chip")
-            .forEach((c) => c.classList.remove("active"));
+          Array.prototype.forEach.call(
+            document.querySelectorAll(".chip"),
+            function(c) { c.classList.remove("active"); }
+          );
           chip.classList.add("active");
           renderTasks();
         });
@@ -1382,8 +1212,8 @@
       });
 
       taskStatusSelect.innerHTML = "";
-      STATUS_LIST.forEach((s) => {
-        const opt = document.createElement("option");
+      STATUS_LIST.forEach(function(s) {
+        var opt = document.createElement("option");
         opt.value = s;
         opt.textContent = s;
         taskStatusSelect.appendChild(opt);
@@ -1392,48 +1222,48 @@
 
     initStatusSelectors();
 
-  // LOGIN
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+    // LOGIN
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      var email = document.getElementById("login-email").value.trim();
+      var password = document
+        .getElementById("login-password")
+        .value.trim();
 
-  const email = document.getElementById("login-email").value.trim();
-  const password = document
-    .getElementById("login-password")
-    .value.trim();
+      loginErrorEl.textContent = "";
 
-  loginErrorEl.textContent = "";
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then((cred) => {
-      console.log("Login OK", cred.user);
-      // aqui o onAuthStateChanged trata de mostrar o app-view
-    })
-    .catch((error) => {
-      console.error("ERRO LOGIN", error);
-      alert("Erro login: " + error.code + " — " + error.message);
-      loginErrorEl.textContent = "Erro: " + error.code;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(function(cred) {
+          console.log("Login OK", cred.user);
+        })
+        .catch(function(error) {
+          console.error("ERRO LOGIN", error);
+          alert("Erro login: " + error.code + " — " + error.message);
+          loginErrorEl.textContent = "Erro: " + error.code;
+        });
     });
-});
 
-// LOGOUT
-logoutBtn.addEventListener("click", () => {
-  signOut(auth);
-});
+    // LOGOUT
+    logoutBtn.addEventListener("click", function() {
+      auth.signOut();
+    });
 
-// TABS
-tabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    tabButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    const tab = btn.dataset.tab;
-    tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
-    tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
-    tabColaboradoresView.classList.toggle("hidden", tab !== "colaboradores");
-  });
-});
+    // TABS
+    Array.prototype.forEach.call(tabButtons, function(btn) {
+      btn.addEventListener("click", function() {
+        Array.prototype.forEach.call(tabButtons, function(b) {
+          b.classList.remove("active");
+        });
+        btn.classList.add("active");
+        var tab = btn.dataset.tab;
+        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
+        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
+        tabColaboradoresView.classList.toggle("hidden", tab !== "colaboradores");
+      });
+    });
 
     // MODAL TAREFA
-    function openTaskModal(task, fixedDateYmd = null) {
+    function openTaskModal(task) {
       taskModalBackdrop.style.display = "flex";
       if (task) {
         document.getElementById("task-modal-title").textContent =
@@ -1453,7 +1283,7 @@ tabButtons.forEach((btn) => {
         taskIdInput.value = "";
         taskTitleInput.value = "";
         taskChannelInput.value = "";
-        taskDateInput.value = fixedDateYmd || formatYMD(new Date());
+        taskDateInput.value = formatYMD(new Date());
         taskDurationInput.value = "";
         taskStatusSelect.value = "Pedido";
         taskPrioritySelect.value = "Normal";
@@ -1468,43 +1298,108 @@ tabButtons.forEach((btn) => {
 
     taskModalClose.addEventListener("click", closeTaskModal);
     taskCancelBtn.addEventListener("click", closeTaskModal);
-    taskModalBackdrop.addEventListener("click", (e) => {
+    taskModalBackdrop.addEventListener("click", function(e) {
       if (e.target === taskModalBackdrop) closeTaskModal();
     });
 
-    fabAdd.addEventListener("click", () => openTaskModal(null));
+    fabAdd.addEventListener("click", function() { openTaskModal(null); });
 
-    // FORM TAREFA
-    taskForm.addEventListener("submit", async (e) => {
+    function renderHistory(history) {
+      taskHistoryList.innerHTML = "";
+      if (!history || !history.length) {
+        taskHistoryEmpty.style.display = "block";
+        return;
+      }
+      taskHistoryEmpty.style.display = "none";
+      history
+        .slice()
+        .sort(function(a, b) {
+          return (a.at || "").localeCompare(b.at || "");
+        })
+        .forEach(function(h) {
+          var item = document.createElement("div");
+          item.className = "history-item";
+          var dateTxt = h.at
+            ? new Date(h.at).toLocaleString("pt-PT", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+              })
+            : "—";
+          var from = h.fromStatus || "—";
+          var to = h.toStatus || "—";
+          item.innerHTML =
+            '<span class="badge-status">' +
+            (h.type === "criação" ? "Criação" : "Atualização") +
+            "</span><br>" +
+            (h.byName || h.byEmail || "—") +
+            " · " +
+            dateTxt +
+            "<br><strong>" +
+            from +
+            "</strong> → <strong>" +
+            to +
+            "</strong>";
+          taskHistoryList.appendChild(item);
+        });
+    }
+
+    function changeTaskStatus(id, task, newStatus) {
+      var nowIso = new Date().toISOString();
+      var collName = currentCollaborator.name || currentCollaborator.email;
+      var ref = db.collection("tarefas").doc(id);
+      var history = (task.history || []).slice();
+      history.push({
+        at: nowIso,
+        byUid: currentUser.uid,
+        byName: collName,
+        byEmail: currentCollaborator.email,
+        fromStatus: task.status || null,
+        toStatus: newStatus,
+        type: "estado"
+      });
+
+      return ref.update({
+        status: newStatus,
+        lastUpdatedAt: nowIso,
+        lastUpdatedByUid: currentUser.uid,
+        lastUpdatedByName: collName,
+        lastUpdatedByEmail: currentCollaborator.email,
+        history: history
+      });
+    }
+
+    taskForm.addEventListener("submit", function(e) {
       e.preventDefault();
       if (!currentUser || !currentCollaborator) return;
 
-      const id = taskIdInput.value || null;
-      const title = taskTitleInput.value.trim();
-      const channel = taskChannelInput.value;
-      const date = taskDateInput.value;
-      const duration = taskDurationInput.value
+      var id = taskIdInput.value || null;
+      var title = taskTitleInput.value.trim();
+      var channel = taskChannelInput.value;
+      var date = taskDateInput.value;
+      var duration = taskDurationInput.value
         ? Number(taskDurationInput.value)
         : null;
-      const status = taskStatusSelect.value;
-      const priority = taskPrioritySelect.value || "Normal";
-      const notes = taskNotesInput.value.trim();
+      var status = taskStatusSelect.value;
+      var priority = taskPrioritySelect.value || "Normal";
+      var notes = taskNotesInput.value.trim();
 
       if (!title || !channel || !date || !status) return;
 
-      const nowIso = new Date().toISOString();
-      const collName = currentCollaborator.name || currentCollaborator.email;
+      var nowIso = new Date().toISOString();
+      var collName = currentCollaborator.name || currentCollaborator.email;
 
-      try {
-        if (!id) {
-          await addDoc(collection(db, "tarefas"), {
-            title,
-            channel,
-            date,
-            duration,
-            status,
-            priority,
-            notes,
+      if (!id) {
+        db.collection("tarefas")
+          .add({
+            title: title,
+            channel: channel,
+            date: date,
+            duration: duration,
+            status: status,
+            priority: priority,
+            notes: notes,
             createdAt: nowIso,
             createdByUid: currentUser.uid,
             createdByName: collName,
@@ -1521,110 +1416,59 @@ tabButtons.forEach((btn) => {
                 byEmail: currentCollaborator.email,
                 fromStatus: null,
                 toStatus: status,
-                type: "criação",
-              },
-            ],
+                type: "criação"
+              }
+            ]
+          })
+          .then(function() {
+            closeTaskModal();
+          })
+          .catch(function(err) {
+            console.error("Erro ao guardar tarefa:", err);
+            alert("Erro ao guardar a ação.");
           });
-        } else {
-          const ref = doc(db, "tarefas", id);
-          const previous = tasksMap.get(id);
-          const history = previous?.history || [];
-          history.push({
-            at: nowIso,
-            byUid: currentUser.uid,
-            byName: collName,
-            byEmail: currentCollaborator.email,
-            fromStatus: previous?.status || null,
-            toStatus: status,
-            type: "edição",
-          });
+      } else {
+        var ref = db.collection("tarefas").doc(id);
+        var previous = tasksMap[id];
+        var history = (previous && previous.history) ? previous.history.slice() : [];
+        history.push({
+          at: nowIso,
+          byUid: currentUser.uid,
+          byName: collName,
+          byEmail: currentCollaborator.email,
+          fromStatus: (previous && previous.status) || null,
+          toStatus: status,
+          type: "edição"
+        });
 
-          await updateDoc(ref, {
-            title,
-            channel,
-            date,
-            duration,
-            status,
-            priority,
-            notes,
-            lastUpdatedAt: nowIso,
-            lastUpdatedByUid: currentUser.uid,
-            lastUpdatedByName: collName,
-            lastUpdatedByEmail: currentCollaborator.email,
-            history,
+        ref.update({
+          title: title,
+          channel: channel,
+          date: date,
+          duration: duration,
+          status: status,
+          priority: priority,
+          notes: notes,
+          lastUpdatedAt: nowIso,
+          lastUpdatedByUid: currentUser.uid,
+          lastUpdatedByName: collName,
+          lastUpdatedByEmail: currentCollaborator.email,
+          history: history
+        })
+          .then(function() {
+            closeTaskModal();
+          })
+          .catch(function(err) {
+            console.error("Erro ao atualizar tarefa:", err);
+            alert("Erro ao atualizar a ação.");
           });
-        }
-        closeTaskModal();
-      } catch (err) {
-        console.error("Erro ao guardar tarefa:", err);
-        alert("Erro ao guardar a ação. Verifica as regras do Firestore.");
       }
     });
 
-    // HISTÓRICO
-    function renderHistory(history) {
-      taskHistoryList.innerHTML = "";
-      if (!history || !history.length) {
-        taskHistoryEmpty.style.display = "block";
-        return;
-      }
-      taskHistoryEmpty.style.display = "none";
-
-      history
-        .slice()
-        .sort((a, b) => (a.at || "").localeCompare(b.at || ""))
-        .forEach((h) => {
-          const item = document.createElement("div");
-          item.className = "history-item";
-          const dateTxt = h.at
-            ? new Date(h.at).toLocaleString("pt-PT", {
-                day: "2-digit",
-                month: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : "—";
-          const from = h.fromStatus || "—";
-          const to = h.toStatus || "—";
-          item.innerHTML = `<span class="badge-status">${
-            h.type === "criação" ? "Criação" : "Atualização"
-          }</span>
-            <br />${h.byName || h.byEmail || "—"} · ${dateTxt}
-            <br /><strong>${from}</strong> → <strong>${to}</strong>`;
-          taskHistoryList.appendChild(item);
-        });
-    }
-
-    async function changeTaskStatus(id, task, newStatus) {
-      const nowIso = new Date().toISOString();
-      const collName = currentCollaborator.name || currentCollaborator.email;
-      const ref = doc(db, "tarefas", id);
-      const history = task.history ? task.history.slice() : [];
-      history.push({
-        at: nowIso,
-        byUid: currentUser.uid,
-        byName: collName,
-        byEmail: currentCollaborator.email,
-        fromStatus: task.status || null,
-        toStatus: newStatus,
-        type: "estado",
-      });
-
-      await updateDoc(ref, {
-        status: newStatus,
-        lastUpdatedAt: nowIso,
-        lastUpdatedByUid: currentUser.uid,
-        lastUpdatedByName: collName,
-        lastUpdatedByEmail: currentCollaborator.email,
-        history,
-      });
-    }
-
-    // RENDER LISTA
     function renderTasks() {
-      const tasksArr = Array.from(tasksMap.values());
+      var arr = Object.keys(tasksMap).map(function(id) { return tasksMap[id]; });
 
-      const visible = tasksArr.filter((t) => {
+      var visible = arr.filter(function(t) {
         if (activeStatusFilter === "Todas") return true;
         return t.status === activeStatusFilter;
       });
@@ -1638,19 +1482,21 @@ tabButtons.forEach((btn) => {
       }
 
       visible
-        .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
-        .forEach((task) => {
-          const card = document.createElement("article");
+        .sort(function(a, b) {
+          return (a.date || "").localeCompare(b.date || "");
+        })
+        .forEach(function(task) {
+          var card = document.createElement("article");
           card.className = "task-card";
 
-          const header = document.createElement("div");
+          var header = document.createElement("div");
           header.className = "task-header-row";
 
-          const titleEl = document.createElement("div");
+          var titleEl = document.createElement("div");
           titleEl.className = "task-title";
           titleEl.textContent = task.title;
 
-          const tag = document.createElement("div");
+          var tag = document.createElement("div");
           tag.className = "task-tag";
           tag.textContent = task.channel || "—";
 
@@ -1658,25 +1504,26 @@ tabButtons.forEach((btn) => {
           header.appendChild(tag);
           card.appendChild(header);
 
-          const meta = document.createElement("div");
+          var meta = document.createElement("div");
           meta.className = "task-meta";
           if (task.date) {
-            meta.innerHTML += `<span>📅 <strong>${task.date}</strong></span>`;
+            meta.innerHTML += '<span>📅 <strong>' + task.date + "</strong></span>";
           }
           if (task.duration) {
-            meta.innerHTML += `<span>⏱ ${task.duration} min</span>`;
+            meta.innerHTML += "<span>⏱ " + task.duration + " min</span>";
           }
-          meta.innerHTML += `<span>👤 ${
-            task.lastUpdatedByName || task.createdByName || "—"
-          }</span>`;
+          meta.innerHTML +=
+            "<span>👤 " +
+            (task.lastUpdatedByName || task.createdByName || "—") +
+            "</span>";
 
-          const priSpan = document.createElement("span");
+          var priSpan = document.createElement("span");
           priSpan.className =
             "priority-pill " + priorityClass(task.priority);
           priSpan.textContent = task.priority || "Normal";
           meta.appendChild(priSpan);
 
-          const sSpan = document.createElement("span");
+          var sSpan = document.createElement("span");
           sSpan.className =
             "status-pill status-" + statusClass(task.status || "");
           sSpan.textContent = task.status || "—";
@@ -1684,57 +1531,58 @@ tabButtons.forEach((btn) => {
 
           card.appendChild(meta);
 
-          const statusRow = document.createElement("div");
+          var statusRow = document.createElement("div");
           statusRow.className = "task-status-row";
 
-          const select = document.createElement("select");
-          STATUS_LIST.forEach((s) => {
-            const opt = document.createElement("option");
+          var select = document.createElement("select");
+          STATUS_LIST.forEach(function(s) {
+            var opt = document.createElement("option");
             opt.value = s;
             opt.textContent = s;
             if (s === task.status) opt.selected = true;
             select.appendChild(opt);
           });
 
-          select.addEventListener("change", async (e) => {
+          select.addEventListener("change", function(e) {
             if (!currentUser || !currentCollaborator) return;
-            const newStatus = e.target.value;
-            await changeTaskStatus(task.id, task, newStatus);
+            var newStatus = e.target.value;
+            changeTaskStatus(task.id, task, newStatus);
           });
 
-          const statusNote = document.createElement("small");
+          var statusNote = document.createElement("small");
           statusNote.textContent = "Mudanças são registadas por colaborador.";
 
           statusRow.appendChild(select);
           statusRow.appendChild(statusNote);
           card.appendChild(statusRow);
 
-          const footer = document.createElement("div");
+          var footer = document.createElement("div");
           footer.className = "task-footer";
 
-          const last = document.createElement("span");
+          var last = document.createElement("span");
           if (task.lastUpdatedAt && task.lastUpdatedByName) {
-            const d = new Date(task.lastUpdatedAt);
-            const dStr = isNaN(d.getTime())
+            var d = new Date(task.lastUpdatedAt);
+            var dStr = isNaN(d.getTime())
               ? task.lastUpdatedAt
               : d.toLocaleString("pt-PT", {
                   day: "2-digit",
                   month: "2-digit",
                   hour: "2-digit",
-                  minute: "2-digit",
+                  minute: "2-digit"
                 });
-            last.textContent = `Última alteração por ${
-              task.lastUpdatedByName
-            } em ${dStr}`;
+            last.textContent =
+              "Última alteração por " + task.lastUpdatedByName + " em " + dStr;
           } else {
             last.textContent = "Ainda sem histórico de alterações.";
           }
 
-          const historyBtn = document.createElement("button");
+          var historyBtn = document.createElement("button");
           historyBtn.type = "button";
           historyBtn.className = "btn-link";
           historyBtn.textContent = "Ver detalhes";
-          historyBtn.addEventListener("click", () => openTaskModal(task));
+          historyBtn.addEventListener("click", function() {
+            openTaskModal(task);
+          });
 
           footer.appendChild(last);
           footer.appendChild(historyBtn);
@@ -1746,73 +1594,70 @@ tabButtons.forEach((btn) => {
       renderCalendar();
     }
 
-    // CALENDÁRIO
     function renderCalendar() {
-      const tasksArr = Array.from(tasksMap.values());
-      const year = currentMonth.getFullYear();
-      const month = currentMonth.getMonth();
+      var arr = Object.keys(tasksMap).map(function(id) { return tasksMap[id]; });
+      var year = currentMonth.getFullYear();
+      var month = currentMonth.getMonth();
 
       calendarMonthLabel.textContent = monthLabel(currentMonth);
 
-      const firstDay = new Date(year, month, 1);
-      let startWeekday = firstDay.getDay();
+      var firstDay = new Date(year, month, 1);
+      var startWeekday = firstDay.getDay();
       if (startWeekday === 0) startWeekday = 7;
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      var daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      const cells = [];
-      const todayYMD = formatYMD(new Date());
+      var cells = [];
+      var todayYMD = formatYMD(new Date());
 
-      const daysPrev = startWeekday - 1;
-      const prevMonthLastDate = new Date(year, month, 0).getDate();
+      var daysPrev = startWeekday - 1;
+      var prevMonthLastDate = new Date(year, month, 0).getDate();
 
-      for (let i = daysPrev; i > 0; i--) {
-        const d = new Date(year, month - 1, prevMonthLastDate - i + 1);
-        cells.push({ date: d, other: true });
+      for (var i = daysPrev; i > 0; i--) {
+        var dPrev = new Date(year, month - 1, prevMonthLastDate - i + 1);
+        cells.push({ date: dPrev, other: true });
       }
 
-      for (let d = 1; d <= daysInMonth; d++) {
+      for (var d = 1; d <= daysInMonth; d++) {
         cells.push({ date: new Date(year, month, d), other: false });
       }
 
       while (cells.length < 42) {
-        const lastCell = cells[cells.length - 1];
-        const d = new Date(lastCell.date);
-        d.setDate(d.getDate() + 1);
-        cells.push({ date: d, other: true });
+        var lastCell = cells[cells.length - 1];
+        var dNext = new Date(lastCell.date);
+        dNext.setDate(dNext.getDate() + 1);
+        cells.push({ date: dNext, other: true });
       }
 
       calendarGrid.innerHTML = "";
 
-      cells.forEach((c) => {
-        const ymd = formatYMD(c.date);
-        const dayNum = c.date.getDate();
-        const dayTasks = tasksArr.filter((t) => t.date === ymd);
+      cells.forEach(function(c) {
+        var ymd = formatYMD(c.date);
+        var dayNum = c.date.getDate();
+        var dayTasks = arr.filter(function(t) { return t.date === ymd; });
 
-        const cell = document.createElement("button");
-        cell.type = "button";
+        var cell = document.createElement("div");
         cell.className = "calendar-day";
         if (c.other) cell.classList.add("other-month");
         if (ymd === todayYMD) cell.classList.add("today");
 
-        const top = document.createElement("div");
+        var top = document.createElement("div");
         top.className = "calendar-day-number";
         top.textContent = dayNum;
 
-        const badgesWrap = document.createElement("div");
+        var badgesWrap = document.createElement("div");
         badgesWrap.className = "calendar-day-badges";
 
         if (dayTasks.length) {
-          dayTasks.slice(0, 4).forEach((t) => {
-            const b = document.createElement("div");
+          dayTasks.slice(0, 4).forEach(function(t) {
+            var b = document.createElement("div");
             b.className =
-              "calendar-day-badge calendar-icon-badge status-" +
-              statusClass(t.status || "");
+              "calendar-day-badge " + statusClass(t.status || "");
             b.textContent = channelIcon(t.channel);
             badgesWrap.appendChild(b);
           });
         }
 
-        const count = document.createElement("div");
+        var count = document.createElement("div");
         count.className = "calendar-day-count";
         if (dayTasks.length) {
           count.textContent =
@@ -1825,82 +1670,207 @@ tabButtons.forEach((btn) => {
         cell.appendChild(badgesWrap);
         cell.appendChild(count);
 
-        cell.addEventListener("click", () => openDayModal(ymd));
-
         calendarGrid.appendChild(cell);
       });
     }
 
-    calPrevBtn.addEventListener("click", () => {
+    calPrevBtn.addEventListener("click", function() {
       currentMonth.setMonth(currentMonth.getMonth() - 1);
       renderCalendar();
     });
 
-    calNextBtn.addEventListener("click", () => {
+    calNextBtn.addEventListener("click", function() {
       currentMonth.setMonth(currentMonth.getMonth() + 1);
       renderCalendar();
     });
 
-    // MODAL DIA
-    function openDayModal(ymd) {
-      selectedDayDate = ymd;
-      const d = new Date(ymd + "T00:00:00");
-      dayModalTitle.textContent = d.toLocaleDateString("pt-PT", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
+    function renderCollaborators() {
+      collabListEl.innerHTML = "";
+      var arr = Object.keys(collabsMap).map(function(id) { return collabsMap[id]; });
+      arr.sort(function(a, b) {
+        return (a.name || a.email || "").localeCompare(b.name || b.email || "");
       });
+      if (!arr.length) {
+        collabListEl.innerHTML =
+          '<div style="font-size:12px;color:var(--text-soft);margin-top:6px;">Nenhum colaborador registado ainda. Assim que alguém entrar com email válido, aparece aqui.</div>';
+        return;
+      }
 
-      const tasksArr = Array.from(tasksMap.values()).filter(
-        (t) => t.date === ymd
-      );
+      arr.forEach(function(c) {
+        var row = document.createElement("div");
+        row.className = "collab-row";
 
-      dayTasksListEl.innerHTML = "";
-      if (!tasksArr.length) {
-        dayModalEmpty.style.display = "block";
-      } else {
-        dayModalEmpty.style.display = "none";
-        tasksArr
-          .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-          .forEach((t) => {
-            const row = document.createElement("div");
-            row.className = "day-task-row";
+        var main = document.createElement("div");
+        main.className = "collab-main";
+        var nameEl = document.createElement("div");
+        nameEl.textContent = c.name || c.email || "—";
+        nameEl.style.fontWeight = "600";
+        nameEl.style.fontSize = "12px";
+        var emailEl = document.createElement("div");
+        emailEl.textContent = c.email;
+        emailEl.style.fontSize = "11px";
+        emailEl.style.color = "var(--text-muted)";
 
-            const top = document.createElement("div");
-            top.className = "day-task-top";
+        var roleEl = document.createElement("span");
+        roleEl.className =
+          "pill-role " + (c.role === "admin" ? "" : "secondary");
+        roleEl.textContent =
+          c.role === "admin" ? "Administrador" : "Colaborador";
 
-            const left = document.createElement("div");
-            left.innerHTML = `<div class="day-task-title">${t.title}</div>
-              <div class="day-task-channel">${t.channel || "—"}</div>`;
+        main.appendChild(nameEl);
+        main.appendChild(emailEl);
+        main.appendChild(roleEl);
 
-            top.appendChild(left);
-            row.appendChild(top);
+        var controls = document.createElement("div");
+        controls.style.display = "flex";
+        controls.style.flexDirection = "column";
+        controls.style.alignItems = "flex-end";
+        controls.style.gap = "4px";
 
-            const meta = document.createElement("div");
-            meta.className = "day-task-meta";
-            if (t.duration) {
-              meta.innerHTML += `<span>⏱ ${t.duration} min</span>`;
-            }
-            const pSpan = document.createElement("span");
-            pSpan.className =
-              "priority-pill " + priorityClass(t.priority || "Normal");
-            pSpan.textContent = t.priority || "Normal";
-            meta.appendChild(pSpan);
-            const sSpan = document.createElement("span");
-            sSpan.className =
-              "status-pill status-" + statusClass(t.status || "");
-            sSpan.textContent = t.status || "—";
-            meta.appendChild(sSpan);
-            row.appendChild(meta);
+        var activeWrap = document.createElement("label");
+        activeWrap.className = "switch";
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = c.active !== false;
+        var slider = document.createElement("span");
+        slider.className = "slider";
+        activeWrap.appendChild(input);
+        activeWrap.appendChild(slider);
 
-            const statusRow = document.createElement("div");
-            statusRow.className = "day-task-status-row";
+        input.addEventListener("change", function() {
+          db.collection("colaboradores").doc(c.uid).update({
+            active: input.checked
+          });
+        });
 
-            const select = document.createElement("select");
-            STATUS_LIST.forEach((s) => {
-              const opt = document.createElement("option");
-              opt.value = s;
-              opt.textContent = s;
-              if (s === t.status) opt.selected = true;
-           
+        controls.appendChild(activeWrap);
+
+        if (currentCollaborator && currentCollaborator.role === "admin" && c.uid !== currentUser.uid) {
+          var roleBtn = document.createElement("button");
+          roleBtn.type = "button";
+          roleBtn.className = "btn-link";
+          roleBtn.textContent =
+            c.role === "admin" ? "Tornar colaborador" : "Tornar admin";
+          roleBtn.addEventListener("click", function() {
+            var newRole = c.role === "admin" ? "colaborador" : "admin";
+            db.collection("colaboradores").doc(c.uid).update({
+              role: newRole
+            });
+          });
+          controls.appendChild(roleBtn);
+        }
+
+        row.appendChild(main);
+        row.appendChild(controls);
+        collabListEl.appendChild(row);
+      });
+    }
+
+    function subscribeTasks() {
+      if (tasksUnsub) tasksUnsub();
+      tasksUnsub = db
+        .collection("tarefas")
+        .orderBy("date", "asc")
+        .onSnapshot(function(snap) {
+          tasksMap = {};
+          snap.forEach(function(doc) {
+            tasksMap[doc.id] = Object.assign({ id: doc.id }, doc.data());
+          });
+          renderTasks();
+        });
+    }
+
+    function subscribeCollaborators() {
+      if (collabUnsub) collabUnsub();
+      collabUnsub = db
+        .collection("colaboradores")
+        .orderBy("name", "asc")
+        .onSnapshot(function(snap) {
+          collabsMap = {};
+          snap.forEach(function(doc) {
+            collabsMap[doc.id] = doc.data();
+          });
+          renderCollaborators();
+        });
+    }
+
+    function ensureCollaboratorDoc(user) {
+      var uid = user.uid;
+      var email = user.email || "";
+      var name = user.displayName || email.split("@")[0] || "Sem nome";
+
+      var role =
+        email.toLowerCase() === "fligadebora@hotmail.com"
+          ? "admin"
+          : "colaborador";
+
+      var docRef = db.collection("colaboradores").doc(uid);
+      return docRef.set(
+        {
+          uid: uid,
+          email: email,
+          name: name,
+          role: role,
+          active: true
+        },
+        { merge: true }
+      ).then(function() {
+        currentCollaborator = {
+          uid: uid,
+          email: email,
+          name: name,
+          role: role,
+          active: true
+        };
+
+        var initials = (name || email || "FL")
+          .split(" ")
+          .map(function(p) { return p[0]; })
+          .join("")
+          .slice(0, 2)
+          .toUpperCase();
+        userAvatarEl.textContent = initials;
+        userNameEl.textContent = name || email;
+        userRoleEl.textContent =
+          role === "admin" ? "Administrador" : "Colaborador";
+
+        if (role === "admin") {
+          tabColaboradoresBtn.style.display = "inline-block";
+        } else {
+          tabColaboradoresBtn.style.display = "none";
+        }
+      });
+    }
+
+    auth.onAuthStateChanged(function(user) {
+      currentUser = user || null;
+
+      if (!user) {
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        if (tasksUnsub) tasksUnsub();
+        if (collabUnsub) collabUnsub();
+        return;
+      }
+
+      loginView.style.display = "none";
+      appView.style.display = "block";
+      fabAdd.classList.remove("hidden");
+
+      ensureCollaboratorDoc(user).then(function() {
+        subscribeCollaborators();
+        subscribeTasks();
+      });
+    });
+
+    // INIT
+    (function init() {
+      var y = currentMonth.getFullYear();
+      var m = currentMonth.getMonth();
+      calendarMonthLabel.textContent = monthLabel(currentMonth);
+      renderCalendar();
+    })();
+  </script>
+</body>
+</html>
