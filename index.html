@@ -1392,44 +1392,45 @@
 
     initStatusSelectors();
 
-    // LOGIN
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("login-email").value.trim();
-      const password = document
-        .getElementById("login-password")
-        .value.trim();
+  // LOGIN
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-      loginErrorEl.textContent = "";
+  const email = document.getElementById("login-email").value.trim();
+  const password = document
+    .getElementById("login-password")
+    .value.trim();
 
-signInWithEmailAndPassword(auth, email, password)
-  .then((cred) => {
-    console.log('Login OK', cred.user);
-  })
-  .catch((error) => {
-    console.error('ERRO LOGIN', error);
-    alert('Erro login: ' + error.code + ' — ' + error.message);
-    loginErrorEl.textContent = 'Erro: ' + error.code;
+  loginErrorEl.textContent = "";
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+      console.log("Login OK", cred.user);
+      // aqui o onAuthStateChanged trata de mostrar o app-view
+    })
+    .catch((error) => {
+      console.error("ERRO LOGIN", error);
+      alert("Erro login: " + error.code + " — " + error.message);
+      loginErrorEl.textContent = "Erro: " + error.code;
+    });
+});
+
+// LOGOUT
+logoutBtn.addEventListener("click", () => {
+  signOut(auth);
+});
+
+// TABS
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    tabButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
+    tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
+    tabColaboradoresView.classList.toggle("hidden", tab !== "colaboradores");
   });
-
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth);
-    });
-
-    // TABS
-    tabButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        tabButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const tab = btn.dataset.tab;
-        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
-        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
-        tabColaboradoresView.classList.toggle(
-          "hidden",
-          tab !== "colaboradores"
-        );
-      });
-    });
+});
 
     // MODAL TAREFA
     function openTaskModal(task, fixedDateYmd = null) {
