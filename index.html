@@ -234,6 +234,17 @@
       padding-inline: 16px;
     }
 
+    .btn-link {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-strong);
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
     .login-error {
       margin-top: var(--space-3);
       font-size: 12px;
@@ -326,6 +337,72 @@
       box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
     }
 
+    /* PRIORIDADE E ESTADOS */
+
+    .priority-pill {
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .priority-baixa {
+      background: #e5f3ff;
+      color: #1d4ed8;
+    }
+
+    .priority-normal {
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .priority-alta {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .priority-critica {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-pill {
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-Pedido {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-Em-criação {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .status-Em-aprovação {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    .status-Aprovado {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-Publicado {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    /* LISTA TAREFAS */
+
     .status-filters {
       display: flex;
       overflow-x: auto;
@@ -412,68 +489,6 @@
       background: var(--bg-soft);
     }
 
-    .priority-pill {
-      border-radius: var(--radius-pill);
-      padding: 2px 8px;
-      font-size: 10px;
-      font-weight: 500;
-    }
-
-    .priority-baixa {
-      background: #e5f3ff;
-      color: #1d4ed8;
-    }
-
-    .priority-normal {
-      background: #eef2ff;
-      color: #4f46e5;
-    }
-
-    .priority-alta {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .priority-critica {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .status-pill {
-      border-radius: var(--radius-pill);
-      padding: 2px 8px;
-      font-size: 10px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .status-Pedido {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-Em-criação {
-      background: #e0f2fe;
-      color: #075985;
-    }
-
-    .status-Em-aprovação {
-      background: #e0f2fe;
-      color: #082f49;
-    }
-
-    .status-Aprovado {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-Publicado {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
     .task-status-row {
       display: flex;
       align-items: center;
@@ -503,17 +518,6 @@
       color: var(--text-muted);
     }
 
-    .btn-link {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--primary-strong);
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
-    }
-
     .empty-state {
       padding: var(--space-6);
       text-align: center;
@@ -521,7 +525,7 @@
       color: var(--text-soft);
     }
 
-    /* COLABORADORES (apenas admin) */
+    /* COLABORADORES */
 
     #tab-colaboradores-view {
       display: none;
@@ -610,7 +614,7 @@
       transform: translateX(18px);
     }
 
-    /* CALENDÁRIO MENSAL */
+    /* CALENDÁRIO */
 
     .calendar-wrapper {
       background: var(--bg-alt);
@@ -789,14 +793,6 @@
       font-weight: 600;
     }
 
-    .pill-status {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-soft);
-      color: var(--text-soft);
-    }
-
     .modal-close {
       border: none;
       background: transparent;
@@ -874,6 +870,14 @@
       color: var(--text-muted);
     }
 
+    .day-task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--text-soft);
+    }
+
     .day-task-status-row {
       display: flex;
       align-items: center;
@@ -882,14 +886,6 @@
 
     .day-task-status-row select {
       flex: 1;
-    }
-
-    .day-task-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      font-size: 10px;
-      color: var(--text-soft);
     }
 
     .day-task-actions {
@@ -1005,16 +1001,14 @@
         </button>
       </div>
 
-      <!-- TAB CALENDÁRIO (vista principal) -->
+      <!-- TAB CALENDÁRIO -->
       <div id="tab-calendario-view">
         <div class="calendar-wrapper">
           <div class="calendar-header">
             <button type="button" class="calendar-nav-btn" id="cal-prev">
               ◀
             </button>
-            <div class="calendar-month-label" id="calendar-month-label">
-              <!-- via JS -->
-            </div>
+            <div class="calendar-month-label" id="calendar-month-label"></div>
             <button type="button" class="calendar-nav-btn" id="cal-next">
               ▶
             </button>
@@ -1030,13 +1024,11 @@
             <div>Dom</div>
           </div>
 
-          <div class="calendar-grid" id="calendar-grid">
-            <!-- via JS -->
-          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
         </div>
       </div>
 
-      <!-- TAB TAREFAS (lista clássica) -->
+      <!-- TAB LISTA -->
       <div id="tab-tarefas-view" class="hidden">
         <div class="status-filters" id="status-filters"></div>
         <div class="tasks-list" id="tasks-list"></div>
@@ -1046,7 +1038,7 @@
         </div>
       </div>
 
-      <!-- TAB COLABORADORES (apenas admin) -->
+      <!-- TAB EQUIPA -->
       <div id="tab-colaboradores-view">
         <div class="card">
           <div class="card-title" style="font-size: 15px">
@@ -1063,9 +1055,8 @@
               margin-bottom: 8px;
             "
           >
-            Nota: a criação de novas contas (email e password) continua a ser
-            feita na consola Firebase. Aqui controla apenas o perfil e estado
-            dentro da aplicação.
+            Nota: a criação de contas (email/password) é feita na consola
+            Firebase. Aqui controla apenas o perfil e estado.
           </div>
 
           <div class="collab-list" id="collab-list"></div>
@@ -1074,7 +1065,7 @@
     </section>
   </div>
 
-  <!-- BOTÃO FLOTANTE NOVA TAREFA -->
+  <!-- BOTÃO FLOTANTE -->
   <button class="fab hidden" id="fab-add">+</button>
 
   <!-- MODAL TAREFA -->
@@ -1129,9 +1120,7 @@
         </div>
 
         <div class="field-group">
-          <div class="field-label">
-            Duração estimada (min)
-          </div>
+          <div class="field-label">Duração estimada (min)</div>
           <input
             type="number"
             id="task-duration"
@@ -1177,14 +1166,13 @@
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id="task-save-btn">
+          <button type="submit" class="btn btn-primary">
             Guardar ação
           </button>
           <button
             type="button"
             class="btn btn-ghost"
             id="task-cancel-btn"
-            style="width: 100%"
           >
             Cancelar
           </button>
@@ -1193,7 +1181,7 @@
     </div>
   </div>
 
-  <!-- MODAL DIA (visão diária ao clicar no calendário) -->
+  <!-- MODAL DIA -->
   <div class="modal-backdrop" id="day-modal-backdrop">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="day-modal-title">
       <div class="modal-header">
@@ -1254,7 +1242,6 @@
       orderBy,
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-    // CONFIG DO TEU PROJETO
     const firebaseConfig = {
       apiKey: "AIzaSyA5ge2xh4oq0TrPMWQsZgEnYnsaACFsm7w",
       authDomain: "calendario-maketing-fliga.firebaseapp.com",
@@ -1266,7 +1253,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
+    const db = getFirestore(app); // instância única recomendada[web:79][web:100]
 
     // ELEMENTOS
     const loginView = document.getElementById("login-view");
@@ -1281,9 +1268,7 @@
     const tabButtons = document.querySelectorAll(".tab");
     const tabTarefasView = document.getElementById("tab-tarefas-view");
     const tabCalendarioView = document.getElementById("tab-calendario-view");
-    const tabColaboradoresView = document.getElementById(
-      "tab-colaboradores-view"
-    );
+    const tabColaboradoresView = document.getElementById("tab-colaboradores-view");
     const tabColaboradoresBtn = document.getElementById("tab-colaboradores");
 
     const statusFiltersEl = document.getElementById("status-filters");
@@ -1308,13 +1293,11 @@
     const taskHistoryList = document.getElementById("task-history-list");
     const taskHistoryEmpty = document.getElementById("task-history-empty");
 
-    // Calendário
     const calendarMonthLabel = document.getElementById("calendar-month-label");
     const calendarGrid = document.getElementById("calendar-grid");
     const calPrevBtn = document.getElementById("cal-prev");
     const calNextBtn = document.getElementById("cal-next");
 
-    // Modal Dia
     const dayModalBackdrop = document.getElementById("day-modal-backdrop");
     const dayModalClose = document.getElementById("day-modal-close");
     const dayModalTitle = document.getElementById("day-modal-title");
@@ -1330,8 +1313,6 @@
       "Publicado",
     ];
 
-    const PRIORITY_LIST = ["Baixa", "Normal", "Alta", "Crítica"];
-
     let currentUser = null;
     let currentCollaborator = null;
     let tasksMap = new Map();
@@ -1342,9 +1323,8 @@
 
     let currentMonth = new Date();
     currentMonth.setDate(1);
-    let selectedDayDate = null; // yyyy-MM-dd
+    let selectedDayDate = null;
 
-    // HELPERS
     function formatYMD(date) {
       const d = new Date(date);
       const y = d.getFullYear();
@@ -1381,7 +1361,6 @@
       return "⭐";
     }
 
-    // POPULAR ESTADOS
     function initStatusSelectors() {
       statusFiltersEl.innerHTML = "";
       ["Todas", ...STATUS_LIST].forEach((status) => {
@@ -1513,7 +1492,7 @@
 
       try {
         if (!id) {
-          const docRef = await addDoc(collection(db, "tarefas"), {
+          await addDoc(collection(db, "tarefas"), {
             title,
             channel,
             date,
@@ -1541,7 +1520,6 @@
               },
             ],
           });
-          console.log("Tarefa criada:", docRef.id);
         } else {
           const ref = doc(db, "tarefas", id);
           const previous = tasksMap.get(id);
@@ -1570,14 +1548,72 @@
             lastUpdatedByEmail: currentCollaborator.email,
             history,
           });
-          console.log("Tarefa atualizada:", id);
         }
         closeTaskModal();
       } catch (err) {
         console.error("Erro ao guardar tarefa:", err);
-        alert("Erro ao guardar a ação. Verifica as permissões do Firestore.");
+        alert("Erro ao guardar a ação. Verifica as regras do Firestore.");
       }
     });
+
+    // HISTÓRICO
+    function renderHistory(history) {
+      taskHistoryList.innerHTML = "";
+      if (!history || !history.length) {
+        taskHistoryEmpty.style.display = "block";
+        return;
+      }
+      taskHistoryEmpty.style.display = "none";
+
+      history
+        .slice()
+        .sort((a, b) => (a.at || "").localeCompare(b.at || ""))
+        .forEach((h) => {
+          const item = document.createElement("div");
+          item.className = "history-item";
+          const dateTxt = h.at
+            ? new Date(h.at).toLocaleString("pt-PT", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "—";
+          const from = h.fromStatus || "—";
+          const to = h.toStatus || "—";
+          item.innerHTML = `<span class="badge-status">${
+            h.type === "criação" ? "Criação" : "Atualização"
+          }</span>
+            <br />${h.byName || h.byEmail || "—"} · ${dateTxt}
+            <br /><strong>${from}</strong> → <strong>${to}</strong>`;
+          taskHistoryList.appendChild(item);
+        });
+    }
+
+    async function changeTaskStatus(id, task, newStatus) {
+      const nowIso = new Date().toISOString();
+      const collName = currentCollaborator.name || currentCollaborator.email;
+      const ref = doc(db, "tarefas", id);
+      const history = task.history ? task.history.slice() : [];
+      history.push({
+        at: nowIso,
+        byUid: currentUser.uid,
+        byName: collName,
+        byEmail: currentCollaborator.email,
+        fromStatus: task.status || null,
+        toStatus: newStatus,
+        type: "estado",
+      });
+
+      await updateDoc(ref, {
+        status: newStatus,
+        lastUpdatedAt: nowIso,
+        lastUpdatedByUid: currentUser.uid,
+        lastUpdatedByName: collName,
+        lastUpdatedByEmail: currentCollaborator.email,
+        history,
+      });
+    }
 
     // RENDER LISTA
     function renderTasks() {
@@ -1629,14 +1665,12 @@
             task.lastUpdatedByName || task.createdByName || "—"
           }</span>`;
 
-          // prioridade
-          const pClass = priorityClass(task.priority);
           const priSpan = document.createElement("span");
-          priSpan.className = `priority-pill ${pClass}`;
+          priSpan.className =
+            "priority-pill " + priorityClass(task.priority);
           priSpan.textContent = task.priority || "Normal";
           meta.appendChild(priSpan);
 
-          // estado colorido
           const sSpan = document.createElement("span");
           sSpan.className =
             "status-pill status-" + statusClass(task.status || "");
@@ -1707,76 +1741,17 @@
       renderCalendar();
     }
 
-    function renderHistory(history) {
-      taskHistoryList.innerHTML = "";
-      if (!history || !history.length) {
-        taskHistoryEmpty.style.display = "block";
-        return;
-      }
-      taskHistoryEmpty.style.display = "none";
-
-      history
-        .slice()
-        .sort((a, b) => (a.at || "").localeCompare(b.at || ""))
-        .forEach((h) => {
-          const item = document.createElement("div");
-          item.className = "history-item";
-          const dateTxt = h.at
-            ? new Date(h.at).toLocaleString("pt-PT", {
-                day: "2-digit",
-                month: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : "—";
-          const from = h.fromStatus || "—";
-          const to = h.toStatus || "—";
-          item.innerHTML = `<span class="badge-status">${
-            h.type === "criação" ? "Criação" : "Atualização"
-          }</span>
-            <br />${h.byName || h.byEmail || "—"} · ${dateTxt}
-            <br /><strong>${from}</strong> → <strong>${to}</strong>`;
-          taskHistoryList.appendChild(item);
-        });
-    }
-
-    async function changeTaskStatus(id, task, newStatus) {
-      const nowIso = new Date().toISOString();
-      const collName = currentCollaborator.name || currentCollaborator.email;
-      const ref = doc(db, "tarefas", id);
-      const history = task.history ? task.history.slice() : [];
-      history.push({
-        at: nowIso,
-        byUid: currentUser.uid,
-        byName: collName,
-        byEmail: currentCollaborator.email,
-        fromStatus: task.status || null,
-        toStatus: newStatus,
-        type: "estado",
-      });
-
-      await updateDoc(ref, {
-        status: newStatus,
-        lastUpdatedAt: nowIso,
-        lastUpdatedByUid: currentUser.uid,
-        lastUpdatedByName: collName,
-        lastUpdatedByEmail: currentCollaborator.email,
-        history,
-      });
-    }
-
-    // CALENDÁRIO MENSAL
-
+    // CALENDÁRIO
     function renderCalendar() {
       const tasksArr = Array.from(tasksMap.values());
       const year = currentMonth.getFullYear();
-      const month = currentMonth.getMonth(); // 0-11
+      const month = currentMonth.getMonth();
 
       calendarMonthLabel.textContent = monthLabel(currentMonth);
 
       const firstDay = new Date(year, month, 1);
-      let startWeekday = firstDay.getDay(); // 0-Dom
-      if (startWeekday === 0) startWeekday = 7; // 1-Seg...7-Dom
+      let startWeekday = firstDay.getDay();
+      if (startWeekday === 0) startWeekday = 7;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
       const cells = [];
@@ -1862,7 +1837,6 @@
     });
 
     // MODAL DIA
-
     function openDayModal(ymd) {
       selectedDayDate = ymd;
       const d = new Date(ymd + "T00:00:00");
@@ -1908,13 +1882,11 @@
               "priority-pill " + priorityClass(t.priority || "Normal");
             pSpan.textContent = t.priority || "Normal";
             meta.appendChild(pSpan);
-
             const sSpan = document.createElement("span");
             sSpan.className =
               "status-pill status-" + statusClass(t.status || "");
             sSpan.textContent = t.status || "—";
             meta.appendChild(sSpan);
-
             row.appendChild(meta);
 
             const statusRow = document.createElement("div");
@@ -1926,242 +1898,5 @@
               opt.value = s;
               opt.textContent = s;
               if (s === t.status) opt.selected = true;
-              select.appendChild(opt);
-            });
+           
 
-            select.addEventListener("change", async (e) => {
-              if (!currentUser || !currentCollaborator) return;
-              const newStatus = e.target.value;
-              await changeTaskStatus(t.id, t, newStatus);
-            });
-
-            statusRow.appendChild(select);
-            row.appendChild(statusRow);
-
-            const actionsRow = document.createElement("div");
-            actionsRow.className = "day-task-actions";
-
-            const editBtn = document.createElement("button");
-            editBtn.type = "button";
-            editBtn.className = "btn-link";
-            editBtn.textContent = "Editar";
-            editBtn.addEventListener("click", () => {
-              openTaskModal(t);
-            });
-
-            actionsRow.appendChild(editBtn);
-            row.appendChild(actionsRow);
-
-            dayTasksListEl.appendChild(row);
-          });
-      }
-
-      dayModalBackdrop.style.display = "flex";
-    }
-
-    function closeDayModal() {
-      dayModalBackdrop.style.display = "none";
-      selectedDayDate = null;
-    }
-
-    dayModalClose.addEventListener("click", closeDayModal);
-    dayModalBackdrop.addEventListener("click", (e) => {
-      if (e.target === dayModalBackdrop) closeDayModal();
-    });
-
-    dayAddTaskBtn.addEventListener("click", () => {
-      if (!selectedDayDate) return;
-      openTaskModal(null, selectedDayDate);
-    });
-
-    // COLABORADORES
-
-    function renderCollaborators() {
-      collabListEl.innerHTML = "";
-      const arr = Array.from(collabsMap.values()).sort((a, b) =>
-        (a.name || a.email || "").localeCompare(b.name || b.email || "")
-      );
-      if (!arr.length) {
-        collabListEl.innerHTML =
-          '<div style="font-size:12px;color:var(--text-soft);margin-top:6px;">Nenhum colaborador registado ainda. Assim que alguém entrar com email válido, aparece aqui.</div>';
-        return;
-      }
-
-      arr.forEach((c) => {
-        const row = document.createElement("div");
-        row.className = "collab-row";
-
-        const main = document.createElement("div");
-        main.className = "collab-main";
-        const nameEl = document.createElement("div");
-        nameEl.textContent = c.name || c.email || "—";
-        nameEl.style.fontWeight = "600";
-        nameEl.style.fontSize = "12px";
-        const emailEl = document.createElement("div");
-        emailEl.textContent = c.email;
-        emailEl.style.fontSize = "11px";
-        emailEl.style.color = "var(--text-muted)";
-
-        const roleEl = document.createElement("span");
-        roleEl.className =
-          "pill-role " + (c.role === "admin" ? "" : "secondary");
-        roleEl.textContent =
-          c.role === "admin" ? "Administrador" : "Colaborador";
-
-        main.appendChild(nameEl);
-        main.appendChild(emailEl);
-        main.appendChild(roleEl);
-
-        const controls = document.createElement("div");
-        controls.style.display = "flex";
-        controls.style.flexDirection = "column";
-        controls.style.alignItems = "flex-end";
-        controls.style.gap = "4px";
-
-        const activeWrap = document.createElement("label");
-        activeWrap.className = "switch";
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.checked = c.active !== false; // por defeito ativo
-        const slider = document.createElement("span");
-        slider.className = "slider";
-        activeWrap.appendChild(input);
-        activeWrap.appendChild(slider);
-
-        input.addEventListener("change", async () => {
-          const ref = doc(db, "colaboradores", c.id);
-          await updateDoc(ref, { active: input.checked });
-        });
-
-        const roleBtn = document.createElement("button");
-        roleBtn.type = "button";
-        roleBtn.className = "btn-link";
-        roleBtn.textContent =
-          c.role === "admin" ? "Tornar colaborador" : "Tornar admin";
-
-        roleBtn.addEventListener("click", async () => {
-          const newRole = c.role === "admin" ? "colaborador" : "admin";
-          const ref = doc(db, "colaboradores", c.id);
-          await updateDoc(ref, { role: newRole });
-        });
-
-        controls.appendChild(activeWrap);
-        if (currentCollaborator?.role === "admin" && c.uid !== currentUser.uid) {
-          controls.appendChild(roleBtn);
-        }
-
-        row.appendChild(main);
-        row.appendChild(controls);
-        collabListEl.appendChild(row);
-      });
-    }
-
-    // SYNC FIRESTORE
-
-    function subscribeTasks() {
-      if (tasksUnsub) tasksUnsub();
-      const q = query(collection(db, "tarefas"), orderBy("date", "asc"));
-      tasksUnsub = onSnapshot(q, (snap) => {
-        tasksMap.clear();
-        snap.forEach((d) => {
-          tasksMap.set(d.id, { id: d.id, ...d.data() });
-        });
-        renderTasks();
-      });
-    }
-
-    function subscribeCollaborators() {
-      if (collabUnsub) collabUnsub();
-      collabUnsub = onSnapshot(collection(db, "colaboradores"), (snap) => {
-        collabsMap.clear();
-        snap.forEach((d) => {
-          collabsMap.set(d.id, { id: d.id, ...d.data() });
-        });
-        renderCollaborators();
-      });
-    }
-
-    async function ensureCollaboratorDoc(user) {
-      const uid = user.uid;
-      const email = user.email || "";
-      const name = user.displayName || email.split("@")[0] || "Sem nome";
-
-      let existing = collabsMap.get(uid) || null;
-      if (!existing) {
-        const role =
-          email.toLowerCase() === "fligadebora@hotmail.com"
-            ? "admin"
-            : "colaborador";
-        const ref = doc(db, "colaboradores", uid);
-        await setDoc(
-          ref,
-          {
-            uid,
-            email,
-            name,
-            role,
-            active: true,
-          },
-          { merge: true }
-        );
-        existing = { id: uid, uid, email, name, role, active: true };
-        collabsMap.set(uid, existing);
-      }
-
-      currentCollaborator = existing;
-
-      if (currentCollaborator.active === false) {
-        alert(
-          "O seu utilizador está marcado como inativo pela administração. Contacte a Débora para reativar."
-        );
-        await signOut(auth);
-      }
-
-      const initials = (currentCollaborator.name || email || "FL")
-        .split(" ")
-        .map((p) => p[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase();
-      userAvatarEl.textContent = initials;
-      userNameEl.textContent = currentCollaborator.name || email;
-      userRoleEl.textContent =
-        currentCollaborator.role === "admin"
-          ? "Administrador"
-          : "Colaborador";
-
-      if (currentCollaborator.role === "admin") {
-        tabColaboradoresBtn.style.display = "inline-block";
-      } else {
-        tabColaboradoresBtn.style.display = "none";
-      }
-    }
-
-    // LISTENER DE AUTH
-    onAuthStateChanged(auth, async (user) => {
-      currentUser = user || null;
-
-      if (!user) {
-        loginView.style.display = "block";
-        appView.style.display = "none";
-        fabAdd.classList.add("hidden");
-        if (tasksUnsub) tasksUnsub();
-        if (collabUnsub) collabUnsub();
-        return;
-      }
-
-      loginView.style.display = "none";
-      appView.style.display = "block";
-      fabAdd.classList.remove("hidden");
-
-      subscribeCollaborators();
-      setTimeout(async () => {
-        await ensureCollaboratorDoc(user);
-      }, 300);
-
-      subscribeTasks();
-      renderCalendar();
-    });
-  </script>
-</body>
-</html>
