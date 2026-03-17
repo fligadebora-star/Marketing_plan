@@ -548,7 +548,120 @@
       transform: translateX(18px);
     }
 
-    /* MODAL E FAB */
+    /* CALENDÁRIO MENSAL */
+
+    .calendar-wrapper {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-3);
+    }
+
+    .calendar-month-label {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .calendar-nav-btn {
+      border: none;
+      background: var(--bg-soft);
+      border-radius: var(--radius-pill);
+      padding: 6px 10px;
+      font-size: 11px;
+      color: var(--text-soft);
+      cursor: pointer;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .calendar-weekdays div {
+      text-align: center;
+      padding-bottom: 4px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .calendar-day {
+      min-height: 54px;
+      border-radius: 14px;
+      background: var(--bg-soft);
+      padding: 4px 4px 6px;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.12s ease, box-shadow 0.12s ease,
+        transform 0.06s ease;
+    }
+
+    .calendar-day.other-month {
+      opacity: 0.45;
+    }
+
+    .calendar-day.today {
+      border: 1px solid var(--primary);
+      box-shadow: 0 0 0 2px rgba(31, 138, 112, 0.15);
+    }
+
+    .calendar-day:hover {
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.09);
+      transform: translateY(-1px);
+    }
+
+    .calendar-day-number {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .calendar-day-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .calendar-day-badge {
+      border-radius: 999px;
+      font-size: 9px;
+      padding: 2px 6px;
+      background: rgba(31, 138, 112, 0.06);
+      color: var(--primary-strong);
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .calendar-day-count {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 2px;
+    }
+
+    /* MODAIS E FAB */
 
     .fab {
       position: fixed;
@@ -653,6 +766,60 @@
       color: var(--text-soft);
     }
 
+    /* MODAL DIA */
+
+    .day-tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .day-task-row {
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(209, 213, 219, 0.7);
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .day-task-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .day-task-title {
+      font-weight: 600;
+    }
+
+    .day-task-channel {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .day-task-status-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .day-task-status-row select {
+      flex: 1;
+    }
+
+    .day-task-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
     /* UTIL */
 
     .hidden {
@@ -752,35 +919,51 @@
       </div>
 
       <div class="tabs" id="tabs">
-        <button class="tab active" data-tab="tarefas">Tarefas</button>
-        <button class="tab" data-tab="calendario">Visão mês</button>
+        <button class="tab active" data-tab="calendario">Calendário</button>
+        <button class="tab" data-tab="tarefas">Lista</button>
         <button class="tab" data-tab="colaboradores" id="tab-colaboradores">
           Equipa
         </button>
       </div>
 
-      <!-- TAB TAREFAS -->
-      <div id="tab-tarefas-view">
+      <!-- TAB CALENDÁRIO (vista principal) -->
+      <div id="tab-calendario-view">
+        <div class="calendar-wrapper">
+          <div class="calendar-header">
+            <button type="button" class="calendar-nav-btn" id="cal-prev">
+              ◀
+            </button>
+            <div class="calendar-month-label" id="calendar-month-label">
+              <!-- preenchido via JS -->
+            </div>
+            <button type="button" class="calendar-nav-btn" id="cal-next">
+              ▶
+            </button>
+          </div>
+
+          <div class="calendar-weekdays">
+            <div>Seg</div>
+            <div>Ter</div>
+            <div>Qua</div>
+            <div>Qui</div>
+            <div>Sex</div>
+            <div>Sáb</div>
+            <div>Dom</div>
+          </div>
+
+          <div class="calendar-grid" id="calendar-grid">
+            <!-- preenchido por JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB TAREFAS (lista clássica) -->
+      <div id="tab-tarefas-view" class="hidden">
         <div class="status-filters" id="status-filters"></div>
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">
           Ainda não há ações de marketing para este período.<br />
           Toque em “+” para criar a primeira tarefa.
-        </div>
-      </div>
-
-      <!-- TAB CALENDÁRIO (simplificada: apenas resumo) -->
-      <div id="tab-calendario-view" class="hidden">
-        <div class="card">
-          <div class="card-title" style="font-size: 15px">
-            Resumo por estado
-          </div>
-          <div class="card-subtitle" style="margin-bottom: 12px">
-            Distribuição das ações por estado de workflow.
-          </div>
-          <div id="calendar-summary" style="font-size: 13px; color: var(--text-soft); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <!-- preenchido por JS -->
-          </div>
         </div>
       </div>
 
@@ -923,6 +1106,46 @@
     </div>
   </div>
 
+  <!-- MODAL DIA (visão diária ao clicar no calendário) -->
+  <div class="modal-backdrop" id="day-modal-backdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="day-modal-title">
+      <div class="modal-header">
+        <div>
+          <div id="day-modal-title" class="modal-title">
+            Ações no dia
+          </div>
+          <div
+            style="
+              font-size: 11px;
+              color: var(--text-soft);
+              margin-top: 2px;
+            "
+          >
+            Altere rapidamente os estados ou entre em detalhe em cada ação.
+          </div>
+        </div>
+        <button class="modal-close" id="day-modal-close">&times;</button>
+      </div>
+
+      <div>
+        <div class="field-label">Ações neste dia</div>
+        <div
+          id="day-modal-empty"
+          style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"
+        >
+          Ainda não há ações planeadas para este dia.
+        </div>
+        <div class="day-tasks-list" id="day-tasks-list"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="day-add-task-btn">
+          Nova ação neste dia
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- FIREBASE APP -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
@@ -978,7 +1201,6 @@
     const statusFiltersEl = document.getElementById("status-filters");
     const tasksListEl = document.getElementById("tasks-list");
     const tasksEmptyEl = document.getElementById("tasks-empty");
-    const calendarSummaryEl = document.getElementById("calendar-summary");
 
     const collabListEl = document.getElementById("collab-list");
 
@@ -998,6 +1220,20 @@
     const taskHistoryEmpty = document.getElementById("task-history-empty");
     const taskSaveBtn = document.getElementById("task-save-btn");
 
+    // Calendário
+    const calendarMonthLabel = document.getElementById("calendar-month-label");
+    const calendarGrid = document.getElementById("calendar-grid");
+    const calPrevBtn = document.getElementById("cal-prev");
+    const calNextBtn = document.getElementById("cal-next");
+
+    // Modal Dia
+    const dayModalBackdrop = document.getElementById("day-modal-backdrop");
+    const dayModalClose = document.getElementById("day-modal-close");
+    const dayModalTitle = document.getElementById("day-modal-title");
+    const dayTasksListEl = document.getElementById("day-tasks-list");
+    const dayModalEmpty = document.getElementById("day-modal-empty");
+    const dayAddTaskBtn = document.getElementById("day-add-task-btn");
+
     const STATUS_LIST = [
       "Pedido",
       "Em criação",
@@ -1014,9 +1250,29 @@
     let collabsMap = new Map();
     let activeStatusFilter = "Todas";
 
+    let currentMonth = new Date(); // referência para calendário
+    currentMonth.setDate(1);
+    let selectedDayDate = null; // yyyy-MM-dd
+
+    // HELPERS
+    function formatYMD(date) {
+      const d = new Date(date);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function monthLabel(date) {
+      return date.toLocaleDateString("pt-PT", {
+        month: "long",
+        year: "numeric",
+      });
+    }
+
     // POPULAR ESTADOS
     function initStatusSelectors() {
-      // Filtro chips
+      // Filtro chips lista
       statusFiltersEl.innerHTML = "";
       ["Todas", ...STATUS_LIST].forEach((status) => {
         const chip = document.createElement("button");
@@ -1083,8 +1339,8 @@
       });
     });
 
-    // MODAL
-    function openTaskModal(task) {
+    // MODAL TAREFA
+    function openTaskModal(task, fixedDateYmd = null) {
       taskModalBackdrop.style.display = "flex";
       if (task) {
         document.getElementById("task-modal-title").textContent =
@@ -1103,7 +1359,7 @@
         taskIdInput.value = "";
         taskTitleInput.value = "";
         taskChannelInput.value = "";
-        taskDateInput.valueAsDate = new Date();
+        taskDateInput.value = fixedDateYmd || formatYMD(new Date());
         taskDurationInput.value = "";
         taskStatusSelect.value = "Pedido";
         taskNotesInput.value = "";
@@ -1220,8 +1476,7 @@
       closeTaskModal();
     });
 
-    // RENDERIZAÇÃO
-
+    // RENDER LISTA
     function renderTasks() {
       const tasksArr = Array.from(tasksMap.values());
 
@@ -1331,43 +1586,7 @@
           tasksListEl.appendChild(card);
         });
 
-      renderCalendarSummary();
-    }
-
-    function renderCalendarSummary() {
-      const tasksArr = Array.from(tasksMap.values());
-      const counts = {};
-      STATUS_LIST.forEach((s) => (counts[s] = 0));
-      tasksArr.forEach((t) => {
-        if (t.status && counts[t.status] != null) counts[t.status] += 1;
-      });
-
-      calendarSummaryEl.innerHTML = "";
-      STATUS_LIST.forEach((s) => {
-        const total = counts[s] || 0;
-        const div = document.createElement("div");
-        div.style.padding = "8px 10px";
-        div.style.borderRadius = "14px";
-        div.style.background = "#ffffff";
-        div.style.border = "1px solid var(--border)";
-        div.style.display = "flex";
-        div.style.flexDirection = "column";
-        div.style.gap = "4px";
-
-        const title = document.createElement("div");
-        title.style.fontSize = "11px";
-        title.style.fontWeight = "600";
-        title.textContent = s;
-
-        const num = document.createElement("div");
-        num.style.fontSize = "18px";
-        num.style.fontWeight = "700";
-        num.textContent = total.toString();
-
-        div.appendChild(title);
-        div.appendChild(num);
-        calendarSummaryEl.appendChild(div);
-      });
+      renderCalendar(); // atualiza também o calendário
     }
 
     function renderHistory(history) {
@@ -1427,6 +1646,198 @@
         history,
       });
     }
+
+    // CALENDÁRIO MENSAL
+
+    function renderCalendar() {
+      const tasksArr = Array.from(tasksMap.values());
+      const year = currentMonth.getFullYear();
+      const month = currentMonth.getMonth(); // 0-11
+
+      calendarMonthLabel.textContent = monthLabel(currentMonth);
+
+      // dia da semana do primeiro dia (0-dom,1-seg,...)
+      const firstDay = new Date(year, month, 1);
+      let startWeekday = firstDay.getDay(); // 0=Dom
+      if (startWeekday === 0) startWeekday = 7; // 1-7 com Seg=1
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // queremos uma grelha 6x7: começar alguns dias antes
+      const cells = [];
+      const todayYMD = formatYMD(new Date());
+
+      // número de dias do mês anterior a mostrar
+      const daysPrev = startWeekday - 1;
+      const prevMonthLastDate = new Date(year, month, 0).getDate();
+
+      for (let i = daysPrev; i > 0; i--) {
+        const d = new Date(year, month - 1, prevMonthLastDate - i + 1);
+        cells.push({ date: d, other: true });
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        cells.push({ date: new Date(year, month, d), other: false });
+      }
+
+      while (cells.length < 42) {
+        const lastCell = cells[cells.length - 1];
+        const d = new Date(lastCell.date);
+        d.setDate(d.getDate() + 1);
+        cells.push({ date: d, other: true });
+      }
+
+      calendarGrid.innerHTML = "";
+
+      cells.forEach((c) => {
+        const ymd = formatYMD(c.date);
+        const dayNum = c.date.getDate();
+        const dayTasks = tasksArr.filter((t) => t.date === ymd);
+
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "calendar-day";
+        if (c.other) cell.classList.add("other-month");
+        if (ymd === todayYMD) cell.classList.add("today");
+
+        const top = document.createElement("div");
+        top.className = "calendar-day-number";
+        top.textContent = dayNum;
+
+        const badgesWrap = document.createElement("div");
+        badgesWrap.className = "calendar-day-badges";
+
+        if (dayTasks.length) {
+          // mostra até 2 títulos curtos
+          dayTasks.slice(0, 2).forEach((t) => {
+            const b = document.createElement("div");
+            b.className = "calendar-day-badge";
+            b.textContent = t.title;
+            badgesWrap.appendChild(b);
+          });
+        }
+
+        const count = document.createElement("div");
+        count.className = "calendar-day-count";
+        if (dayTasks.length) {
+          count.textContent =
+            dayTasks.length === 1
+              ? "1 ação"
+              : dayTasks.length + " ações";
+        }
+
+        cell.appendChild(top);
+        cell.appendChild(badgesWrap);
+        cell.appendChild(count);
+
+        cell.addEventListener("click", () => openDayModal(ymd));
+
+        calendarGrid.appendChild(cell);
+      });
+    }
+
+    calPrevBtn.addEventListener("click", () => {
+      currentMonth.setMonth(currentMonth.getMonth() - 1);
+      renderCalendar();
+    });
+
+    calNextBtn.addEventListener("click", () => {
+      currentMonth.setMonth(currentMonth.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // MODAL DIA
+
+    function openDayModal(ymd) {
+      selectedDayDate = ymd;
+      const d = new Date(ymd + "T00:00:00");
+      dayModalTitle.textContent = d.toLocaleDateString("pt-PT", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+
+      const tasksArr = Array.from(tasksMap.values()).filter(
+        (t) => t.date === ymd
+      );
+
+      dayTasksListEl.innerHTML = "";
+      if (!tasksArr.length) {
+        dayModalEmpty.style.display = "block";
+      } else {
+        dayModalEmpty.style.display = "none";
+        tasksArr
+          .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
+          .forEach((t) => {
+            const row = document.createElement("div");
+            row.className = "day-task-row";
+
+            const top = document.createElement("div");
+            top.className = "day-task-top";
+
+            const left = document.createElement("div");
+            left.innerHTML = `<div class="day-task-title">${t.title}</div>
+              <div class="day-task-channel">${t.channel || "—"}</div>`;
+
+            top.appendChild(left);
+            row.appendChild(top);
+
+            const statusRow = document.createElement("div");
+            statusRow.className = "day-task-status-row";
+
+            const select = document.createElement("select");
+            STATUS_LIST.forEach((s) => {
+              const opt = document.createElement("option");
+              opt.value = s;
+              opt.textContent = s;
+              if (s === t.status) opt.selected = true;
+              select.appendChild(opt);
+            });
+
+            select.addEventListener("change", async (e) => {
+              if (!currentUser || !currentCollaborator) return;
+              const newStatus = e.target.value;
+              await changeTaskStatus(t.id, t, newStatus);
+            });
+
+            statusRow.appendChild(select);
+            row.appendChild(statusRow);
+
+            const actionsRow = document.createElement("div");
+            actionsRow.className = "day-task-actions";
+
+            const editBtn = document.createElement("button");
+            editBtn.type = "button";
+            editBtn.className = "btn-link";
+            editBtn.textContent = "Editar";
+            editBtn.addEventListener("click", () => {
+              openTaskModal(t);
+            });
+
+            actionsRow.appendChild(editBtn);
+            row.appendChild(actionsRow);
+
+            dayTasksListEl.appendChild(row);
+          });
+      }
+
+      dayModalBackdrop.style.display = "flex";
+    }
+
+    function closeDayModal() {
+      dayModalBackdrop.style.display = "none";
+      selectedDayDate = null;
+    }
+
+    dayModalClose.addEventListener("click", closeDayModal);
+    dayModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === dayModalBackdrop) closeDayModal();
+    });
+
+    dayAddTaskBtn.addEventListener("click", () => {
+      if (!selectedDayDate) return;
+      openTaskModal(null, selectedDayDate);
+    });
 
     // COLABORADORES
 
@@ -1540,7 +1951,6 @@
       const email = user.email || "";
       const name = user.displayName || email.split("@")[0] || "Sem nome";
 
-      // Procurar doc com id == uid
       let existing = null;
       collabsMap.forEach((c) => {
         if (c.uid === uid) existing = c;
@@ -1570,7 +1980,6 @@
         currentCollaborator = existing;
       }
 
-      // Se estiver inativo, impedir uso
       if (currentCollaborator.active === false) {
         alert(
           "O seu utilizador está marcado como inativo pela administração. Contacte a Débora para reativar."
@@ -1591,7 +2000,6 @@
           ? "Administrador"
           : "Colaborador";
 
-      // Mostrar/ocultar tab de colaboradores
       if (currentCollaborator.role === "admin") {
         tabColaboradoresBtn.style.display = "inline-block";
       } else {
@@ -1612,18 +2020,17 @@
         return;
       }
 
-      // Logado
       loginView.style.display = "none";
       appView.style.display = "block";
       fabAdd.classList.remove("hidden");
 
       subscribeCollaborators();
-      // Aguardar 300ms para sync inicial de colaboradores
       setTimeout(async () => {
         await ensureCollaboratorDoc(user);
       }, 300);
 
       subscribeTasks();
+      renderCalendar();
     });
   </script>
 </body>
