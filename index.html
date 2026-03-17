@@ -412,6 +412,68 @@
       background: var(--bg-soft);
     }
 
+    .priority-pill {
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .priority-baixa {
+      background: #e5f3ff;
+      color: #1d4ed8;
+    }
+
+    .priority-normal {
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .priority-alta {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .priority-critica {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-pill {
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-Pedido {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-Em-criação {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .status-Em-aprovação {
+      background: #e0f2fe;
+      color: #082f49;
+    }
+
+    .status-Aprovado {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-Publicado {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
     .task-status-row {
       display: flex;
       align-items: center;
@@ -654,6 +716,15 @@
       text-overflow: ellipsis;
     }
 
+    .calendar-icon-badge {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
     .calendar-day-count {
       font-size: 9px;
       color: var(--text-muted);
@@ -813,6 +884,14 @@
       flex: 1;
     }
 
+    .day-task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--text-soft);
+    }
+
     .day-task-actions {
       display: flex;
       justify-content: flex-end;
@@ -934,7 +1013,7 @@
               ◀
             </button>
             <div class="calendar-month-label" id="calendar-month-label">
-              <!-- preenchido via JS -->
+              <!-- via JS -->
             </div>
             <button type="button" class="calendar-nav-btn" id="cal-next">
               ▶
@@ -952,7 +1031,7 @@
           </div>
 
           <div class="calendar-grid" id="calendar-grid">
-            <!-- preenchido por JS -->
+            <!-- via JS -->
           </div>
         </div>
       </div>
@@ -1051,17 +1130,25 @@
 
         <div class="field-group">
           <div class="field-label">
-            Duração estimada (min) <span style="color: var(--text-muted)"
-              >· editável em “Em criação”</span
-            >
+            Duração estimada (min)
           </div>
           <input
             type="number"
             id="task-duration"
-            min="10"
+            min="5"
             step="5"
             placeholder="ex: 60"
           />
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Prioridade</div>
+          <select id="task-priority">
+            <option value="Normal">Normal</option>
+            <option value="Baixa">Baixa</option>
+            <option value="Alta">Alta</option>
+            <option value="Crítica">Crítica</option>
+          </select>
         </div>
 
         <div class="field-group">
@@ -1161,6 +1248,7 @@
       doc,
       addDoc,
       updateDoc,
+      setDoc,
       onSnapshot,
       query,
       orderBy,
@@ -1215,10 +1303,10 @@
     const taskDateInput = document.getElementById("task-date");
     const taskDurationInput = document.getElementById("task-duration");
     const taskStatusSelect = document.getElementById("task-status");
+    const taskPrioritySelect = document.getElementById("task-priority");
     const taskNotesInput = document.getElementById("task-notes");
     const taskHistoryList = document.getElementById("task-history-list");
     const taskHistoryEmpty = document.getElementById("task-history-empty");
-    const taskSaveBtn = document.getElementById("task-save-btn");
 
     // Calendário
     const calendarMonthLabel = document.getElementById("calendar-month-label");
@@ -1242,6 +1330,8 @@
       "Publicado",
     ];
 
+    const PRIORITY_LIST = ["Baixa", "Normal", "Alta", "Crítica"];
+
     let currentUser = null;
     let currentCollaborator = null;
     let tasksMap = new Map();
@@ -1250,7 +1340,7 @@
     let collabsMap = new Map();
     let activeStatusFilter = "Todas";
 
-    let currentMonth = new Date(); // referência para calendário
+    let currentMonth = new Date();
     currentMonth.setDate(1);
     let selectedDayDate = null; // yyyy-MM-dd
 
@@ -1270,9 +1360,29 @@
       });
     }
 
+    function statusClass(status) {
+      return (status || "").replace(/\s+/g, "-");
+    }
+
+    function priorityClass(priority) {
+      const p = (priority || "Normal").toLowerCase();
+      if (p === "baixa") return "priority-baixa";
+      if (p === "alta") return "priority-alta";
+      if (p === "crítica" || p === "critica") return "priority-critica";
+      return "priority-normal";
+    }
+
+    function channelIcon(channel) {
+      if (!channel) return "⭐";
+      if (channel.includes("Instagram")) return "📱";
+      if (channel.includes("Loja online")) return "🛒";
+      if (channel.includes("Loja física")) return "🏪";
+      if (channel.includes("Email")) return "✉️";
+      return "⭐";
+    }
+
     // POPULAR ESTADOS
     function initStatusSelectors() {
-      // Filtro chips lista
       statusFiltersEl.innerHTML = "";
       ["Todas", ...STATUS_LIST].forEach((status) => {
         const chip = document.createElement("button");
@@ -1292,7 +1402,6 @@
         statusFiltersEl.appendChild(chip);
       });
 
-      // Dropdown do formulário
       taskStatusSelect.innerHTML = "";
       STATUS_LIST.forEach((s) => {
         const opt = document.createElement("option");
@@ -1351,6 +1460,7 @@
         taskDateInput.value = task.date || "";
         taskDurationInput.value = task.duration || "";
         taskStatusSelect.value = task.status || STATUS_LIST[0];
+        taskPrioritySelect.value = task.priority || "Normal";
         taskNotesInput.value = task.notes || "";
         renderHistory(task.history || []);
       } else {
@@ -1362,10 +1472,10 @@
         taskDateInput.value = fixedDateYmd || formatYMD(new Date());
         taskDurationInput.value = "";
         taskStatusSelect.value = "Pedido";
+        taskPrioritySelect.value = "Normal";
         taskNotesInput.value = "";
         renderHistory([]);
       }
-      updateDurationEditability(taskStatusSelect.value);
     }
 
     function closeTaskModal() {
@@ -1380,20 +1490,6 @@
 
     fabAdd.addEventListener("click", () => openTaskModal(null));
 
-    function updateDurationEditability(status) {
-      if (status === "Em criação") {
-        taskDurationInput.disabled = false;
-        taskDurationInput.placeholder =
-          "ex: 60 (só editável enquanto estiver em criação)";
-      } else {
-        taskDurationInput.disabled = true;
-      }
-    }
-
-    taskStatusSelect.addEventListener("change", (e) => {
-      updateDurationEditability(e.target.value);
-    });
-
     // FORM TAREFA
     taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1407,6 +1503,7 @@
         ? Number(taskDurationInput.value)
         : null;
       const status = taskStatusSelect.value;
+      const priority = taskPrioritySelect.value || "Normal";
       const notes = taskNotesInput.value.trim();
 
       if (!title || !channel || !date || !status) return;
@@ -1414,66 +1511,72 @@
       const nowIso = new Date().toISOString();
       const collName = currentCollaborator.name || currentCollaborator.email;
 
-      if (!id) {
-        const docRef = await addDoc(collection(db, "tarefas"), {
-          title,
-          channel,
-          date,
-          duration,
-          status,
-          notes,
-          createdAt: nowIso,
-          createdByUid: currentUser.uid,
-          createdByName: collName,
-          createdByEmail: currentCollaborator.email,
-          lastUpdatedAt: nowIso,
-          lastUpdatedByUid: currentUser.uid,
-          lastUpdatedByName: collName,
-          lastUpdatedByEmail: currentCollaborator.email,
-          history: [
-            {
-              at: nowIso,
-              byUid: currentUser.uid,
-              byName: collName,
-              byEmail: currentCollaborator.email,
-              fromStatus: null,
-              toStatus: status,
-              type: "criação",
-            },
-          ],
-        });
-        console.log("Tarefa criada:", docRef.id);
-      } else {
-        const ref = doc(db, "tarefas", id);
-        const previous = tasksMap.get(id);
-        const history = previous?.history || [];
-        history.push({
-          at: nowIso,
-          byUid: currentUser.uid,
-          byName: collName,
-          byEmail: currentCollaborator.email,
-          fromStatus: previous?.status || null,
-          toStatus: status,
-          type: "edição",
-        });
+      try {
+        if (!id) {
+          const docRef = await addDoc(collection(db, "tarefas"), {
+            title,
+            channel,
+            date,
+            duration,
+            status,
+            priority,
+            notes,
+            createdAt: nowIso,
+            createdByUid: currentUser.uid,
+            createdByName: collName,
+            createdByEmail: currentCollaborator.email,
+            lastUpdatedAt: nowIso,
+            lastUpdatedByUid: currentUser.uid,
+            lastUpdatedByName: collName,
+            lastUpdatedByEmail: currentCollaborator.email,
+            history: [
+              {
+                at: nowIso,
+                byUid: currentUser.uid,
+                byName: collName,
+                byEmail: currentCollaborator.email,
+                fromStatus: null,
+                toStatus: status,
+                type: "criação",
+              },
+            ],
+          });
+          console.log("Tarefa criada:", docRef.id);
+        } else {
+          const ref = doc(db, "tarefas", id);
+          const previous = tasksMap.get(id);
+          const history = previous?.history || [];
+          history.push({
+            at: nowIso,
+            byUid: currentUser.uid,
+            byName: collName,
+            byEmail: currentCollaborator.email,
+            fromStatus: previous?.status || null,
+            toStatus: status,
+            type: "edição",
+          });
 
-        await updateDoc(ref, {
-          title,
-          channel,
-          date,
-          duration,
-          status,
-          notes,
-          lastUpdatedAt: nowIso,
-          lastUpdatedByUid: currentUser.uid,
-          lastUpdatedByName: collName,
-          lastUpdatedByEmail: currentCollaborator.email,
-          history,
-        });
-        console.log("Tarefa atualizada:", id);
+          await updateDoc(ref, {
+            title,
+            channel,
+            date,
+            duration,
+            status,
+            priority,
+            notes,
+            lastUpdatedAt: nowIso,
+            lastUpdatedByUid: currentUser.uid,
+            lastUpdatedByName: collName,
+            lastUpdatedByEmail: currentCollaborator.email,
+            history,
+          });
+          console.log("Tarefa atualizada:", id);
+        }
+        closeTaskModal();
+      } catch (err) {
+        console.error("Erro ao guardar tarefa:", err);
+        alert("Erro ao guardar a ação. Verifica as permissões do Firestore.");
       }
-
-      closeTaskModal();
     });
 
     // RENDER LISTA
@@ -1525,6 +1628,21 @@
           meta.innerHTML += `<span>👤 ${
             task.lastUpdatedByName || task.createdByName || "—"
           }</span>`;
+
+          // prioridade
+          const pClass = priorityClass(task.priority);
+          const priSpan = document.createElement("span");
+          priSpan.className = `priority-pill ${pClass}`;
+          priSpan.textContent = task.priority || "Normal";
+          meta.appendChild(priSpan);
+
+          // estado colorido
+          const sSpan = document.createElement("span");
+          sSpan.className =
+            "status-pill status-" + statusClass(task.status || "");
+          sSpan.textContent = task.status || "—";
+          meta.appendChild(sSpan);
+
           card.appendChild(meta);
 
           const statusRow = document.createElement("div");
@@ -1586,7 +1704,7 @@
           tasksListEl.appendChild(card);
         });
 
-      renderCalendar(); // atualiza também o calendário
+      renderCalendar();
     }
 
     function renderHistory(history) {
@@ -1656,17 +1774,14 @@
 
       calendarMonthLabel.textContent = monthLabel(currentMonth);
 
-      // dia da semana do primeiro dia (0-dom,1-seg,...)
       const firstDay = new Date(year, month, 1);
-      let startWeekday = firstDay.getDay(); // 0=Dom
-      if (startWeekday === 0) startWeekday = 7; // 1-7 com Seg=1
+      let startWeekday = firstDay.getDay(); // 0-Dom
+      if (startWeekday === 0) startWeekday = 7; // 1-Seg...7-Dom
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // queremos uma grelha 6x7: começar alguns dias antes
       const cells = [];
       const todayYMD = formatYMD(new Date());
 
-      // número de dias do mês anterior a mostrar
       const daysPrev = startWeekday - 1;
       const prevMonthLastDate = new Date(year, month, 0).getDate();
 
@@ -1707,11 +1822,12 @@
         badgesWrap.className = "calendar-day-badges";
 
         if (dayTasks.length) {
-          // mostra até 2 títulos curtos
-          dayTasks.slice(0, 2).forEach((t) => {
+          dayTasks.slice(0, 4).forEach((t) => {
             const b = document.createElement("div");
-            b.className = "calendar-day-badge";
-            b.textContent = t.title;
+            b.className =
+              "calendar-day-badge calendar-icon-badge status-" +
+              statusClass(t.status || "");
+            b.textContent = channelIcon(t.channel);
             badgesWrap.appendChild(b);
           });
         }
@@ -1781,6 +1897,25 @@
 
             top.appendChild(left);
             row.appendChild(top);
+
+            const meta = document.createElement("div");
+            meta.className = "day-task-meta";
+            if (t.duration) {
+              meta.innerHTML += `<span>⏱ ${t.duration} min</span>`;
+            }
+            const pSpan = document.createElement("span");
+            pSpan.className =
+              "priority-pill " + priorityClass(t.priority || "Normal");
+            pSpan.textContent = t.priority || "Normal";
+            meta.appendChild(pSpan);
+
+            const sSpan = document.createElement("span");
+            sSpan.className =
+              "status-pill status-" + statusClass(t.status || "");
+            sSpan.textContent = t.status || "—";
+            meta.appendChild(sSpan);
+
+            row.appendChild(meta);
 
             const statusRow = document.createElement("div");
             statusRow.className = "day-task-status-row";
@@ -1951,34 +2086,29 @@
       const email = user.email || "";
       const name = user.displayName || email.split("@")[0] || "Sem nome";
 
-      let existing = null;
-      collabsMap.forEach((c) => {
-        if (c.uid === uid) existing = c;
-      });
-
+      let existing = collabsMap.get(uid) || null;
       if (!existing) {
         const role =
           email.toLowerCase() === "fligadebora@hotmail.com"
             ? "admin"
             : "colaborador";
-        const ref = await addDoc(collection(db, "colaboradores"), {
-          uid,
-          email,
-          name,
-          role,
-          active: true,
-        });
-        currentCollaborator = {
-          id: ref.id,
-          uid,
-          email,
-          name,
-          role,
-          active: true,
-        };
-      } else {
-        currentCollaborator = existing;
+        const ref = doc(db, "colaboradores", uid);
+        await setDoc(
+          ref,
+          {
+            uid,
+            email,
+            name,
+            role,
+            active: true,
+          },
+          { merge: true }
+        );
+        existing = { id: uid, uid, email, name, role, active: true };
+        collabsMap.set(uid, existing);
       }
+
+      currentCollaborator = existing;
 
       if (currentCollaborator.active === false) {
         alert(
