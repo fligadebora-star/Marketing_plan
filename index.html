@@ -1025,7 +1025,13 @@
           <div class="field-label">Nome</div>
           <input type="text" id="collab-name" required placeholder="ex: Bheatriz" />
         </div>
-
+<div class="field-group">
+    <div class="field-label">Perfil</div>
+    <select id="collab-role-input">
+      <option value="colaborador">Colaborador</option>
+      <option value="admin">Administrador</option>
+    </select>
+  </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">Adicionar</button>
           <button type="button" class="btn btn-ghost" id="collab-cancel-btn" style="width: 100%;">Cancelar</button>
@@ -1037,7 +1043,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-    import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where, getDocs, } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA5ge2xh4oq0TrPMWQsZgEnYnsaACFsm7w",
@@ -1137,7 +1143,8 @@
     const collabForm = document.getElementById("collab-form");
     const collabEmailInput = document.getElementById("collab-email");
     const collabNameInput = document.getElementById("collab-name");
-
+const collabRoleInput = document.getElementById("collab-role-input");
+    
     // STATE
     let currentUser = null;
     let currentCollaborator = null;
@@ -1776,29 +1783,45 @@ async function deleteTask(id, title) {
     });
 
     collabForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = collabEmailInput.value.trim();
-      const name = collabNameInput.value.trim();
+  e.preventDefault();
+  const email = collabEmailInput.value.trim().toLowerCase();
+  const name = collabNameInput.value.trim();
+  const role = collabRoleInput.value || "colaborador"; // dropdown no modal
 
-      if (!email || !name) return;
+  if (!email || !name) return;
 
-      const role = email.toLowerCase() === "fligadebora@hotmail.com" ? "admin" : "colaborador";
-      const tempPassword = Math.random().toString(36).substring(2, 10);
-      
-      await addDoc(collection(db, "colaboradores"), {
-        email,
-        name,
-        role,
-        active: true,
-        uid: null,
-        tempPassword,
-        createdAt: new Date().toISOString(),
-      });
+  const tempPassword = Math.random().toString(36).slice(2, 10) + "!L1";
 
-      alert(`Colaborador criado!\n\nEmail: ${email}\nPassword temporária: ${tempPassword}\n\n(Guarda isto antes de compartilhar e cria o utilizador correspondente no Auth do Firebase com este email/password.)`);
+  try {
+    taskSaveBtn && (taskSaveBtn.disabled = true);
 
-      closeCollabModal();
+    // 1. Criar utilizador no Firebase Auth
+    const authData = await createFirebaseAuthUser(email, tempPassword);
+    const uid = authData.localId;
+
+    // 2. Gravar em Firestore com uid real
+    await addDoc(collection(db, "colaboradores"), {
+      uid,
+      email,
+      name,
+      role: email === "fligadebora@hotmail.com" ? "admin" : role,
+      active: true,
+      createdAt: new Date().toISOString(),
+      createdByUid: currentUser.uid,
+      createdByName: currentCollaborator.name,
     });
+
+    alert(
+      `✅ Colaborador criado com sucesso!\n\nEmail: ${email}\nPassword temporária: ${tempPassword}\n\nPartilha estas credenciais com ${name}. Na primeira entrada, devem alterar a password.`
+    );
+
+    closeCollabModal();
+  } catch (err) {
+    alert("Erro ao criar colaborador:\n" + err.message);
+  } finally {
+    taskSaveBtn && (taskSaveBtn.disabled = false);
+  }
+});
 
     // FIRESTORE
     function subscribeTasks() {
@@ -1828,37 +1851,27 @@ async function deleteTask(id, title) {
    async function ensureCollaboratorDoc(user) {
   const uid = user.uid;
   const email = user.email || "";
-  const name = user.displayName || email.split("@")[0] || "Sem nome";
 
-  let existing = null;
-  collabsMap.forEach((c) => {
-    if (c.uid === uid) existing = c;
-  });
+  // Consultar Firestore diretamente (evita race condition com collabsMap)
+  const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
+  const snap = await getDocs(q);
 
-  if (!existing) {
-    const role = email.toLowerCase() === "fligadebora@hotmail.com" ? "admin" : "colaborador";
-    const ref = await addDoc(collection(db, "colaboradores"), {
-      uid,
-      email,
-      name,
-      role,
-      active: true,
-    });
-    currentCollaborator = {
-      id: ref.id,
-      uid,
-      email,
-      name,
-      role,
-      active: true,
-    };
-  } else {
-    currentCollaborator = existing;
+  if (snap.empty) {
+    // Utilizador não existe na app — bloquear acesso
+    await signOut(auth);
+    loginErrorEl.textContent =
+      "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
+    return;
   }
 
+  const docSnap = snap.docs[0];
+  currentCollaborator = { id: docSnap.id, ...docSnap.data() };
+
   if (currentCollaborator.active === false) {
-    alert("O seu utilizador está inativo. Contacte a administração.");
     await signOut(auth);
+    loginErrorEl.textContent =
+      "Utilizador inativo. Contacte a Débora para reativar.";
+    return;
   }
 
   const initials = (currentCollaborator.name || email || "FL")
@@ -1867,40 +1880,29 @@ async function deleteTask(id, title) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
   userAvatarEl.textContent = initials;
   userNameEl.textContent = currentCollaborator.name || email;
   userRoleEl.textContent =
     currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
-  // >>> ALTERAÇÃO AQUI: equipa e botão sempre visíveis para já
   tabColaboradoresBtn.style.display = "inline-block";
-  btnAddCollab.style.display = "inline-block";
 }
-    onAuthStateChanged(auth, async (user) => {
-      currentUser = user || null;
-
-      if (!user) {
-        loginView.style.display = "block";
-        appView.style.display = "none";
-        fabAdd.classList.add("hidden");
-        if (tasksUnsub) tasksUnsub();
-        if (collabUnsub) collabUnsub();
-        return;
-      }
-
-      loginView.style.display = "none";
-      appView.style.display = "block";
-      fabAdd.classList.remove("hidden");
-
-      subscribeCollaborators();
-      setTimeout(async () => {
-        await ensureCollaboratorDoc(user);
-      }, 300);
-
-      subscribeTasks();
-    });
-
-    renderCalendar();
+    async function createFirebaseAuthUser(email, password) {
+  const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`;
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password, returnSecureToken: true }),
+  });
+  const data = await resp.json();
+  if (!resp.ok) {
+    const msg = data.error?.message || "Erro desconhecido";
+    if (msg === "EMAIL_EXISTS") throw new Error("Email já registado no Firebase.");
+    throw new Error(msg);
+  }
+  return data; // contém localId (= uid do novo utilizador)
+}
   </script>
 </body>
 </html>
