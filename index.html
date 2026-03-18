@@ -1504,6 +1504,20 @@ function renderTasks() {
       tasksListEl.appendChild(card);
     });
 
+  const canDelete =
+  currentCollaborator && currentCollaborator.role === "admin";
+
+if (canDelete) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.type = "button";
+  deleteBtn.className = "btn-link";
+  deleteBtn.style.color = "var(--danger)";
+  deleteBtn.textContent = "Remover";
+  deleteBtn.addEventListener("click", () =>
+    deleteTask(task.id, task.title)
+  );
+  statusRow.appendChild(deleteBtn);
+}
   renderCalendar();
 }
     // MODAL TAREFA
@@ -1655,7 +1669,17 @@ function renderTasks() {
         history,
       });
     }
+async function deleteTask(id, title) {
+  if (!currentUser || !currentCollaborator) return;
+  if (currentCollaborator.role !== "admin") {
+    alert("Apenas administradores podem remover ações.");
+    return;
+  }
+  const ok = confirm(`Remover a ação:\n\n${title}\n\nEsta operação não pode ser anulada.`);
+  if (!ok) return;
 
+  await deleteDoc(doc(db, "tarefas", id));
+}
     // COLABORADORES
     function renderCollaborators() {
       collabListEl.innerHTML = "";
