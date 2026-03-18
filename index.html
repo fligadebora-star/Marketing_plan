@@ -745,18 +745,14 @@
       gap: 10px;
     }
 
-    .status-filters {
-      display: flex;
-      overflow-x: auto;
-      gap: 6px;
-      padding-bottom: 4px;
-      margin-bottom: var(--space-3);
-      scrollbar-width: none;
-    }
-
-    .status-filters::-webkit-scrollbar {
-      display: none;
-    }
+.status-filters {
+  display: flex;
+  flex-wrap: wrap;        /* permite ir para 2 ou mais linhas */
+  overflow-x: visible;    /* deixa o conteúdo todo visível */
+  gap: 6px 8px;
+  padding-bottom: 4px;
+  margin-bottom: var(--space-3);
+}
 
     .channel-grid {
       display: grid;
