@@ -933,6 +933,11 @@
           <button id="filter-clear-btn" class="btn btn-ghost btn-sm">Limpar</button>
         </div>
         <div class="status-filters" id="status-filters"></div>
+                <div id="export-buttons" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <button id="btn-export-all" class="btn btn-ghost btn-sm">📋 Todas</button>
+          <button id="btn-export-pending" class="btn btn-ghost btn-sm">⏳ Pendentes</button>
+          <button id="btn-export-backup" class="btn btn-ghost btn-sm">💾 Backup</button>
+        </div>
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">Ainda não há ações para este período.</div>
       </div>
@@ -1793,8 +1798,6 @@ async function deleteTask(id, title) {
   const tempPassword = Math.random().toString(36).slice(2, 10) + "!L1";
 
   try {
-    taskSaveBtn && (taskSaveBtn.disabled = true);
-
     // 1. Criar utilizador no Firebase Auth
     const authData = await createFirebaseAuthUser(email, tempPassword);
     const uid = authData.localId;
@@ -1819,7 +1822,7 @@ async function deleteTask(id, title) {
   } catch (err) {
     alert("Erro ao criar colaborador:\n" + err.message);
   } finally {
-    taskSaveBtn && (taskSaveBtn.disabled = false);
+    
   }
 });
 
@@ -1887,6 +1890,11 @@ async function deleteTask(id, title) {
     currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
   tabColaboradoresBtn.style.display = "inline-block";
+  if (currentCollaborator.role === "admin") {
+    btnAddCollab.style.display = "inline-block";
+  } else {
+    btnAddCollab.style.display = "none";
+  }
 }
     async function createFirebaseAuthUser(email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`;
@@ -1903,6 +1911,86 @@ async function deleteTask(id, title) {
   }
   return data; // contém localId (= uid do novo utilizador)
 }
+
+    // FILTRO LIMPAR
+    document.getElementById("filter-clear-btn").addEventListener("click", () => {
+      document.getElementById("filter-date").value = "";
+      renderTasks();
+    });
+
+    // EXPORTAÇÃO
+    function exportCSV(tasks, filename) {
+      const headers = ["Data","Título","Canal","Estado","Duração (min)","Criado por","Atualizado por","Notas"];
+      const rows = tasks.map((t) => [
+        t.date || "",
+        t.title || "",
+        t.channel || "",
+        t.status || "",
+        t.duration || "",
+        t.createdByName || "",
+        t.lastUpdatedByName || "",
+        (t.notes || "").replace(/[\r\n]+/g, " "),
+      ]);
+      const csv =
+        "\uFEFF" +
+        [headers, ...rows]
+          .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
+          .join("\r\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("btn-export-all").addEventListener("click", () => {
+      exportCSV(Array.from(tasksMap.values()), `tarefas-todas-${new Date().toISOString().slice(0,10)}.csv`);
+    });
+
+    document.getElementById("btn-export-pending").addEventListener("click", () => {
+      const pending = Array.from(tasksMap.values()).filter(
+        (t) => t.status !== "Concluído" && t.status !== "Anulado"
+      );
+      exportCSV(pending, `tarefas-pendentes-${new Date().toISOString().slice(0,10)}.csv`);
+    });
+
+    document.getElementById("btn-export-backup").addEventListener("click", () => {
+      const all = Array.from(tasksMap.values());
+      const blob = new Blob([JSON.stringify(all, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `backup-tarefas-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // AUTH STATE
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+
+      if (!user) {
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        if (tasksUnsub) tasksUnsub();
+        if (collabUnsub) collabUnsub();
+        currentCollaborator = null;
+        return;
+      }
+
+      loginView.style.display = "none";
+      appView.style.display = "block";
+      fabAdd.classList.remove("hidden");
+
+      subscribeCollaborators();
+      subscribeTasks();
+      await ensureCollaboratorDoc(user);
+    });
+
+    renderCalendar();
   </script>
 </body>
 </html>
