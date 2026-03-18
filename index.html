@@ -1768,56 +1768,57 @@
       });
     }
 
-    async function ensureCollaboratorDoc(user) {
-      const uid = user.uid;
-      const email = user.email || "";
-      const name = user.displayName || email.split("@")[0] || "Sem nome";
+   async function ensureCollaboratorDoc(user) {
+  const uid = user.uid;
+  const email = user.email || "";
+  const name = user.displayName || email.split("@")[0] || "Sem nome";
 
-      let existing = null;
-      collabsMap.forEach((c) => {
-        if (c.uid === uid) existing = c;
-      });
+  let existing = null;
+  collabsMap.forEach((c) => {
+    if (c.uid === uid) existing = c;
+  });
 
-      if (!existing) {
-        const role = email.toLowerCase() === "fligadebora@hotmail.com" ? "admin" : "colaborador";
-        const ref = await addDoc(collection(db, "colaboradores"), {
-          uid,
-          email,
-          name,
-          role,
-          active: true,
-        });
-        currentCollaborator = {
-          id: ref.id,
-          uid,
-          email,
-          name,
-          role,
-          active: true,
-        };
-      } else {
-        currentCollaborator = existing;
-      }
+  if (!existing) {
+    const role = email.toLowerCase() === "fligadebora@hotmail.com" ? "admin" : "colaborador";
+    const ref = await addDoc(collection(db, "colaboradores"), {
+      uid,
+      email,
+      name,
+      role,
+      active: true,
+    });
+    currentCollaborator = {
+      id: ref.id,
+      uid,
+      email,
+      name,
+      role,
+      active: true,
+    };
+  } else {
+    currentCollaborator = existing;
+  }
 
-      if (currentCollaborator.active === false) {
-        alert("O seu utilizador está inativo. Contacte a administração.");
-        await signOut(auth);
-      }
+  if (currentCollaborator.active === false) {
+    alert("O seu utilizador está inativo. Contacte a administração.");
+    await signOut(auth);
+  }
 
-      const initials = (currentCollaborator.name || email || "FL").split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
-      userAvatarEl.textContent = initials;
-      userNameEl.textContent = currentCollaborator.name || email;
-      userRoleEl.textContent = currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
+  const initials = (currentCollaborator.name || email || "FL")
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  userAvatarEl.textContent = initials;
+  userNameEl.textContent = currentCollaborator.name || email;
+  userRoleEl.textContent =
+    currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
-      if (currentCollaborator.role === "admin") {
-        tabColaboradoresBtn.style.display = "inline-block";
-        btnAddCollab.style.display = "inline-block";
-      } else {
-        tabColaboradoresBtn.style.display = "none";
-        btnAddCollab.style.display = "none";
-      }
-    }
-
+  // >>> ALTERAÇÃO AQUI: equipa e botão sempre visíveis para já
+  tabColaboradoresBtn.style.display = "inline-block";
+  btnAddCollab.style.display = "inline-block";
+}
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
 
