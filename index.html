@@ -5,6 +5,7 @@
   <title>Calendário Marketing · Farmácia da Liga</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Fonte Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -12,18 +13,25 @@
     rel="stylesheet"
   />
 
+  <!-- jsPDF para exportar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
     :root {
       --bg: #f5f5f7;
       --bg-alt: #ffffff;
       --bg-soft: #f0f1f3;
+
       --primary: #1f8a70;
       --primary-soft: #e0f3ee;
       --primary-strong: #166153;
+
       --danger: #c0392b;
+
       --text-main: #1f2933;
       --text-soft: #6b7280;
       --text-muted: #9ca3af;
+
       --border: #e1e4ea;
       --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
 
@@ -38,6 +46,15 @@
       --space-5: 20px;
       --space-6: 24px;
       --space-8: 32px;
+
+      /* cores pastel por estado */
+      --pedido-bg: #d3e5ff;
+      --criacao-bg: #fffacd;
+      --aprovacao-bg: #ffe4d6;
+      --aprovado-bg: #e6d7f5;
+      --publicado-bg: #e8e8e8;
+      --concluido-bg: #e8e8e8;
+      --anulado-bg: #ffe6e6;
     }
 
     * {
@@ -47,8 +64,7 @@
     }
 
     body {
-      font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
       background: radial-gradient(circle at top, #fdfdfd 0, var(--bg) 40%);
       color: var(--text-main);
       min-height: 100vh;
@@ -92,19 +108,22 @@
       justify-content: center;
       box-shadow: 0 8px 20px rgba(31, 138, 112, 0.3);
       color: #ffffff;
-      font-size: 18px;
+    }
+
+    .brand-logo span {
+      font-size: 20px;
       font-weight: 700;
     }
 
     .brand-text-title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .brand-text-sub {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--text-soft);
     }
 
@@ -220,17 +239,6 @@
       box-shadow: 0 6px 14px rgba(31, 138, 112, 0.3);
     }
 
-    .btn-secondary {
-      background: var(--bg-soft);
-      color: var(--text-main);
-      border: 1px solid var(--border);
-      box-shadow: none;
-    }
-
-    .btn-secondary:active {
-      background: #e8e9eb;
-    }
-
     .btn-ghost {
       background: rgba(255, 255, 255, 0.4);
       color: var(--text-soft);
@@ -239,6 +247,30 @@
       box-shadow: none;
       width: auto;
       padding-inline: 16px;
+    }
+
+    .btn-sm {
+      font-size: 11px;
+      padding: 8px 12px;
+      width: auto;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-soft);
+      box-shadow: none;
+    }
+
+    .btn-link {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-strong);
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
     }
 
     .login-error {
@@ -333,6 +365,10 @@
       box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
     }
 
+    .hidden {
+      display: none !important;
+    }
+
     .status-filters {
       display: flex;
       overflow-x: auto;
@@ -364,6 +400,29 @@
       border-color: transparent;
     }
 
+    .tasks-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .tasks-toolbar .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .tasks-toolbar .exports {
+      display: flex;
+      gap: 6px;
+    }
+
     .tasks-list {
       display: flex;
       flex-direction: column;
@@ -372,7 +431,6 @@
     }
 
     .task-card {
-      background: var(--bg-alt);
       border-radius: var(--radius-lg);
       padding: var(--space-4);
       border: 1px solid var(--border);
@@ -386,29 +444,20 @@
       display: flex;
       justify-content: space-between;
       gap: 6px;
-      align-items: flex-start;
-      flex-wrap: wrap;
+      align-items: center;
     }
 
     .task-title {
       font-size: 14px;
       font-weight: 600;
-      flex: 1;
-    }
-
-    .task-tags {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
     }
 
     .task-tag {
       font-size: 10px;
       padding: 4px 8px;
       border-radius: var(--radius-pill);
-      background: var(--primary-soft);
-      color: var(--primary-strong);
-      font-weight: 500;
+      background: var(--bg-soft);
+      color: var(--text-soft);
     }
 
     .task-meta {
@@ -425,7 +474,7 @@
       gap: 4px;
       padding: 3px 8px;
       border-radius: var(--radius-pill);
-      background: var(--bg-soft);
+      background: rgba(255, 255, 255, 0.4);
     }
 
     .task-status-row {
@@ -439,31 +488,17 @@
       flex: 1;
     }
 
-    .task-status-row small {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
     .task-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
       margin-top: 4px;
-      font-size: 10px;
-      color: var(--text-muted);
     }
 
-    .btn-link {
+    .task-footer span {
       font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--primary-strong);
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
-      font-weight: 600;
+      color: var(--text-muted);
     }
 
     .empty-state {
@@ -475,8 +510,12 @@
 
     /* CALENDÁRIO */
 
-    #tab-calendario-view {
-      display: none;
+    .calendar-wrapper {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: var(--space-4);
     }
 
     .calendar-nav {
@@ -484,122 +523,157 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--space-4);
-      padding: 0 var(--space-3);
     }
 
-    .calendar-nav-btn {
+    .calendar-nav button {
       background: none;
       border: none;
-      font-size: 18px;
+      color: var(--primary);
+      font-size: 16px;
       cursor: pointer;
-      color: var(--primary-strong);
+      font-weight: 600;
     }
 
-    .calendar-month-year {
+    .calendar-nav h3 {
       font-size: 14px;
       font-weight: 600;
-      text-align: center;
     }
 
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
+      gap: 4px;
       margin-bottom: var(--space-4);
     }
 
-    .calendar-day-header {
+    .calendar-day-label {
       text-align: center;
       font-size: 10px;
       font-weight: 600;
       color: var(--text-muted);
       padding: 6px 0;
+      text-transform: uppercase;
     }
 
     .calendar-day {
       aspect-ratio: 1;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-md);
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      font-size: 11px;
+      justify-content: flex-start;
       cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      background: #ffffff;
+      transition: all 0.15s ease;
       position: relative;
-      padding: 2px;
+      overflow: hidden;
+      padding-top: 4px;
+      padding-bottom: 2px;
+    }
+
+    .calendar-day:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(31, 138, 112, 0.15);
     }
 
     .calendar-day.other-month {
-      opacity: 0.4;
+      color: var(--text-muted);
+      background: var(--bg-soft);
     }
 
     .calendar-day.today {
       background: var(--primary-soft);
       border-color: var(--primary);
-    }
-
-    .calendar-day-num {
       font-weight: 600;
-      font-size: 12px;
+      color: var(--primary-strong);
     }
 
-    .calendar-day-dots {
-      display: flex;
-      gap: 1px;
-      margin-top: 1px;
+    .calendar-day.selected {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
     }
 
-    .calendar-day-dot {
-      width: 3px;
-      height: 3px;
+    .calendar-day-count {
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      font-size: 8px;
+      background: var(--danger);
+      color: #ffffff;
       border-radius: 999px;
-      background: var(--primary);
+      min-width: 14px;
+      height: 14px;
+      padding: 0 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .calendar-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .calendar-stat {
-      padding: 12px;
-      border-radius: var(--radius-md);
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
+    .calendar-day-events {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: auto;
+      padding-bottom: 1px;
       text-align: center;
+      width: 100%;
+      line-height: 1.2;
     }
 
-    .calendar-stat-label {
+    .day-details {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .day-details-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+
+    .day-details-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--space-3);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .day-events-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .day-event-item {
+      background: #ffffff;
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--primary);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .day-event-item-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .day-event-item-channel {
       font-size: 10px;
       color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .calendar-stat-value {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary-strong);
     }
 
     /* COLABORADORES */
 
     #tab-colaboradores-view {
       display: none;
-    }
-
-    .collab-actions {
-      display: flex;
-      gap: 8px;
-      margin-bottom: var(--space-4);
-    }
-
-    .collab-actions button {
-      flex: 1;
-      padding: 10px;
-      font-size: 11px;
     }
 
     .collab-list {
@@ -614,7 +688,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid var(--border);
       font-size: 12px;
     }
@@ -623,7 +697,6 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
-      flex: 1;
     }
 
     .collab-email {
@@ -639,7 +712,6 @@
       color: var(--primary-strong);
       display: inline-block;
       width: fit-content;
-      font-weight: 500;
     }
 
     .pill-role.secondary {
@@ -693,7 +765,24 @@
       transform: translateX(18px);
     }
 
-    /* MODAL E FAB */
+    .collab-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .collab-btn-remove {
+      font-size: 10px;
+      color: var(--danger);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* FAB E MODAIS */
 
     .fab {
       position: fixed;
@@ -736,28 +825,20 @@
       background: #ffffff;
       padding: var(--space-5) var(--space-5) calc(var(--space-6) + 12px);
       box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.35);
-      max-height: 85vh;
+      max-height: 90vh;
       overflow-y: auto;
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       margin-bottom: var(--space-4);
-      gap: 10px;
     }
 
     .modal-title {
       font-size: 15px;
       font-weight: 600;
-      flex: 1;
-    }
-
-    .modal-title-sub {
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-top: 2px;
     }
 
     .modal-close {
@@ -766,7 +847,6 @@
       font-size: 20px;
       cursor: pointer;
       color: var(--text-soft);
-      flex-shrink: 0;
     }
 
     .modal-footer {
@@ -776,121 +856,47 @@
       gap: 10px;
     }
 
-    .history-list {
-      margin-top: var(--space-3);
-      max-height: 180px;
+    /* Canaux (tipos de ação) */
+
+    .channel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      max-height: 200px;
       overflow-y: auto;
-      padding-right: 4px;
     }
 
-    .history-item {
-      font-size: 11px;
-      color: var(--text-soft);
-      padding: 8px 0;
-      border-bottom: 1px dashed rgba(209, 213, 219, 0.6);
-      line-height: 1.4;
-    }
-
-    .history-item strong {
-      color: var(--primary-strong);
-      font-weight: 600;
-    }
-
-    .badge-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-soft);
-      color: var(--text-soft);
+    .channel-option {
+      padding: 8px 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      cursor: pointer;
+      text-align: center;
+      font-size: 9px;
       font-weight: 500;
-      margin-top: 2px;
-      margin-bottom: 4px;
+      transition: all 0.15s ease;
     }
 
-    /* UTIL */
-
-    .hidden {
-      display: none !important;
+    .channel-option:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
     }
 
-    .checkbox-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: var(--space-4);
+    .channel-option.selected {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
     }
 
-    .checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      border-radius: var(--radius-md);
-      background: var(--bg-soft);
-      cursor: pointer;
+    .channel-option-icon {
+      font-size: 16px;
+      display: block;
+      margin-bottom: 2px;
     }
 
-    .checkbox-item input[type="checkbox"] {
-      width: auto;
-      margin: 0;
-    }
-
-    .checkbox-item label {
-      flex: 1;
-      font-size: 12px;
-      cursor: pointer;
-      margin: 0;
-    }
-
-    .duration-info {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 2px;
-      font-style: italic;
-    }
-
-    .type-category {
-      margin-bottom: var(--space-3);
-    }
-
-    .type-category-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--primary-strong);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .type-items {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .mini-checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px;
-      border-radius: var(--radius-md);
-      background: transparent;
-    }
-
-    .mini-checkbox-item input[type="checkbox"] {
-      width: auto;
-      margin: 0;
-      accent-color: var(--primary);
-    }
-
-    .mini-checkbox-item label {
-      flex: 1;
-      font-size: 11px;
-      cursor: pointer;
-      margin: 0;
+    .channel-option-label {
+      display: block;
     }
 
     @media (min-width: 640px) {
@@ -904,35 +910,35 @@
   <div class="app-shell">
     <header class="app-header">
       <div class="brand">
-        <div class="brand-logo">FL</div>
+        <div class="brand-logo" aria-label="Marca Farmácia da Liga">
+          <span>FL</span>
+        </div>
         <div>
-          <div class="brand-text-title">Calendário</div>
-          <div class="brand-text-sub">Farmácia da Liga</div>
+          <div class="brand-text-title">Calendário Marketing</div>
+          <div class="brand-text-sub">Farmácia da Liga · Equipa</div>
         </div>
       </div>
       <div class="theme-pill">
         <span class="theme-pill-dot"></span>
-        <span>Online</span>
+        <span>Em tempo real</span>
       </div>
     </header>
 
     <!-- LOGIN -->
     <section id="login-view">
       <div class="card">
-        <div class="card-title">Entrar</div>
-        <div class="card-subtitle">
-          Aceda com o email e palavra‑passe da sua conta.
-        </div>
+        <div class="card-title">Entrar na área interna</div>
+        <div class="card-subtitle">Email e palavra‑passe da conta Firebase.</div>
 
         <form id="login-form">
           <div class="field-group">
-            <div class="field-label">Email</div>
+            <div class="field-label">Email profissional</div>
             <input
               type="email"
               id="login-email"
               autocomplete="email"
               required
-              placeholder="seu@email.com"
+              placeholder="ex: bheatriz@farmaciadaliga.pt"
             />
           </div>
 
@@ -953,7 +959,7 @@
         <div id="login-error" class="login-error"></div>
 
         <p class="login-hint">
-          Contacte o administrador (Débora) para criar a sua conta.
+          Contacte a administração da Farmácia da Liga para criar ou atualizar o seu acesso.
         </p>
       </div>
     </section>
@@ -980,86 +986,150 @@
       </div>
 
       <div class="tabs" id="tabs">
-        <button class="tab active" data-tab="tarefas">Tarefas</button>
-        <button class="tab" data-tab="calendario">Calendário</button>
-        <button class="tab" data-tab="colaboradores" id="tab-colaboradores">
+        <button class="tab active" data-tab="calendario">Calendário</button>
+        <button class="tab" data-tab="tarefas">Tarefas</button>
+        <button
+          class="tab"
+          data-tab="colaboradores"
+          id="tab-colaboradores"
+        >
           Equipa
         </button>
       </div>
 
-      <!-- TAB TAREFAS -->
-      <div id="tab-tarefas-view">
-        <div class="status-filters" id="status-filters"></div>
-        <div class="tasks-list" id="tasks-list"></div>
-        <div id="tasks-empty" class="empty-state hidden">
-          Ainda não há ações.<br />
-          Toque em "+" para criar a primeira.
-        </div>
-      </div>
-
       <!-- TAB CALENDÁRIO -->
       <div id="tab-calendario-view">
-        <div class="card">
+        <div class="calendar-wrapper">
           <div class="calendar-nav">
-            <button class="calendar-nav-btn" id="cal-prev">◀</button>
-            <div class="calendar-month-year" id="cal-month-year"></div>
-            <button class="calendar-nav-btn" id="cal-next">▶</button>
+            <button id="calendar-prev">&larr;</button>
+            <h3 id="calendar-month-title">Mês</h3>
+            <button id="calendar-next">&rarr;</button>
           </div>
 
           <div class="calendar-grid" id="calendar-grid"></div>
 
-          <div class="calendar-stats">
-            <div class="calendar-stat">
-              <div class="calendar-stat-label">Ações este mês</div>
-              <div class="calendar-stat-value" id="cal-month-count">0</div>
+          <div class="day-details" id="day-details" style="display: none">
+            <div class="day-details-title" id="day-details-title"></div>
+            <div class="day-details-actions">
+              <span id="day-details-count"></span>
+              <button
+                type="button"
+                class="btn-link"
+                id="day-add-action-btn"
+              >
+                + Nova ação neste dia
+              </button>
             </div>
-            <div class="calendar-stat">
-              <div class="calendar-stat-label">Próxima ação</div>
-              <div class="calendar-stat-value" id="cal-next-action" style="font-size: 12px; font-weight: 600;">—</div>
-            </div>
+            <div class="day-events-list" id="day-events-list"></div>
           </div>
         </div>
       </div>
 
+      <!-- TAB TAREFAS -->
+      <div id="tab-tarefas-view" class="hidden">
+        <div class="tasks-toolbar">
+          <div class="filters">
+            <span>Filtros:</span>
+            <input
+              type="month"
+              id="filter-month"
+              style="max-width: 130px"
+            />
+            <input
+              type="date"
+              id="filter-day"
+              style="max-width: 130px"
+            />
+            <button
+              type="button"
+              class="btn-link"
+              id="filter-clear"
+            >
+              Limpar filtros
+            </button>
+          </div>
+          <div class="exports">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline"
+              id="export-excel"
+            >
+              Exportar Excel
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline"
+              id="export-pdf"
+            >
+              Exportar PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="status-filters" id="status-filters"></div>
+        <div class="tasks-list" id="tasks-list"></div>
+        <div id="tasks-empty" class="empty-state hidden">
+          Ainda não há ações para este período.
+        </div>
+      </div>
+
       <!-- TAB COLABORADORES -->
-      <div id="tab-colaboradores-view">
+      <div id="tab-colaboradores-view" class="hidden">
         <div class="card">
-          <div class="card-title" style="font-size: 15px">Colaboradores</div>
-          <div class="card-subtitle" style="margin-bottom: var(--space-3)">
-            Gerencie a equipa.
+          <div class="card-title" style="font-size: 15px">
+            Colaboradores
+          </div>
+          <div
+            class="card-subtitle"
+            style="margin-bottom: 12px"
+          >
+            Gestão da equipa e permissões.
           </div>
 
-          <div id="admin-controls" class="hidden">
-            <div class="collab-actions">
-              <button id="btn-add-collab" class="btn btn-secondary">
-                + Adicionar
-              </button>
-              <button id="btn-import-firebase" class="btn btn-secondary">
-                Importar
-              </button>
-            </div>
-          </div>
+          <button
+            id="btn-add-collab"
+            class="btn btn-primary btn-sm"
+            style="
+              margin-bottom: var(--space-4);
+              display: none;
+            "
+          >
+            + Novo colaborador
+          </button>
 
           <div class="collab-list" id="collab-list"></div>
+          <div
+            id="collab-empty"
+            class="empty-state hidden"
+            style="padding: var(--space-4)"
+          >
+            Ainda sem colaboradores.
+          </div>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- BOTÃO FLOTANTE -->
+  <!-- BOTÃO FLOTANTE NOVA TAREFA -->
   <button class="fab hidden" id="fab-add">+</button>
 
   <!-- MODAL TAREFA -->
   <div class="modal-backdrop" id="task-modal-backdrop">
-    <div class="modal" role="dialog" aria-modal="true">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="task-modal-title"
+    >
       <div class="modal-header">
         <div>
-          <div id="task-modal-title" class="modal-title">Nova ação</div>
-          <div class="modal-title-sub">
-            Preencha os dados e o estado da ação.
+          <div id="task-modal-title" class="modal-title">
+            Nova ação de marketing
           </div>
         </div>
-        <button class="modal-close" id="task-modal-close">&times;</button>
+        <button class="modal-close" id="task-modal-close">
+          &times;
+        </button>
       </div>
 
       <form id="task-form">
@@ -1076,21 +1146,9 @@
         </div>
 
         <div class="field-group">
-          <div class="field-label">Canal</div>
-          <select id="task-channel" required>
-            <option value="">Selecionar...</option>
-            <option value="Instagram / Facebook">Instagram / Facebook</option>
-            <option value="Loja online">Loja online</option>
-            <option value="Loja física">Loja física</option>
-            <option value="Email marketing">Email marketing</option>
-            <option value="Blogue">Blogue</option>
-            <option value="Outros">Outros</option>
-          </select>
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Tipo de ação</div>
-          <div id="types-container"></div>
+          <div class="field-label">Tipo de ação / Canal</div>
+          <div class="channel-grid" id="channel-grid"></div>
+          <input type="hidden" id="task-channel" required />
         </div>
 
         <div class="field-group">
@@ -1099,7 +1157,9 @@
         </div>
 
         <div class="field-group">
-          <div class="field-label">Duração estimada (minutos)</div>
+          <div class="field-label">
+            Duração estimada (min) · editável em "Em criação"
+          </div>
           <input
             type="number"
             id="task-duration"
@@ -1107,43 +1167,25 @@
             step="5"
             placeholder="ex: 60"
           />
-          <div class="duration-info">
-            Editável apenas enquanto a ação estiver "Em criação".
-          </div>
         </div>
 
         <div class="field-group">
           <div class="field-label">Estado</div>
-          <select id="task-status" required>
-            <option value="Pedido">Pedido</option>
-            <option value="Em criação">Em criação</option>
-            <option value="Em aprovação">Em aprovação</option>
-            <option value="Aprovado">Aprovado</option>
-            <option value="Publicado">Publicado</option>
-          </select>
+          <select id="task-status" required></select>
         </div>
 
         <div class="field-group">
           <div class="field-label">Notas internas</div>
           <textarea
             id="task-notes"
-            placeholder="Briefing, mensagens‑chave, produtos, timings..."
+            placeholder="Briefing, mensagens-chave, produtos..."
           ></textarea>
         </div>
 
-        <div class="field-group">
-          <div class="field-label">Histórico de alterações</div>
-          <div
-            id="task-history-empty"
-            style="font-size: 11px; color: var(--text-muted)"
-          >
-            Será preenchido com as alterações por colaborador.
-          </div>
-          <div class="history-list" id="task-history-list"></div>
-        </div>
-
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Guardar ação</button>
+          <button type="submit" class="btn btn-primary">
+            Guardar ação
+          </button>
           <button
             type="button"
             class="btn btn-ghost"
@@ -1157,57 +1199,52 @@
     </div>
   </div>
 
-  <!-- MODAL ADICIONAR COLABORADOR -->
-  <div class="modal-backdrop" id="add-collab-backdrop">
-    <div class="modal" role="dialog" aria-modal="true">
+  <!-- MODAL NOVO COLABORADOR -->
+  <div class="modal-backdrop" id="collab-modal-backdrop">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="collab-modal-title"
+    >
       <div class="modal-header">
-        <div>
-          <div class="modal-title">Adicionar colaborador</div>
-          <div class="modal-title-sub">
-            Crie uma nova conta na Firebase ou escolha um colaborador existente.
-          </div>
+        <div id="collab-modal-title" class="modal-title">
+          Novo colaborador
         </div>
-        <button class="modal-close" id="add-collab-close">&times;</button>
+        <button class="modal-close" id="collab-modal-close">
+          &times;
+        </button>
       </div>
 
-      <form id="add-collab-form">
+      <form id="collab-form">
         <div class="field-group">
-          <div class="field-label">Email do colaborador</div>
+          <div class="field-label">Email</div>
           <input
             type="email"
-            id="add-collab-email"
+            id="collab-email"
             required
-            placeholder="nome@farmaciadaliga.pt"
+            placeholder="ex: nome@farmaciadaliga.pt"
           />
         </div>
 
         <div class="field-group">
-          <div class="field-label">Nome (opcional)</div>
+          <div class="field-label">Nome</div>
           <input
             type="text"
-            id="add-collab-name"
-            placeholder="Nome completo"
+            id="collab-name"
+            required
+            placeholder="ex: Bheatriz"
           />
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Perfil</div>
-          <select id="add-collab-role" required>
-            <option value="colaborador">Colaborador</option>
-            <option value="admin">Administrador</option>
-          </select>
-        </div>
-
-        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: var(--space-4); padding: var(--space-3); border-radius: var(--radius-md); background: var(--bg-soft);">
-          💡 Nota: A senha será definida na consola Firebase. Aqui apenas cria o perfil na aplicação.
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Adicionar colaborador</button>
+          <button type="submit" class="btn btn-primary">
+            Adicionar
+          </button>
           <button
             type="button"
             class="btn btn-ghost"
-            id="add-collab-cancel"
+            id="collab-cancel-btn"
             style="width: 100%"
           >
             Cancelar
@@ -1217,7 +1254,6 @@
     </div>
   </div>
 
-  <!-- FIREBASE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import {
@@ -1232,11 +1268,10 @@
       doc,
       addDoc,
       updateDoc,
+      deleteDoc,
       onSnapshot,
       query,
       orderBy,
-      Timestamp,
-      getDocs,
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -1252,50 +1287,66 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // TIPOS DE AÇÃO
-    const TIPOS_ACAO = {
-      "Redes Sociais": [
-        "📱 Post (imagem + texto)",
-        "🎥 Reel (vídeo curto)",
-        "✨ Story (efémero)",
-        "🎬 Vídeo (longa duração)",
-        "🖼️ Carrossel (múltiplas imagens)",
-        "📹 Direto (transmissão ao vivo)",
-        "📸 Resenha/Testimonial",
-        "❓ Enquete/Quiz",
-      ],
-      "Promoções & Campanhas": [
-        "🎁 Promoção (desconto/oferta)",
-        "🎊 Campanha sazonal",
-        "🏆 Concurso/Sorteio",
-        "📢 Comunicado importante",
-        "🎯 Flash sale",
-      ],
-      "Educação & Conteúdo": [
-        "📚 Educação (dica/tutorial)",
-        "💡 Conselho/Recomendação",
-        "📖 Artigo de blogue",
-        "❤️ Bem-estar/Lifestyle",
-        "🔬 Curiosidade científica",
-      ],
-      "Email & SMS": [
-        "📧 Newsletter",
-        "💬 SMS marketing",
-        "📮 Email direto",
-      ],
-      "Loja Online": [
-        "🛍️ Destaque de produtos",
-        "📦 Novo produto",
-        "🎯 Recomendações personalizadas",
-        "🔔 Notificação de restock",
-      ],
-      "Loja Física": [
-        "🏪 Decoração/Visual",
-        "📍 Evento na loja",
-        "👥 Atendimento especial",
-        "🎨 Escaparate temático",
-      ],
+    const STATUS_LIST = [
+      "Pedido",
+      "Em criação",
+      "Em aprovação",
+      "Aprovado",
+      "Publicado",
+      "Concluído",
+      "Anulado",
+    ];
+
+    const STATE_COLORS = {
+      Pedido: getComputedStyle(document.documentElement).getPropertyValue(
+        "--pedido-bg"
+      ),
+      "Em criação": getComputedStyle(
+        document.documentElement
+      ).getPropertyValue("--criacao-bg"),
+      "Em aprovação": getComputedStyle(
+        document.documentElement
+      ).getPropertyValue("--aprovacao-bg"),
+      Aprovado: getComputedStyle(document.documentElement).getPropertyValue(
+        "--aprovado-bg"
+      ),
+      Publicado: getComputedStyle(document.documentElement).getPropertyValue(
+        "--publicado-bg"
+      ),
+      Concluído: getComputedStyle(document.documentElement).getPropertyValue(
+        "--concluido-bg"
+      ),
+      Anulado: getComputedStyle(document.documentElement).getPropertyValue(
+        "--anulado-bg"
+      ),
     };
+
+    const CHANNELS = [
+      { icon: "📱", label: "Post", value: "Post (imagem + texto)" },
+      { icon: "🎥", label: "Reel", value: "Reel (vídeo curto)" },
+      { icon: "✨", label: "Story", value: "Story (efémero)" },
+      { icon: "🎬", label: "Vídeo", value: "Vídeo (longa duração)" },
+      { icon: "🖼️", label: "Carrossel", value: "Carrossel (múltiplas imagens)" },
+      { icon: "📹", label: "Direto", value: "Direto (transmissão ao vivo)" },
+      { icon: "📸", label: "Review", value: "Resenha/Testimonial" },
+      {
+        icon: "📋",
+        label: "Flyers",
+        value: "Flyers / Comunicações material",
+      },
+      { icon: "🎊", label: "Sazonal", value: "Campanha sazonal" },
+      { icon: "🏆", label: "Concurso", value: "Concurso/Sorteio" },
+      { icon: "📢", label: "Comunicado", value: "Comunicado importante" },
+      { icon: "🎯", label: "Flash Sale", value: "Flash sale" },
+      { icon: "📚", label: "Liga-te", value: "Vídeo (Liga-te)" },
+      { icon: "📚", label: "Youtube", value: "Vídeo (Youtube)" },
+      { icon: "📧", label: "Newsletter", value: "Newsletter" },
+      { icon: "🏪", label: "Visual", value: "Decoração/Visual" },
+      { icon: "📍", label: "Evento", value: "Evento na loja" },
+    ];
+
+    const CHANNEL_ICON_BY_VALUE = {};
+    CHANNELS.forEach((ch) => (CHANNEL_ICON_BY_VALUE[ch.value] = ch.icon));
 
     // ELEMENTOS
     const loginView = document.getElementById("login-view");
@@ -1308,37 +1359,36 @@
     const userAvatarEl = document.getElementById("user-avatar");
 
     const tabButtons = document.querySelectorAll(".tab");
-    const tabTarefasView = document.getElementById("tab-tarefas-view");
     const tabCalendarioView = document.getElementById("tab-calendario-view");
+    const tabTarefasView = document.getElementById("tab-tarefas-view");
     const tabColaboradoresView = document.getElementById(
       "tab-colaboradores-view"
     );
     const tabColaboradoresBtn = document.getElementById("tab-colaboradores");
 
-    const statusFiltersEl = document.getElementById("status-filters");
+    // Calendário
+    const calendarGrid = document.getElementById("calendar-grid");
+    const calendarMonthTitle = document.getElementById("calendar-month-title");
+    const calendarPrevBtn = document.getElementById("calendar-prev");
+    const calendarNextBtn = document.getElementById("calendar-next");
+    const dayDetails = document.getElementById("day-details");
+    const dayDetailsTitle = document.getElementById("day-details-title");
+    const dayDetailsCount = document.getElementById("day-details-count");
+    const dayEventsList = document.getElementById("day-events-list");
+    const dayAddActionBtn = document.getElementById("day-add-action-btn");
+
+    // Tarefas
     const tasksListEl = document.getElementById("tasks-list");
     const tasksEmptyEl = document.getElementById("tasks-empty");
-
-    const calendarGrid = document.getElementById("calendar-grid");
-    const calMonthYear = document.getElementById("cal-month-year");
-    const calPrev = document.getElementById("cal-prev");
-    const calNext = document.getElementById("cal-next");
-    const calMonthCount = document.getElementById("cal-month-count");
-    const calNextAction = document.getElementById("cal-next-action");
-
-    const collabListEl = document.getElementById("collab-list");
-    const adminControls = document.getElementById("admin-controls");
-    const btnAddCollab = document.getElementById("btn-add-collab");
-    const btnImportFirebase = document.getElementById("btn-import-firebase");
-    const addCollabBackdrop = document.getElementById("add-collab-backdrop");
-    const addCollabForm = document.getElementById("add-collab-form");
-    const addCollabClose = document.getElementById("add-collab-close");
-    const addCollabCancel = document.getElementById("add-collab-cancel");
-    const addCollabEmail = document.getElementById("add-collab-email");
-    const addCollabName = document.getElementById("add-collab-name");
-    const addCollabRole = document.getElementById("add-collab-role");
-
+    const statusFiltersEl = document.getElementById("status-filters");
     const fabAdd = document.getElementById("fab-add");
+    const filterMonthInput = document.getElementById("filter-month");
+    const filterDayInput = document.getElementById("filter-day");
+    const filterClearBtn = document.getElementById("filter-clear");
+    const exportExcelBtn = document.getElementById("export-excel");
+    const exportPdfBtn = document.getElementById("export-pdf");
+
+    // Modal tarefa
     const taskModalBackdrop = document.getElementById("task-modal-backdrop");
     const taskModalClose = document.getElementById("task-modal-close");
     const taskCancelBtn = document.getElementById("task-cancel-btn");
@@ -1346,79 +1396,86 @@
     const taskIdInput = document.getElementById("task-id");
     const taskTitleInput = document.getElementById("task-title");
     const taskChannelInput = document.getElementById("task-channel");
+    const taskChannelGrid = document.getElementById("channel-grid");
     const taskDateInput = document.getElementById("task-date");
     const taskDurationInput = document.getElementById("task-duration");
     const taskStatusSelect = document.getElementById("task-status");
     const taskNotesInput = document.getElementById("task-notes");
-    const taskHistoryList = document.getElementById("task-history-list");
-    const taskHistoryEmpty = document.getElementById("task-history-empty");
-    const typesContainer = document.getElementById("types-container");
 
-    const STATUS_LIST = [
-      "Pedido",
-      "Em criação",
-      "Em aprovação",
-      "Aprovado",
-      "Publicado",
-    ];
+    // Colaboradores
+    const collabListEl = document.getElementById("collab-list");
+    const collabEmptyEl = document.getElementById("collab-empty");
+    const btnAddCollab = document.getElementById("btn-add-collab");
+    const collabModalBackdrop = document.getElementById(
+      "collab-modal-backdrop"
+    );
+    const collabModalClose = document.getElementById("collab-modal-close");
+    const collabCancelBtn = document.getElementById("collab-cancel-btn");
+    const collabForm = document.getElementById("collab-form");
+    const collabEmailInput = document.getElementById("collab-email");
+    const collabNameInput = document.getElementById("collab-name");
 
+    // STATE
     let currentUser = null;
     let currentCollaborator = null;
     let tasksMap = new Map();
+    let collabsMap = new Map();
     let tasksUnsub = null;
     let collabUnsub = null;
-    let collabsMap = new Map();
+    let calendarCurrentDate = new Date();
+    let selectedDate = null;
     let activeStatusFilter = "Todas";
-    let currentCalendarDate = new Date();
+    let filterMonth = null;
+    let filterDay = null;
 
-    // INICIALIZAR TIPOS DE AÇÃO
-    function initTypeSelectors() {
-      typesContainer.innerHTML = "";
-      Object.entries(TIPOS_ACAO).forEach(([categoria, tipos]) => {
-        const categoryDiv = document.createElement("div");
-        categoryDiv.className = "type-category";
-
-        const titleEl = document.createElement("div");
-        titleEl.className = "type-category-title";
-        titleEl.textContent = categoria;
-        categoryDiv.appendChild(titleEl);
-
-        const itemsDiv = document.createElement("div");
-        itemsDiv.className = "type-items";
-
-        tipos.forEach((tipo) => {
-          const item = document.createElement("div");
-          item.className = "mini-checkbox-item";
-
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.id = `type-${tipo.replace(/\s+/g, "-").toLowerCase()}`;
-          checkbox.value = tipo;
-
-          const label = document.createElement("label");
-          label.htmlFor = checkbox.id;
-          label.textContent = tipo;
-
-          item.appendChild(checkbox);
-          item.appendChild(label);
-          itemsDiv.appendChild(item);
+    // INIT CANAIS + ESTADOS
+    function initChannelGrid() {
+      taskChannelGrid.innerHTML = "";
+      CHANNELS.forEach((ch) => {
+        const div = document.createElement("div");
+        div.className = "channel-option";
+        div.dataset.value = ch.value;
+        div.innerHTML = `<span class="channel-option-icon">${ch.icon}</span><span class="channel-option-label">${ch.label}</span>`;
+        div.addEventListener("click", () => {
+          document
+            .querySelectorAll(".channel-option")
+            .forEach((el) => el.classList.remove("selected"));
+          div.classList.add("selected");
+          taskChannelInput.value = ch.value;
         });
-
-        categoryDiv.appendChild(itemsDiv);
-        typesContainer.appendChild(categoryDiv);
+        taskChannelGrid.appendChild(div);
       });
     }
 
-    initTypeSelectors();
-
-    // FILTROS
-    function initStatusSelectors() {
+    function initStatusUI() {
       statusFiltersEl.innerHTML = "";
-      ["Todas", ...STATUS_LIST].forEach((status) => {
+      taskStatusSelect.innerHTML = "";
+
+      // Chip "Todas"
+      const chipAll = document.createElement("button");
+      chipAll.type = "button";
+      chipAll.className = "chip active";
+      chipAll.textContent = "Todas";
+      chipAll.dataset.status = "Todas";
+      chipAll.addEventListener("click", () => {
+        activeStatusFilter = "Todas";
+        document
+          .querySelectorAll(".chip")
+          .forEach((c) => c.classList.remove("active"));
+        chipAll.classList.add("active");
+        renderTasks();
+      });
+      statusFiltersEl.appendChild(chipAll);
+
+      STATUS_LIST.forEach((status) => {
+        const opt = document.createElement("option");
+        opt.value = status;
+        opt.textContent = status;
+        taskStatusSelect.appendChild(opt);
+
         const chip = document.createElement("button");
         chip.type = "button";
-        chip.className =
-          "chip" + (status === activeStatusFilter ? " active" : "");
+        chip.className = "chip";
         chip.textContent = status;
         chip.dataset.status = status;
         chip.addEventListener("click", () => {
@@ -1433,7 +1490,20 @@
       });
     }
 
-    initStatusSelectors();
+    initChannelGrid();
+    initStatusUI();
+
+    // TABS
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const tab = btn.dataset.tab;
+        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
+        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
+        tabColaboradoresView.classList.toggle("hidden", tab !== "colaboradores");
+      });
+    });
 
     // LOGIN
     loginForm.addEventListener("submit", (e) => {
@@ -1442,13 +1512,11 @@
       const password = document
         .getElementById("login-password")
         .value.trim();
-
       loginErrorEl.textContent = "";
-
       signInWithEmailAndPassword(auth, email, password).catch((error) => {
         console.error(error);
         loginErrorEl.textContent =
-          "Não foi possível iniciar sessão. Verifique os dados.";
+          "Não foi possível iniciar sessão. Verifique email e palavra‑passe.";
       });
     });
 
@@ -1456,63 +1524,324 @@
       signOut(auth);
     });
 
-    // TABS
-    tabButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        tabButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const tab = btn.dataset.tab;
-        tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
-        tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
-        tabColaboradoresView.classList.toggle(
-          "hidden",
-          tab !== "colaboradores"
-        );
-        if (tab === "calendario") {
-          renderCalendar();
-        }
+    // CALENDÁRIO
+    function renderCalendar() {
+      calendarGrid.innerHTML = "";
+
+      const year = calendarCurrentDate.getFullYear();
+      const month = calendarCurrentDate.getMonth();
+
+      calendarMonthTitle.textContent = new Date(year, month).toLocaleString(
+        "pt-PT",
+        { month: "long", year: "numeric" }
+      );
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const startDate = new Date(firstDay);
+      startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+      ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].forEach((day) => {
+        const label = document.createElement("div");
+        label.className = "calendar-day-label";
+        label.textContent = day;
+        calendarGrid.appendChild(label);
       });
+
+      let date = new Date(startDate);
+      for (let i = 0; i < 42; i++) {
+        const dayEl = document.createElement("div");
+        dayEl.className = "calendar-day";
+
+        const isOtherMonth = date.getMonth() !== month;
+        const isToday = date.toDateString() === new Date().toDateString();
+        const isSelected =
+          selectedDate && date.toDateString() === selectedDate.toDateString();
+
+        if (isOtherMonth) dayEl.classList.add("other-month");
+        if (isToday) dayEl.classList.add("today");
+        if (isSelected) dayEl.classList.add("selected");
+
+        const dateStr = date.toISOString().split("T")[0];
+        const tasksForDay = Array.from(tasksMap.values()).filter(
+          (t) => t.date === dateStr
+        );
+        const count = tasksForDay.length;
+
+        dayEl.innerHTML = `<div>${date.getDate()}</div>`;
+
+        if (count > 0) {
+          const countBadge = document.createElement("div");
+          countBadge.className = "calendar-day-count";
+          countBadge.textContent = count;
+          dayEl.appendChild(countBadge);
+
+          const icons = [];
+          tasksForDay.forEach((t) => {
+            const icon = CHANNEL_ICON_BY_VALUE[t.channel];
+            if (icon && !icons.includes(icon)) icons.push(icon);
+          });
+          if (icons.length) {
+            const iconsDiv = document.createElement("div");
+            iconsDiv.className = "calendar-day-events";
+            iconsDiv.textContent = icons.slice(0, 4).join(" ");
+            dayEl.appendChild(iconsDiv);
+          }
+        }
+
+        dayEl.addEventListener("click", () => {
+          selectedDate = new Date(date);
+          renderCalendar();
+          showDayDetails(dateStr);
+        });
+
+        calendarGrid.appendChild(dayEl);
+        date.setDate(date.getDate() + 1);
+      }
+    }
+
+    function showDayDetails(dateStr) {
+      const tasksForDay = Array.from(tasksMap.values())
+        .filter((t) => t.date === dateStr)
+        .sort((a, b) => (a.channel || "").localeCompare(b.channel || ""));
+
+      const d = new Date(dateStr);
+      dayDetailsTitle.textContent = d.toLocaleDateString("pt-PT", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+
+      dayDetailsCount.textContent =
+        tasksForDay.length === 0
+          ? "Sem ações neste dia."
+          : `${tasksForDay.length} ação(ões) neste dia.`;
+
+      if (!tasksForDay.length) {
+        dayEventsList.innerHTML = "";
+      } else {
+        dayEventsList.innerHTML = "";
+        tasksForDay.forEach((task) => {
+          const item = document.createElement("div");
+          item.className = "day-event-item";
+          const color = STATE_COLORS[task.status] || "#ffffff";
+          item.style.borderLeftColor = "#1f8a70";
+          item.style.background = color;
+
+          item.innerHTML = `
+            <div class="day-event-item-title">${task.title}</div>
+            <div class="day-event-item-channel">${
+              CHANNEL_ICON_BY_VALUE[task.channel] || ""
+            } ${task.channel || "—"} · ${task.status || ""}</div>
+          `;
+          item.addEventListener("click", () => openTaskModal(task));
+          dayEventsList.appendChild(item);
+        });
+      }
+
+      dayDetails.style.display = "block";
+      dayAddActionBtn.onclick = () => {
+        openTaskModal(null, dateStr);
+      };
+    }
+
+    calendarPrevBtn.addEventListener("click", () => {
+      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() - 1);
+      renderCalendar();
     });
 
+    calendarNextBtn.addEventListener("click", () => {
+      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // FILTROS DATA
+    filterMonthInput.addEventListener("change", (e) => {
+      filterMonth = e.target.value || null;
+      if (filterMonth) filterDayInput.value = "";
+      filterDay = null;
+      renderTasks();
+    });
+
+    filterDayInput.addEventListener("change", (e) => {
+      filterDay = e.target.value || null;
+      if (filterDay) filterMonthInput.value = "";
+      filterMonth = null;
+      renderTasks();
+    });
+
+    filterClearBtn.addEventListener("click", () => {
+      filterMonth = null;
+      filterDay = null;
+      filterMonthInput.value = "";
+      filterDayInput.value = "";
+      renderTasks();
+    });
+
+    // TAREFAS
+    function filteredTasksArray() {
+      let arr = Array.from(tasksMap.values());
+
+      // filtro data
+      if (filterDay) {
+        arr = arr.filter((t) => t.date === filterDay);
+      } else if (filterMonth) {
+        arr = arr.filter(
+          (t) => t.date && t.date.startsWith(filterMonth)
+        );
+      }
+
+      // filtro estado
+      if (activeStatusFilter !== "Todas") {
+        arr = arr.filter((t) => t.status === activeStatusFilter);
+      }
+
+      return arr;
+    }
+
+    function renderTasks() {
+      const visible = filteredTasksArray();
+
+      tasksListEl.innerHTML = "";
+
+      if (!visible.length) {
+        tasksEmptyEl.classList.remove("hidden");
+      } else {
+        tasksEmptyEl.classList.add("hidden");
+      }
+
+      visible
+        .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
+        .forEach((task) => {
+          const card = document.createElement("article");
+          card.className = "task-card";
+          const bg = STATE_COLORS[task.status] || "#ffffff";
+          card.style.background = bg;
+
+          const header = document.createElement("div");
+          header.className = "task-header-row";
+
+          const titleEl = document.createElement("div");
+          titleEl.className = "task-title";
+          titleEl.textContent = task.title;
+
+          const tag = document.createElement("div");
+          tag.className = "task-tag";
+          tag.textContent =
+            (CHANNEL_ICON_BY_VALUE[task.channel] || "") +
+            " " +
+            (task.channel || "—");
+
+          header.appendChild(titleEl);
+          header.appendChild(tag);
+          card.appendChild(header);
+
+          const meta = document.createElement("div");
+          meta.className = "task-meta";
+          if (task.date)
+            meta.innerHTML += `<span>📅 ${task.date}</span>`;
+          if (task.duration)
+            meta.innerHTML += `<span>⏱ ${task.duration} min</span>`;
+          meta.innerHTML += `<span>👤 ${
+            task.lastUpdatedByName || task.createdByName || "—"
+          }</span>`;
+          meta.innerHTML += `<span>${task.status || ""}</span>`;
+          card.appendChild(meta);
+
+          const statusRow = document.createElement("div");
+          statusRow.className = "task-status-row";
+
+          const select = document.createElement("select");
+          STATUS_LIST.forEach((s) => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            if (s === task.status) opt.selected = true;
+            select.appendChild(opt);
+          });
+
+          select.addEventListener("change", async (e) => {
+            if (!currentUser || !currentCollaborator) return;
+            const newStatus = e.target.value;
+            await changeTaskStatus(task.id, task, newStatus);
+          });
+
+          const editBtn = document.createElement("button");
+          editBtn.type = "button";
+          editBtn.className = "btn-link";
+          editBtn.textContent = "Editar";
+          editBtn.addEventListener("click", () => openTaskModal(task));
+
+          statusRow.appendChild(select);
+          statusRow.appendChild(editBtn);
+          card.appendChild(statusRow);
+
+          const footer = document.createElement("div");
+          footer.className = "task-footer";
+          const last = document.createElement("span");
+          if (task.lastUpdatedAt && task.lastUpdatedByName) {
+            const d = new Date(task.lastUpdatedAt);
+            const dStr = isNaN(d.getTime())
+              ? task.lastUpdatedAt
+              : d.toLocaleString("pt-PT", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+            last.textContent = `Última alteração por ${
+              task.lastUpdatedByName
+            } em ${dStr}`;
+          } else {
+            last.textContent = "Ainda sem histórico de alterações.";
+          }
+
+          footer.appendChild(last);
+          card.appendChild(footer);
+
+          tasksListEl.appendChild(card);
+        });
+
+      renderCalendar();
+    }
+
     // MODAL TAREFA
-    function openTaskModal(task) {
+    function openTaskModal(task, presetDate = null) {
       taskModalBackdrop.style.display = "flex";
       if (task) {
         document.getElementById("task-modal-title").textContent =
           "Editar ação";
-        taskIdInput.value = task.id || "";
+        taskIdInput.value = task.id;
         taskTitleInput.value = task.title || "";
         taskChannelInput.value = task.channel || "";
         taskDateInput.value = task.date || "";
         taskDurationInput.value = task.duration || "";
-        taskStatusSelect.value = task.status || "Pedido";
+        taskStatusSelect.value = task.status || STATUS_LIST[0];
         taskNotesInput.value = task.notes || "";
 
-        // Preencher tipos
         document
-          .querySelectorAll("#types-container input[type='checkbox']")
-          .forEach((cb) => {
-            cb.checked = task.types && task.types.includes(cb.value);
+          .querySelectorAll(".channel-option")
+          .forEach((el) => {
+            el.classList.toggle(
+              "selected",
+              el.dataset.value === task.channel
+            );
           });
-
-        renderHistory(task.history || []);
       } else {
-        document.getElementById("task-modal-title").textContent = "Nova ação";
+        document.getElementById("task-modal-title").textContent =
+          "Nova ação de marketing";
         taskIdInput.value = "";
         taskTitleInput.value = "";
         taskChannelInput.value = "";
-        taskDateInput.valueAsDate = new Date();
+        taskDateInput.value = presetDate || "";
+        if (!presetDate) taskDateInput.valueAsDate = new Date();
         taskDurationInput.value = "";
         taskStatusSelect.value = "Pedido";
         taskNotesInput.value = "";
-
         document
-          .querySelectorAll("#types-container input[type='checkbox']")
-          .forEach((cb) => {
-            cb.checked = false;
-          });
-
-        renderHistory([]);
+          .querySelectorAll(".channel-option")
+          .forEach((el) => el.classList.remove("selected"));
       }
       updateDurationEditability(taskStatusSelect.value);
     }
@@ -1530,18 +1859,13 @@
     fabAdd.addEventListener("click", () => openTaskModal(null));
 
     function updateDurationEditability(status) {
-      if (status === "Em criação") {
-        taskDurationInput.disabled = false;
-      } else {
-        taskDurationInput.disabled = true;
-      }
+      taskDurationInput.disabled = status !== "Em criação";
     }
 
     taskStatusSelect.addEventListener("change", (e) => {
       updateDurationEditability(e.target.value);
     });
 
-    // FORM TAREFA
     taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentUser || !currentCollaborator) return;
@@ -1556,374 +1880,76 @@
       const status = taskStatusSelect.value;
       const notes = taskNotesInput.value.trim();
 
-      const types = Array.from(
-        document.querySelectorAll(
-          "#types-container input[type='checkbox']:checked"
-        )
-      ).map((cb) => cb.value);
+      if (!title || !channel || !date || !status) return;
 
-      if (!title || !channel || !date || !status) {
-        alert("Preencha os campos obrigatórios.");
-        return;
-      }
-
-      const nowIso = Timestamp.now();
+      const nowIso = new Date().toISOString();
       const collName = currentCollaborator.name || currentCollaborator.email;
 
-      try {
-        if (!id) {
-          await addDoc(collection(db, "tarefas"), {
-            title,
-            channel,
-            date,
-            duration,
-            status,
-            types: types.length > 0 ? types : [],
-            notes,
-            createdAt: nowIso,
-            createdByUid: currentUser.uid,
-            createdByName: collName,
-            createdByEmail: currentCollaborator.email,
-            lastUpdatedAt: nowIso,
-            lastUpdatedByUid: currentUser.uid,
-            lastUpdatedByName: collName,
-            lastUpdatedByEmail: currentCollaborator.email,
-            history: [
-              {
-                at: nowIso,
-                byUid: currentUser.uid,
-                byName: collName,
-                byEmail: currentCollaborator.email,
-                fromStatus: null,
-                toStatus: status,
-                type: "criação",
-              },
-            ],
-          });
-        } else {
-          const ref = doc(db, "tarefas", id);
-          const previous = tasksMap.get(id);
-          const history = previous?.history ? [...previous.history] : [];
-
-          history.push({
-            at: nowIso,
-            byUid: currentUser.uid,
-            byName: collName,
-            byEmail: currentCollaborator.email,
-            fromStatus: previous?.status || null,
-            toStatus: status,
-            type: "edição",
-          });
-
-          await updateDoc(ref, {
-            title,
-            channel,
-            date,
-            duration,
-            status,
-            types: types.length > 0 ? types : [],
-            notes,
-            lastUpdatedAt: nowIso,
-            lastUpdatedByUid: currentUser.uid,
-            lastUpdatedByName: collName,
-            lastUpdatedByEmail: currentCollaborator.email,
-            history,
-          });
-        }
-
-        closeTaskModal();
-      } catch (error) {
-        console.error("Erro ao guardar:", error);
-        alert("Erro ao guardar.");
-      }
-    });
-
-    // RENDERIZAÇÃO TAREFAS
-    function renderTasks() {
-      const tasksArr = Array.from(tasksMap.values());
-
-      const visible = tasksArr.filter((t) => {
-        if (activeStatusFilter === "Todas") return true;
-        return t.status === activeStatusFilter;
-      });
-
-      tasksListEl.innerHTML = "";
-
-      if (!visible.length) {
-        tasksEmptyEl.classList.remove("hidden");
+      if (!id) {
+        await addDoc(collection(db, "tarefas"), {
+          title,
+          channel,
+          date,
+          duration,
+          status,
+          notes,
+          createdAt: nowIso,
+          createdByUid: currentUser.uid,
+          createdByName: collName,
+          createdByEmail: currentCollaborator.email,
+          lastUpdatedAt: nowIso,
+          lastUpdatedByUid: currentUser.uid,
+          lastUpdatedByName: collName,
+          lastUpdatedByEmail: currentCollaborator.email,
+          history: [
+            {
+              at: nowIso,
+              byUid: currentUser.uid,
+              byName: collName,
+              byEmail: currentCollaborator.email,
+              fromStatus: null,
+              toStatus: status,
+              type: "criação",
+            },
+          ],
+        });
       } else {
-        tasksEmptyEl.classList.add("hidden");
-      }
-
-      visible
-        .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
-        .forEach((task) => {
-          const card = document.createElement("article");
-          card.className = "task-card";
-
-          const header = document.createElement("div");
-          header.className = "task-header-row";
-
-          const titleEl = document.createElement("div");
-          titleEl.className = "task-title";
-          titleEl.textContent = task.title;
-
-          const tags = document.createElement("div");
-          tags.className = "task-tags";
-
-          const channelTag = document.createElement("div");
-          channelTag.className = "task-tag";
-          channelTag.textContent = task.channel || "—";
-          tags.appendChild(channelTag);
-
-          if (task.types && task.types.length > 0) {
-            task.types.slice(0, 1).forEach((type) => {
-              const typeTag = document.createElement("div");
-              typeTag.className = "task-tag";
-              typeTag.textContent = type.split(" ")[0];
-              tags.appendChild(typeTag);
-            });
-            if (task.types.length > 1) {
-              const moreTag = document.createElement("div");
-              moreTag.className = "task-tag";
-              moreTag.textContent = `+${task.types.length - 1}`;
-              tags.appendChild(moreTag);
-            }
-          }
-
-          header.appendChild(titleEl);
-          header.appendChild(tags);
-          card.appendChild(header);
-
-          const meta = document.createElement("div");
-          meta.className = "task-meta";
-          if (task.date) {
-            meta.innerHTML += `<span>📅 ${task.date}</span>`;
-          }
-          if (task.duration) {
-            meta.innerHTML += `<span>⏱ ${task.duration}min</span>`;
-          }
-          meta.innerHTML += `<span>👤 ${
-            task.lastUpdatedByName || task.createdByName || "—"
-          }</span>`;
-          card.appendChild(meta);
-
-          const statusRow = document.createElement("div");
-          statusRow.className = "task-status-row";
-
-          const select = document.createElement("select");
-          STATUS_LIST.forEach((s) => {
-            const opt = document.createElement("option");
-            opt.value = s;
-            opt.textContent = s;
-            if (s === task.status) opt.selected = true;
-            select.appendChild(opt);
-          });
-
-          select.addEventListener("change", async (e) => {
-            if (!currentUser || !currentCollaborator) return;
-            await changeTaskStatus(task.id, task, e.target.value);
-          });
-
-          const statusNote = document.createElement("small");
-          statusNote.textContent = "Mudanças registadas.";
-
-          statusRow.appendChild(select);
-          statusRow.appendChild(statusNote);
-          card.appendChild(statusRow);
-
-          const footer = document.createElement("div");
-          footer.className = "task-footer";
-
-          const last = document.createElement("span");
-          if (task.lastUpdatedAt && task.lastUpdatedByName) {
-            const d =
-              task.lastUpdatedAt instanceof Timestamp
-                ? task.lastUpdatedAt.toDate()
-                : new Date(task.lastUpdatedAt);
-            const dStr = isNaN(d.getTime())
-              ? ""
-              : d.toLocaleString("pt-PT", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                });
-            last.textContent = `${task.lastUpdatedByName} · ${dStr}`;
-          } else {
-            last.textContent = "Sem alterações.";
-          }
-
-          const historyBtn = document.createElement("button");
-          historyBtn.type = "button";
-          historyBtn.className = "btn-link";
-          historyBtn.textContent = "Ver detalhes";
-          historyBtn.addEventListener("click", () => openTaskModal(task));
-
-          footer.appendChild(last);
-          footer.appendChild(historyBtn);
-          card.appendChild(footer);
-
-          tasksListEl.appendChild(card);
-        });
-    }
-
-    // CALENDÁRIO
-    function renderCalendar() {
-      const year = currentCalendarDate.getFullYear();
-      const month = currentCalendarDate.getMonth();
-
-      calMonthYear.textContent = currentCalendarDate.toLocaleString("pt-PT", {
-        month: "long",
-        year: "numeric",
-      });
-
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-      const daysInMonth = lastDay.getDate();
-      const startingDayOfWeek = firstDay.getDay();
-
-      calendarGrid.innerHTML = "";
-
-      const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
-      dayNames.forEach((day) => {
-        const header = document.createElement("div");
-        header.className = "calendar-day-header";
-        header.textContent = day;
-        calendarGrid.appendChild(header);
-      });
-
-      // Dias vazios antes do mês
-      for (let i = 0; i < startingDayOfWeek; i++) {
-        const emptyDay = document.createElement("div");
-        emptyDay.className = "calendar-day other-month";
-        calendarGrid.appendChild(emptyDay);
-      }
-
-      // Dias do mês
-      const today = new Date();
-      const tasksArr = Array.from(tasksMap.values());
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dayEl = document.createElement("div");
-        dayEl.className = "calendar-day";
-
-        const isToday =
-          day === today.getDate() &&
-          month === today.getMonth() &&
-          year === today.getFullYear();
-        if (isToday) dayEl.classList.add("today");
-
-        const dayNum = document.createElement("div");
-        dayNum.className = "calendar-day-num";
-        dayNum.textContent = day;
-        dayEl.appendChild(dayNum);
-
-        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
-          day
-        ).padStart(2, "0")}`;
-        const dayTasks = tasksArr.filter((t) => t.date === dateStr);
-
-        if (dayTasks.length > 0) {
-          const dotsDiv = document.createElement("div");
-          dotsDiv.className = "calendar-day-dots";
-          for (let i = 0; i < Math.min(3, dayTasks.length); i++) {
-            const dot = document.createElement("div");
-            dot.className = "calendar-day-dot";
-            dotsDiv.appendChild(dot);
-          }
-          dayEl.appendChild(dotsDiv);
-        }
-
-        dayEl.addEventListener("click", () => {
-          taskDateInput.value = dateStr;
-          activeStatusFilter = "Todas";
-          document
-            .querySelectorAll(".chip")
-            .forEach((c) => c.classList.remove("active"));
-          document.querySelector(".chip[data-status='Todas']").classList.add("active");
-          tabButtons.forEach((b) => b.classList.remove("active"));
-          tabButtons[0].classList.add("active");
-          tabTarefasView.classList.remove("hidden");
-          tabCalendarioView.classList.add("hidden");
-          renderTasks();
+        const ref = doc(db, "tarefas", id);
+        const previous = tasksMap.get(id);
+        const history = previous?.history || [];
+        history.push({
+          at: nowIso,
+          byUid: currentUser.uid,
+          byName: collName,
+          byEmail: currentCollaborator.email,
+          fromStatus: previous?.status || null,
+          toStatus: status,
+          type: "edição",
         });
 
-        calendarGrid.appendChild(dayEl);
+        await updateDoc(ref, {
+          title,
+          channel,
+          date,
+          duration,
+          status,
+          notes,
+          lastUpdatedAt: nowIso,
+          lastUpdatedByUid: currentUser.uid,
+          lastUpdatedByName: collName,
+          lastUpdatedByEmail: currentCollaborator.email,
+          history,
+        });
       }
 
-      // Atualizar stats
-      const monthTasks = tasksArr.filter((t) => {
-        const tDate = new Date(t.date + "T00:00:00");
-        return (
-          tDate.getMonth() === month && tDate.getFullYear() === year
-        );
-      });
-      calMonthCount.textContent = monthTasks.length;
-
-      const nextTask = tasksArr
-        .filter((t) => new Date(t.date + "T00:00:00") >= new Date())
-        .sort((a, b) => (a.date || "").localeCompare(b.date || ""))[0];
-      calNextAction.textContent = nextTask
-        ? new Date(nextTask.date + "T00:00:00").toLocaleDateString("pt-PT")
-        : "—";
-    }
-
-    calPrev.addEventListener("click", () => {
-      currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
-      renderCalendar();
+      closeTaskModal();
     });
-
-    calNext.addEventListener("click", () => {
-      currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
-      renderCalendar();
-    });
-
-    // HISTORY
-    function renderHistory(history) {
-      taskHistoryList.innerHTML = "";
-      if (!history || !history.length) {
-        taskHistoryEmpty.style.display = "block";
-        return;
-      }
-      taskHistoryEmpty.style.display = "none";
-
-      history
-        .slice()
-        .sort((a, b) => {
-          const aTime =
-            a.at instanceof Timestamp ? a.at.toDate() : new Date(a.at);
-          const bTime =
-            b.at instanceof Timestamp ? b.at.toDate() : new Date(b.at);
-          return aTime - bTime;
-        })
-        .forEach((h) => {
-          const item = document.createElement("div");
-          item.className = "history-item";
-          const d =
-            h.at instanceof Timestamp ? h.at.toDate() : new Date(h.at);
-          const dateTxt = isNaN(d.getTime())
-            ? "—"
-            : d.toLocaleString("pt-PT", {
-                day: "2-digit",
-                month: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-          const badgeText =
-            h.type === "criação" ? "Criação" : h.type === "edição" ? "Edição" : "Estado";
-          item.innerHTML = `<span class="badge-status">${badgeText}</span>
-            <br /><strong>${h.byName || h.byEmail || "—"}</strong> · ${dateTxt}
-            <br />${h.fromStatus || "—"} → <strong>${h.toStatus || "—"}</strong>`;
-          taskHistoryList.appendChild(item);
-        });
-    }
 
     async function changeTaskStatus(id, task, newStatus) {
-      const nowIso = Timestamp.now();
+      const nowIso = new Date().toISOString();
       const collName = currentCollaborator.name || currentCollaborator.email;
       const ref = doc(db, "tarefas", id);
-      const history = task.history ? [...task.history] : [];
+      const history = task.history ? task.history.slice() : [];
       history.push({
         at: nowIso,
         byUid: currentUser.uid,
@@ -1934,19 +1960,131 @@
         type: "estado",
       });
 
-      try {
-        await updateDoc(ref, {
-          status: newStatus,
-          lastUpdatedAt: nowIso,
-          lastUpdatedByUid: currentUser.uid,
-          lastUpdatedByName: collName,
-          lastUpdatedByEmail: currentCollaborator.email,
-          history,
-        });
-      } catch (error) {
-        console.error("Erro:", error);
-      }
+      await updateDoc(ref, {
+        status: newStatus,
+        lastUpdatedAt: nowIso,
+        lastUpdatedByUid: currentUser.uid,
+        lastUpdatedByName: collName,
+        lastUpdatedByEmail: currentCollaborator.email,
+        history,
+      });
     }
+
+    // EXPORTAÇÕES
+    function getTasksForExport() {
+      return filteredTasksArray().sort((a, b) =>
+        (a.date || "").localeCompare(b.date || "")
+      );
+    }
+
+    exportExcelBtn.addEventListener("click", () => {
+      const tasks = getTasksForExport();
+      if (!tasks.length) {
+        alert("Não há ações para exportar com os filtros atuais.");
+        return;
+      }
+
+      const header = [
+        "Data",
+        "Título",
+        "Tipo/Canal",
+        "Estado",
+        "Operador",
+        "Duração (min)",
+        "Notas",
+      ];
+      const rows = [header.join(";")];
+
+      tasks.forEach((t) => {
+        const cols = [
+          t.date || "",
+          (t.title || "").replace(/;/g, ","),
+          (t.channel || "").replace(/;/g, ","),
+          t.status || "",
+          t.lastUpdatedByName || t.createdByName || "",
+          t.duration != null ? String(t.duration) : "",
+          (t.notes || "").replace(/;/g, ","),
+        ];
+        rows.push(cols.join(";"));
+      });
+
+      const csvContent = rows.join("\n");
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "acoes_marketing.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    exportPdfBtn.addEventListener("click", () => {
+      const tasks = getTasksForExport();
+      if (!tasks.length) {
+        alert("Não há ações para exportar com os filtros atuais.");
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const docPdf = new jsPDF();
+
+      let y = 12;
+      docPdf.setFont("helvetica", "bold");
+      docPdf.setFontSize(14);
+      docPdf.text("Plano de ações marketing - Farmácia da Liga", 10, y);
+      y += 8;
+      docPdf.setFontSize(10);
+      docPdf.setFont("helvetica", "normal");
+      const now = new Date().toLocaleString("pt-PT");
+      docPdf.text(`Gerado em ${now}`, 10, y);
+      y += 8;
+
+      const filtros = [];
+      if (filterDay) filtros.push(`Dia: ${filterDay}`);
+      if (filterMonth) filtros.push(`Mês: ${filterMonth}`);
+      if (activeStatusFilter !== "Todas")
+        filtros.push(`Estado: ${activeStatusFilter}`);
+      if (filtros.length) {
+        docPdf.text("Filtros: " + filtros.join(" · "), 10, y);
+        y += 6;
+      }
+
+      docPdf.text(`Total de ações: ${tasks.length}`, 10, y);
+      y += 8;
+
+      docPdf.setFont("helvetica", "bold");
+      docPdf.text("Data", 10, y);
+      docPdf.text("Título", 32, y);
+      docPdf.text("Canal", 110, y);
+      docPdf.text("Estado", 150, y);
+      y += 4;
+      docPdf.setFont("helvetica", "normal");
+      docPdf.setLineWidth(0.1);
+      docPdf.line(10, y, 200, y);
+      y += 4;
+
+      tasks.forEach((t) => {
+        if (y > 280) {
+          docPdf.addPage();
+          y = 12;
+        }
+        const date = t.date || "";
+        const title = (t.title || "").slice(0, 40);
+        const channel = (t.channel || "").slice(0, 24);
+        const status = t.status || "";
+
+        docPdf.text(date, 10, y);
+        docPdf.text(title, 32, y);
+        docPdf.text(channel, 110, y);
+        docPdf.text(status, 150, y);
+        y += 6;
+      });
+
+      docPdf.save("plano_acoes_marketing.pdf");
+    });
 
     // COLABORADORES
     function renderCollaborators() {
@@ -1954,10 +2092,11 @@
       const arr = Array.from(collabsMap.values()).sort((a, b) =>
         (a.name || a.email || "").localeCompare(b.name || b.email || "")
       );
+
       if (!arr.length) {
-        collabListEl.innerHTML =
-          '<div style="font-size:12px;color:var(--text-soft);margin-top:6px;">Nenhum colaborador ainda.</div>';
-        return;
+        collabEmptyEl.classList.remove("hidden");
+      } else {
+        collabEmptyEl.classList.add("hidden");
       }
 
       arr.forEach((c) => {
@@ -1969,7 +2108,6 @@
         const nameEl = document.createElement("div");
         nameEl.textContent = c.name || c.email || "—";
         nameEl.style.fontWeight = "600";
-        nameEl.style.fontSize = "12px";
         const emailEl = document.createElement("div");
         emailEl.className = "collab-email";
         emailEl.textContent = c.email;
@@ -1984,11 +2122,8 @@
         main.appendChild(emailEl);
         main.appendChild(roleEl);
 
-        const controls = document.createElement("div");
-        controls.style.display = "flex";
-        controls.style.flexDirection = "column";
-        controls.style.alignItems = "flex-end";
-        controls.style.gap = "4px";
+        const actions = document.createElement("div");
+        actions.className = "collab-actions";
 
         const activeWrap = document.createElement("label");
         activeWrap.className = "switch";
@@ -2002,123 +2137,89 @@
 
         input.addEventListener("change", async () => {
           const ref = doc(db, "colaboradores", c.id);
-          try {
-            await updateDoc(ref, { active: input.checked });
-          } catch (error) {
-            console.error("Erro:", error);
-          }
+          await updateDoc(ref, { active: input.checked });
         });
 
-        const roleBtn = document.createElement("button");
-        roleBtn.type = "button";
-        roleBtn.className = "btn-link";
-        roleBtn.textContent =
-          c.role === "admin" ? "Tornar colaborador" : "Tornar admin";
+        actions.appendChild(activeWrap);
 
-        roleBtn.addEventListener("click", async () => {
-          const newRole = c.role === "admin" ? "colaborador" : "admin";
-          const ref = doc(db, "colaboradores", c.id);
-          try {
-            await updateDoc(ref, { role: newRole });
-          } catch (error) {
-            console.error("Erro:", error);
-          }
-        });
-
-        controls.appendChild(activeWrap);
         if (currentCollaborator?.role === "admin" && c.uid !== currentUser.uid) {
-          controls.appendChild(roleBtn);
+          const roleBtn = document.createElement("button");
+          roleBtn.type = "button";
+          roleBtn.className = "collab-btn-remove btn-link";
+          roleBtn.textContent =
+            c.role === "admin" ? "Remover admin" : "Fazer admin";
+
+          roleBtn.addEventListener("click", async () => {
+            const newRole =
+              c.role === "admin" ? "colaborador" : "admin";
+            const ref = doc(db, "colaboradores", c.id);
+            await updateDoc(ref, { role: newRole });
+          });
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.type = "button";
+          deleteBtn.className = "collab-btn-remove";
+          deleteBtn.textContent = "Remover";
+
+          deleteBtn.addEventListener("click", async () => {
+            if (confirm(`Remover ${c.name || c.email}?`)) {
+              await deleteDoc(doc(db, "colaboradores", c.id));
+            }
+          });
+
+          actions.appendChild(roleBtn);
+          actions.appendChild(deleteBtn);
         }
 
         row.appendChild(main);
-        row.appendChild(controls);
+        row.appendChild(actions);
         collabListEl.appendChild(row);
       });
     }
 
-    // MODAL ADICIONAR COLABORADOR
-    btnAddCollab.addEventListener("click", () => {
-      addCollabBackdrop.style.display = "flex";
-      addCollabEmail.value = "";
-      addCollabName.value = "";
-      addCollabRole.value = "colaborador";
+    function openCollabModal() {
+      collabModalBackdrop.style.display = "flex";
+      collabEmailInput.value = "";
+      collabNameInput.value = "";
+    }
+
+    function closeCollabModal() {
+      collabModalBackdrop.style.display = "none";
+    }
+
+    btnAddCollab.addEventListener("click", openCollabModal);
+    collabModalClose.addEventListener("click", closeCollabModal);
+    collabCancelBtn.addEventListener("click", closeCollabModal);
+    collabModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === collabModalBackdrop) closeCollabModal();
     });
 
-    addCollabClose.addEventListener("click", () => {
-      addCollabBackdrop.style.display = "none";
-    });
-
-    addCollabCancel.addEventListener("click", () => {
-      addCollabBackdrop.style.display = "none";
-    });
-
-    addCollabBackdrop.addEventListener("click", (e) => {
-      if (e.target === addCollabBackdrop) addCollabBackdrop.style.display = "none";
-    });
-
-    addCollabForm.addEventListener("submit", async (e) => {
+    collabForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = addCollabEmail.value.trim();
-      const name = addCollabName.value.trim();
-      const role = addCollabRole.value;
+      const email = collabEmailInput.value.trim();
+      const name = collabNameInput.value.trim();
+      if (!email || !name) return;
 
-      if (!email) {
-        alert("Preencha o email.");
-        return;
-      }
+      const role =
+        email.toLowerCase() === "fligadebora@hotmail.com"
+          ? "admin"
+          : "colaborador";
 
-      try {
-        await addDoc(collection(db, "colaboradores"), {
-          email,
-          name: name || email.split("@")[0],
-          role,
-          active: true,
-          uid: null, // Será preenchido quando fizer login
-        });
-        addCollabBackdrop.style.display = "none";
-        alert("Colaborador adicionado com sucesso!");
-      } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao adicionar colaborador.");
-      }
+      await addDoc(collection(db, "colaboradores"), {
+        email,
+        name,
+        role,
+        active: true,
+        uid: null,
+      });
+
+      alert(
+        "Colaborador criado na coleção 'colaboradores'. Crie o login correspondente na consola Firebase com o mesmo email."
+      );
+      closeCollabModal();
     });
 
-    // IMPORTAR DO FIREBASE
-    btnImportFirebase.addEventListener("click", async () => {
-      try {
-        const usersSnap = await getDocs(collection(db, "tarefas"));
-        const emails = new Set();
-        usersSnap.forEach((doc) => {
-          const data = doc.data();
-          if (data.createdByEmail) emails.add(data.createdByEmail);
-          if (data.lastUpdatedByEmail) emails.add(data.lastUpdatedByEmail);
-        });
-
-        let imported = 0;
-        for (const email of emails) {
-          const existing = Array.from(collabsMap.values()).find(
-            (c) => c.email === email
-          );
-          if (!existing) {
-            await addDoc(collection(db, "colaboradores"), {
-              email,
-              name: email.split("@")[0],
-              role: email.toLowerCase() === "fligadebora@hotmail.com" ? "admin" : "colaborador",
-              active: true,
-              uid: null,
-            });
-            imported++;
-          }
-        }
-
-        alert(`Importados ${imported} colaborador(es) do histórico de tarefas.`);
-      } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao importar.");
-      }
-    });
-
-    // SYNC FIRESTORE
+    // FIRESTORE
     function subscribeTasks() {
       if (tasksUnsub) tasksUnsub();
       const q = query(collection(db, "tarefas"), orderBy("date", "asc"));
@@ -2149,7 +2250,7 @@
 
       let existing = null;
       collabsMap.forEach((c) => {
-        if (c.uid === uid || c.email === email) existing = c;
+        if (c.uid === uid) existing = c;
       });
 
       if (!existing) {
@@ -2157,36 +2258,29 @@
           email.toLowerCase() === "fligadebora@hotmail.com"
             ? "admin"
             : "colaborador";
-        try {
-          const ref = await addDoc(collection(db, "colaboradores"), {
-            uid,
-            email,
-            name,
-            role,
-            active: true,
-          });
-          currentCollaborator = {
-            id: ref.id,
-            uid,
-            email,
-            name,
-            role,
-            active: true,
-          };
-        } catch (error) {
-          console.error("Erro:", error);
-        }
+        const ref = await addDoc(collection(db, "colaboradores"), {
+          uid,
+          email,
+          name,
+          role,
+          active: true,
+        });
+        currentCollaborator = {
+          id: ref.id,
+          uid,
+          email,
+          name,
+          role,
+          active: true,
+        };
       } else {
-        // Atualizar uid se não tiver
-        if (!existing.uid) {
-          const ref = doc(db, "colaboradores", existing.id);
-          await updateDoc(ref, { uid });
-        }
         currentCollaborator = existing;
       }
 
       if (currentCollaborator.active === false) {
-        alert("O seu utilizador está marcado como inativo.");
+        alert(
+          "O seu utilizador está inativo. Contacte a administração."
+        );
         await signOut(auth);
       }
 
@@ -2205,14 +2299,13 @@
 
       if (currentCollaborator.role === "admin") {
         tabColaboradoresBtn.style.display = "inline-block";
-        adminControls.classList.remove("hidden");
+        btnAddCollab.style.display = "inline-block";
       } else {
         tabColaboradoresBtn.style.display = "none";
-        adminControls.classList.add("hidden");
+        btnAddCollab.style.display = "none";
       }
     }
 
-    // AUTH
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
 
@@ -2236,6 +2329,8 @@
 
       subscribeTasks();
     });
+
+    renderCalendar();
   </script>
 </body>
 </html>
