@@ -864,10 +864,13 @@
         <div class="card-subtitle">Email e palavra‑passe da conta Firebase.</div>
 
         <form id="login-form">
-          <div class="field-group">
-            <div class="field-label">Email profissional</div>
-            <input type="email" id="login-email" autocomplete="email" required placeholder="ex: bheatriz@farmaciadaliga.pt" />
-          </div>
+<div class="field-group">
+  <div class="field-label">Password temporária</div>
+  <input type="password" id="collab-password" required placeholder="mínimo 6 caracteres" />
+  <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+    Partilha esta password com o colaborador. Deve alterá-la no primeiro acesso.
+  </div>
+</div>
 
           <div class="field-group">
             <div class="field-label">Palavra‑passe</div>
@@ -1148,6 +1151,7 @@
     const collabForm = document.getElementById("collab-form");
     const collabEmailInput = document.getElementById("collab-email");
     const collabNameInput = document.getElementById("collab-name");
+    const collabPasswordInput = document.getElementById("collab-password");
 const collabRoleInput = document.getElementById("collab-role-input");
     
     // STATE
@@ -1795,7 +1799,11 @@ async function deleteTask(id, title) {
 
   if (!email || !name) return;
 
-  const tempPassword = Math.random().toString(36).slice(2, 10) + "!L1";
+const tempPassword = collabPasswordInput.value.trim();
+if (tempPassword.length < 6) {
+  alert("A password deve ter pelo menos 6 caracteres.");
+  return;
+}
 
   try {
     // 1. Criar utilizador no Firebase Auth
