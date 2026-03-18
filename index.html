@@ -1894,6 +1894,8 @@ async function deleteTask(id, title) {
     btnAddCollab.style.display = "inline-block";
   } else {
     btnAddCollab.style.display = "none";
+    
+     renderCollaborators();
   }
 }
     async function createFirebaseAuthUser(email, password) {
