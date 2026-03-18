@@ -1392,12 +1392,10 @@ function renderTasks() {
 
   let visible = tasksArr;
 
-  // FILTRO POR DATA ESPECÍFICA (INPUT)
   if (filterDate) {
     visible = visible.filter((t) => t.date === filterDate);
   }
 
-  // FILTROS POR ESTADO / PERÍODO
   const hoje = new Date();
   const doisMesesAtras = new Date();
   doisMesesAtras.setMonth(hoje.getMonth() - 2);
@@ -1406,28 +1404,23 @@ function renderTasks() {
     const status = t.status || "";
     const data = t.date ? new Date(t.date) : null;
 
-    // Todas as pendentes: tudo excepto concluído e anulado
     if (activeStatusFilter === "pendentes") {
       return status !== "Concluído" && status !== "Anulado";
     }
 
-    // Todas as terminadas: só concluído + anulado
     if (activeStatusFilter === "terminadas") {
       return status === "Concluído" || status === "Anulado";
     }
 
-    // Últimos 2 meses: qualquer estado, mas data no intervalo
     if (activeStatusFilter === "ultimos2") {
       if (!data || isNaN(data.getTime())) return false;
       return data >= doisMesesAtras && data <= hoje;
     }
 
-    // Estado individual (Pedido, Em criação, ...)
     if (STATUS_LIST.includes(activeStatusFilter)) {
       return status === activeStatusFilter;
     }
 
-    // fallback – não deve acontecer, mas mantém tudo
     return true;
   });
 
@@ -1490,101 +1483,37 @@ function renderTasks() {
         const newStatus = e.target.value;
         await changeTaskStatus(task.id, task, newStatus);
       });
+      statusRow.appendChild(select);
 
       const editBtn = document.createElement("button");
       editBtn.type = "button";
       editBtn.className = "btn-link";
       editBtn.textContent = "Editar";
       editBtn.addEventListener("click", () => openTaskModal(task));
-      visible
-  .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
-  .forEach((task) => {
-    const isGrey = task.status === "Concluído" || task.status === "Publicado";
-    const card = document.createElement("article");
-    card.className = "task-card" + (isGrey ? " completed" : "");
-    card.style.borderLeft = `4px solid ${STATUS_COLORS[task.status] || "#e1e4ea"}`;
-    card.style.backgroundColor = STATUS_COLORS[task.status] || "#ffffff";
-
-    const header = document.createElement("div");
-    header.className = "task-header-row";
-    const titleEl = document.createElement("div");
-    titleEl.className = "task-title";
-    titleEl.textContent = task.title;
-    const statusBadge = document.createElement("span");
-    statusBadge.className =
-      "status-badge " + task.status.toLowerCase().replace(/ /g, "");
-    statusBadge.textContent = task.status;
-    header.appendChild(titleEl);
-    header.appendChild(statusBadge);
-    card.appendChild(header);
-
-    const meta = document.createElement("div");
-    meta.className = "task-meta";
-    if (task.date) meta.innerHTML += `<span>📅 ${task.date}</span>`;
-    if (task.duration) meta.innerHTML += `<span>⏱ ${task.duration} min</span>`;
-    meta.innerHTML += `<span>👤 ${
-      task.lastUpdatedByName || task.createdByName || "—"
-    }</span>`;
-    card.appendChild(meta);
-
-    const statusRow = document.createElement("div");
-    statusRow.className = "task-status-row";
-
-    const select = document.createElement("select");
-    STATUS_LIST.forEach((s) => {
-      const opt = document.createElement("option");
-      opt.value = s;
-      opt.textContent = s;
-      if (s === task.status) opt.selected = true;
-      select.appendChild(opt);
-    });
-    select.addEventListener("change", async (e) => {
-      if (!currentUser || !currentCollaborator) return;
-      const newStatus = e.target.value;
-      await changeTaskStatus(task.id, task, newStatus);
-    });
-    statusRow.appendChild(select);
-
-    const editBtn = document.createElement("button");
-    editBtn.type = "button";
-    editBtn.className = "btn-link";
-    editBtn.textContent = "Editar";
-    editBtn.addEventListener("click", () => openTaskModal(task));
-    statusRow.appendChild(editBtn);
-
-    // >>> AQUI DENTRO DO forEach <<<
-    const canDelete =
-      currentCollaborator && currentCollaborator.role === "admin";
-    if (canDelete) {
-      const deleteBtn = document.createElement("button");
-      deleteBtn.type = "button";
-      deleteBtn.className = "btn-link";
-      deleteBtn.style.color = "var(--danger)";
-      deleteBtn.textContent = "Remover";
-      deleteBtn.addEventListener("click", () =>
-        deleteTask(task.id, task.title)
-      );
-      statusRow.appendChild(deleteBtn);
-    }
-
-    card.appendChild(statusRow);
-    tasksListEl.appendChild(card);
-  });
-
-renderCalendar();
-
-
-      statusRow.appendChild(select);
       statusRow.appendChild(editBtn);
-      card.appendChild(statusRow);
 
+      const canDelete =
+        currentCollaborator && currentCollaborator.role === "admin";
+      if (canDelete) {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "btn-link";
+        deleteBtn.style.color = "var(--danger)";
+        deleteBtn.textContent = "Remover";
+        deleteBtn.addEventListener("click", () =>
+          deleteTask(task.id, task.title)
+        );
+        statusRow.appendChild(deleteBtn);
+      }
+
+      card.appendChild(statusRow);
       tasksListEl.appendChild(card);
     });
 
-  const canDelete =
-  currentCollaborator && currentCollaborator.role === "admin";
+  renderCalendar();
+}
 
-  
+
 // MODAL TAREFA
     function openTaskModal(task) {
       taskModalBackdrop.style.display = "flex";
