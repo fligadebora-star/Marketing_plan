@@ -1851,53 +1851,54 @@ async function deleteTask(id, title) {
       });
     }
 
-   async function ensureCollaboratorDoc(user) {
-  const uid = user.uid;
-  const email = user.email || "";
+    async function ensureCollaboratorDoc(user) {
+      const uid = user.uid;
+      const email = user.email || "";
 
-  // Consultar Firestore diretamente (evita race condition com collabsMap)
-  const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
-  const snap = await getDocs(q);
+      // Consulta directa — nunca cria documentos, só verifica
+      const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
+      const snap = await getDocs(q);
 
-  if (snap.empty) {
-    // Utilizador não existe na app — bloquear acesso
-    await signOut(auth);
-    loginErrorEl.textContent =
-      "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
-    return;
-  }
+      if (snap.empty) {
+        await signOut(auth);
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        loginErrorEl.textContent =
+          "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
+        currentCollaborator = null;
+        return;
+      }
 
-  const docSnap = snap.docs[0];
-  currentCollaborator = { id: docSnap.id, ...docSnap.data() };
+      const docSnap = snap.docs[0];
+      currentCollaborator = { id: docSnap.id, ...docSnap.data() };
 
-  if (currentCollaborator.active === false) {
-    await signOut(auth);
-    loginErrorEl.textContent =
-      "Utilizador inativo. Contacte a Débora para reativar.";
-    return;
-  }
+      if (currentCollaborator.active === false) {
+        await signOut(auth);
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        loginErrorEl.textContent =
+          "Utilizador inativo. Contacte a Débora para reativar.";
+        currentCollaborator = null;
+        return;
+      }
 
-  const initials = (currentCollaborator.name || email || "FL")
-    .split(" ")
-    .map((p) => p[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+      const initials = (currentCollaborator.name || email || "FL")
+        .split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 
-  userAvatarEl.textContent = initials;
-  userNameEl.textContent = currentCollaborator.name || email;
-  userRoleEl.textContent =
-    currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
+      userAvatarEl.textContent = initials;
+      userNameEl.textContent = currentCollaborator.name || email;
+      userRoleEl.textContent =
+        currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
-  tabColaboradoresBtn.style.display = "inline-block";
-  if (currentCollaborator.role === "admin") {
-    btnAddCollab.style.display = "inline-block";
-  } else {
-    btnAddCollab.style.display = "none";
-    
-     renderCollaborators();
-  }
-}
+      tabColaboradoresBtn.style.display = "inline-block";
+      btnAddCollab.style.display =
+        currentCollaborator.role === "admin" ? "inline-block" : "none";
+
+      // Redesenha lista com role correcto
+      renderCollaborators();
+    }
     async function createFirebaseAuthUser(email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`;
   const resp = await fetch(url, {
@@ -1987,9 +1988,12 @@ async function deleteTask(id, title) {
       appView.style.display = "block";
       fabAdd.classList.remove("hidden");
 
+      // PRIMEIRO: saber quem é → só depois ligar os listeners
+      await ensureCollaboratorDoc(user);
+      if (!currentCollaborator) return; // bloqueado (inativo ou não autorizado)
+
       subscribeCollaborators();
       subscribeTasks();
-      await ensureCollaboratorDoc(user);
     });
 
     renderCalendar();
