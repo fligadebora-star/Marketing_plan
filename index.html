@@ -837,6 +837,25 @@
       display: inline-block;
       margin: 0 2px;
     }
+
+    /* ── IDEIAS ── */
+    .ideas-list { display:flex; flex-direction:column; gap:var(--space-3); margin-bottom:var(--space-6); }
+    .idea-card { background:var(--bg-alt); border-radius:var(--radius-lg); padding:var(--space-4); border:1px solid var(--border); box-shadow:0 10px 26px rgba(15,23,42,0.04); display:flex; flex-direction:column; gap:8px; transition:opacity 0.2s; }
+    .idea-card.idea-standby  { background:#fdf6ec; border-left:4px solid #c9ae82; }
+    .idea-card.idea-aplicada { background:#eaf5ec; border-left:4px solid #4caf78; }
+    .idea-card.idea-rasurada { background:#f0f0f0; border-left:4px solid #b0b0b0; opacity:0.6; }
+    .idea-title { font-size:14px; font-weight:600; }
+    .idea-card.idea-rasurada .idea-title { text-decoration:line-through; color:var(--text-muted); }
+    .idea-meta { display:flex; flex-wrap:wrap; gap:6px; font-size:11px; color:var(--text-soft); }
+    .idea-meta span { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:var(--radius-pill); background:rgba(0,0,0,0.05); }
+    .idea-status-row { display:flex; align-items:center; gap:8px; margin-top:4px; }
+    .idea-status-row select { flex:1; }
+    .idea-status-badge { display:inline-block; padding:2px 8px; border-radius:var(--radius-pill); font-size:10px; font-weight:600; text-transform:uppercase; }
+    .idea-status-badge.standby  { background:#f0e3c4; color:#7a5c1e; }
+    .idea-status-badge.aplicada { background:#c8ecd4; color:#1a6b35; }
+    .idea-status-badge.rasurada { background:#e0e0e0; color:#555; }
+    .fab-ideas { position:fixed; right:84px; bottom:24px; width:54px; height:54px; border-radius:999px; border:none; background:linear-gradient(135deg,#8b6abf,#5e3d9c); color:#fff; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:0 18px 30px rgba(94,61,156,0.35); cursor:pointer; z-index:40; }
+    .fab-ideas:active { transform:translateY(1px) scale(0.98); }
   </style>
 </head>
 <body>
@@ -902,6 +921,7 @@
       <div class="tabs" id="tabs">
         <button class="tab active" data-tab="calendario">Calendário</button>
         <button class="tab" data-tab="tarefas">Tarefas</button>
+        <button class="tab" data-tab="ideias" id="tab-ideias-btn">💡 Ideias</button>
         <button class="tab" data-tab="colaboradores" id="tab-colaboradores">Equipa</button>
       </div>
 
@@ -933,15 +953,20 @@
           <button id="filter-clear-btn" class="btn btn-ghost btn-sm">Limpar</button>
         </div>
         <div class="status-filters" id="status-filters"></div>
-
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
           <button id="btn-export-all" class="btn btn-ghost btn-sm">📋 Todas</button>
           <button id="btn-export-pending" class="btn btn-ghost btn-sm">⏳ Pendentes</button>
           <button id="btn-export-backup" class="btn btn-ghost btn-sm">💾 Backup</button>
         </div>
-
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">Ainda não há ações para este período.</div>
+      </div>
+
+
+      <!-- TAB IDEIAS -->
+      <div id="tab-ideias-view" class="hidden">
+        <div id="ideas-list" class="ideas-list"></div>
+        <div id="ideas-empty" class="empty-state hidden">Ainda não há ideias registadas.</div>
       </div>
 
       <!-- TAB COLABORADORES -->
@@ -959,8 +984,58 @@
     </section>
   </div>
 
+  <button class="fab-ideas hidden" id="fab-add-idea">💡</button>
   <!-- BOTÃO FLOTANTE NOVA TAREFA -->
   <button class="fab hidden" id="fab-add">+</button>
+
+  <!-- MODAL NOVA IDEIA -->
+  <div class="modal-backdrop" id="idea-modal-backdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="idea-modal-title">
+      <div class="modal-header">
+        <div id="idea-modal-title" class="modal-title">Nova ideia</div>
+        <button class="modal-close" id="idea-modal-close">&times;</button>
+      </div>
+      <form id="idea-form">
+        <input type="hidden" id="idea-id" />
+        <div class="field-group">
+          <div class="field-label">Título da ideia</div>
+          <input type="text" id="idea-title-input" required placeholder="ex: Campanha awareness dermato" />
+        </div>
+        <div class="field-group">
+          <div class="field-label">Descrição</div>
+          <textarea id="idea-desc" placeholder="Descreve a ideia, contexto, referências..."></textarea>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Categoria</div>
+          <select id="idea-category">
+            <option value="">— Sem categoria —</option>
+            <option value="Produto">💊 Produto</option>
+            <option value="Serviço">🩺 Serviço</option>
+            <option value="Institucional">🏷️ Institucional</option>
+            <option value="Educação / Saúde">📚 Educação / Saúde</option>
+            <option value="Promoção">🎯 Promoção</option>
+            <option value="Sazonal / Campanha">🎊 Sazonal / Campanha</option>
+            <option value="Nutrição">🥗 Nutrição</option>
+            <option value="Beleza / Cosmética">💄 Beleza / Cosmética</option>
+            <option value="Óptica">👓 Óptica</option>
+            <option value="Entretenimento">🎉 Entretenimento</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Estado</div>
+          <select id="idea-status">
+            <option value="Stand-by">Stand-by</option>
+            <option value="Aplicada">Aplicada</option>
+            <option value="Rasurada">Rasurada</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar ideia</button>
+          <button type="button" class="btn btn-ghost" id="idea-cancel-btn" style="width:100%;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- MODAL TAREFA -->
   <div class="modal-backdrop" id="task-modal-backdrop">
@@ -1004,6 +1079,33 @@
         <div class="field-group">
           <div class="field-label">Notas internas</div>
           <textarea id="task-notes" placeholder="Briefing, mensagens-chave, produtos..."></textarea>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Localização</div>
+          <select id="task-location">
+            <option value="">— Sem localização —</option>
+            <option value="Farmácia">🏪 Farmácia</option>
+            <option value="Clínica">🏥 Clínica</option>
+            <option value="Site">🌐 Site</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Categoria do conteúdo</div>
+          <select id="task-category">
+            <option value="">— Sem categoria —</option>
+            <option value="Produto">💊 Produto</option>
+            <option value="Serviço">🩺 Serviço</option>
+            <option value="Institucional">🏷️ Institucional</option>
+            <option value="Educação / Saúde">📚 Educação / Saúde</option>
+            <option value="Promoção">🎯 Promoção</option>
+            <option value="Sazonal / Campanha">🎊 Sazonal / Campanha</option>
+            <option value="Nutrição">🥗 Nutrição</option>
+            <option value="Beleza / Cosmética">💄 Beleza / Cosmética</option>
+            <option value="Óptica">👓 Óptica</option>
+            <option value="Entretenimento">🎉 Entretenimento</option>
+          </select>
         </div>
 
         <div class="modal-footer">
@@ -1116,6 +1218,7 @@
     const tabTarefasView = document.getElementById("tab-tarefas-view");
     const tabColaboradoresView = document.getElementById("tab-colaboradores-view");
     const tabColaboradoresBtn = document.getElementById("tab-colaboradores");
+    const tabIdeiasView = document.getElementById("tab-ideias-view");
 
     // CALENDÁRIO
     const calendarGrid = document.getElementById("calendar-grid");
@@ -1250,6 +1353,8 @@ const collabRoleInput = document.getElementById("collab-role-input");
         tabCalendarioView.classList.toggle("hidden", tab !== "calendario");
         tabTarefasView.classList.toggle("hidden", tab !== "tarefas");
         tabColaboradoresView.classList.toggle("hidden", tab !== "colaboradores");
+        tabIdeiasView.classList.toggle("hidden", tab !== "ideias");
+        if (tab === "ideias") { fabAdd.classList.add("hidden"); fabAddIdea.classList.remove("hidden"); } else { fabAdd.classList.remove("hidden"); fabAddIdea.classList.add("hidden"); }
       });
     });
 
@@ -1481,6 +1586,8 @@ function renderTasks() {
       meta.className = "task-meta";
       if (task.date) meta.innerHTML += `<span>📅 ${task.date}</span>`;
       if (task.duration) meta.innerHTML += `<span>⏱ ${task.duration} min</span>`;
+      if (task.location) meta.innerHTML += `<span>📍 ${task.location}</span>`;
+      if (task.category) meta.innerHTML += `<span>🏷️ ${task.category}</span>`;
       meta.innerHTML += `<span>👤 ${
         task.lastUpdatedByName || task.createdByName || "—"
       }</span>`;
@@ -1546,6 +1653,8 @@ function renderTasks() {
         taskDurationInput.value = task.duration || "";
         taskStatusSelect.value = task.status || STATUS_LIST[0];
         taskNotesInput.value = task.notes || "";
+        document.getElementById("task-location").value = task.location || "";
+        document.getElementById("task-category").value = task.category || "";
 
         document.querySelectorAll(".channel-option").forEach((el) => {
           el.classList.toggle("selected", el.dataset.value === task.channel);
@@ -1559,6 +1668,8 @@ function renderTasks() {
         taskDurationInput.value = "";
         taskStatusSelect.value = "Pedido";
         taskNotesInput.value = "";
+        document.getElementById("task-location").value = "";
+        document.getElementById("task-category").value = "";
         document.querySelectorAll(".channel-option").forEach((el) => el.classList.remove("selected"));
       }
       updateDurationEditability(taskStatusSelect.value);
@@ -1595,6 +1706,8 @@ function renderTasks() {
       const duration = taskDurationInput.value ? Number(taskDurationInput.value) : null;
       const status = taskStatusSelect.value;
       const notes = taskNotesInput.value.trim();
+      const location = document.getElementById("task-location").value;
+      const category = document.getElementById("task-category").value;
 
       if (!title || !channel || !date || !status) return;
 
@@ -1609,6 +1722,8 @@ function renderTasks() {
           duration,
           status,
           notes,
+          location: location || "",
+          category: category || "",
           createdAt: nowIso,
           createdByUid: currentUser.uid,
           createdByName: collName,
@@ -1648,6 +1763,8 @@ function renderTasks() {
           duration,
           status,
           notes,
+          location: location || "",
+          category: category || "",
           lastUpdatedAt: nowIso,
           lastUpdatedByUid: currentUser.uid,
           lastUpdatedByName: collName,
@@ -1805,10 +1922,7 @@ async function deleteTask(id, title) {
   if (!email || !name) return;
 
   const tempPassword = document.getElementById("collab-password").value.trim();
-  if (tempPassword.length < 6) {
-    alert("A password deve ter pelo menos 6 caracteres.");
-    return;
-  }
+  if (tempPassword.length < 6) { alert("A password deve ter pelo menos 6 caracteres."); return; }
 
   try {
     // 1. Criar utilizador no Firebase Auth
@@ -1921,61 +2035,154 @@ async function deleteTask(id, title) {
   return data; // contém localId (= uid do novo utilizador)
 }
 
+    // ── IDEIAS ──
+    let ideasMap = new Map();
+    let ideasUnsub = null;
+    const ideasListEl = document.getElementById("ideas-list");
+    const ideasEmptyEl = document.getElementById("ideas-empty");
+    const fabAddIdea = document.getElementById("fab-add-idea");
+    const ideaModalBackdrop = document.getElementById("idea-modal-backdrop");
+    const ideaModalClose = document.getElementById("idea-modal-close");
+    const ideaCancelBtn = document.getElementById("idea-cancel-btn");
+    const ideaForm = document.getElementById("idea-form");
+    const IDEA_STATUSES = ["Stand-by", "Aplicada", "Rasurada"];
+
+    function ideaStatusClass(s) { return s === "Aplicada" ? "idea-aplicada" : s === "Rasurada" ? "idea-rasurada" : "idea-standby"; }
+    function ideaBadgeClass(s)  { return s === "Aplicada" ? "aplicada" : s === "Rasurada" ? "rasurada" : "standby"; }
+
+    function renderIdeas() {
+      ideasListEl.innerHTML = "";
+      const arr = Array.from(ideasMap.values()).sort((a,b) => (b.createdAt||"").localeCompare(a.createdAt||""));
+      if (!arr.length) { ideasEmptyEl.classList.remove("hidden"); return; }
+      ideasEmptyEl.classList.add("hidden");
+      arr.forEach((idea) => {
+        const card = document.createElement("article");
+        card.className = "idea-card " + ideaStatusClass(idea.status);
+        const header = document.createElement("div");
+        header.className = "task-header-row";
+        const titleEl = document.createElement("div");
+        titleEl.className = "idea-title";
+        titleEl.textContent = idea.title;
+        const badge = document.createElement("span");
+        badge.className = "idea-status-badge " + ideaBadgeClass(idea.status);
+        badge.textContent = idea.status;
+        header.appendChild(titleEl);
+        header.appendChild(badge);
+        card.appendChild(header);
+        if (idea.desc) {
+          const desc = document.createElement("div");
+          desc.style.cssText = "font-size:12px;color:var(--text-soft);line-height:1.5;";
+          desc.textContent = idea.desc;
+          card.appendChild(desc);
+        }
+        const meta = document.createElement("div");
+        meta.className = "idea-meta";
+        if (idea.category) meta.innerHTML += `<span>🏷️ ${idea.category}</span>`;
+        if (idea.createdByName) meta.innerHTML += `<span>👤 ${idea.createdByName}</span>`;
+        if (idea.createdAt) meta.innerHTML += `<span>📅 ${idea.createdAt.slice(0,10)}</span>`;
+        card.appendChild(meta);
+        const statusRow = document.createElement("div");
+        statusRow.className = "idea-status-row";
+        const sel = document.createElement("select");
+        IDEA_STATUSES.forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s; opt.textContent = s;
+          if (s === idea.status) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener("change", async (e) => {
+          if (!currentUser || !currentCollaborator) return;
+          await updateDoc(doc(db, "ideias", idea.id), { status: e.target.value, lastUpdatedAt: new Date().toISOString(), lastUpdatedByName: currentCollaborator.name || currentCollaborator.email });
+        });
+        statusRow.appendChild(sel);
+        const editBtn = document.createElement("button");
+        editBtn.type = "button"; editBtn.className = "btn-link"; editBtn.textContent = "Editar";
+        editBtn.addEventListener("click", () => openIdeaModal(idea));
+        statusRow.appendChild(editBtn);
+        if (currentCollaborator?.role === "admin") {
+          const delBtn = document.createElement("button");
+          delBtn.type = "button"; delBtn.className = "btn-link"; delBtn.style.color = "var(--danger)"; delBtn.textContent = "Remover";
+          delBtn.addEventListener("click", async () => { if (confirm(`Remover ideia: ${idea.title}?`)) await deleteDoc(doc(db, "ideias", idea.id)); });
+          statusRow.appendChild(delBtn);
+        }
+        card.appendChild(statusRow);
+        ideasListEl.appendChild(card);
+      });
+    }
+
+    function openIdeaModal(idea) {
+      ideaModalBackdrop.style.display = "flex";
+      if (idea) {
+        document.getElementById("idea-modal-title").textContent = "Editar ideia";
+        document.getElementById("idea-id").value = idea.id;
+        document.getElementById("idea-title-input").value = idea.title || "";
+        document.getElementById("idea-desc").value = idea.desc || "";
+        document.getElementById("idea-category").value = idea.category || "";
+        document.getElementById("idea-status").value = idea.status || "Stand-by";
+      } else {
+        document.getElementById("idea-modal-title").textContent = "Nova ideia";
+        document.getElementById("idea-id").value = "";
+        document.getElementById("idea-title-input").value = "";
+        document.getElementById("idea-desc").value = "";
+        document.getElementById("idea-category").value = "";
+        document.getElementById("idea-status").value = "Stand-by";
+      }
+    }
+    function closeIdeaModal() { ideaModalBackdrop.style.display = "none"; ideaForm.reset(); }
+    ideaModalClose.addEventListener("click", closeIdeaModal);
+    ideaCancelBtn.addEventListener("click", closeIdeaModal);
+    ideaModalBackdrop.addEventListener("click", (e) => { if (e.target === ideaModalBackdrop) closeIdeaModal(); });
+    fabAddIdea.addEventListener("click", () => openIdeaModal(null));
+
+    ideaForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentUser || !currentCollaborator) return;
+      const id = document.getElementById("idea-id").value || null;
+      const title = document.getElementById("idea-title-input").value.trim();
+      const desc = document.getElementById("idea-desc").value.trim();
+      const category = document.getElementById("idea-category").value;
+      const status = document.getElementById("idea-status").value;
+      const nowIso = new Date().toISOString();
+      const collName = currentCollaborator.name || currentCollaborator.email;
+      if (!title) return;
+      if (!id) {
+        await addDoc(collection(db, "ideias"), { title, desc, category, status, createdAt: nowIso, createdByUid: currentUser.uid, createdByName: collName, lastUpdatedAt: nowIso, lastUpdatedByName: collName });
+      } else {
+        await updateDoc(doc(db, "ideias", id), { title, desc, category, status, lastUpdatedAt: nowIso, lastUpdatedByName: collName });
+      }
+      closeIdeaModal();
+    });
+
+    function subscribeIdeas() {
+      if (ideasUnsub) ideasUnsub();
+      ideasUnsub = onSnapshot(query(collection(db, "ideias"), orderBy("createdAt", "desc")), (snap) => {
+        ideasMap.clear();
+        snap.forEach((d) => ideasMap.set(d.id, { id: d.id, ...d.data() }));
+        renderIdeas();
+      });
+    }
+
+    // FILTRO LIMPAR
+    document.getElementById("filter-clear-btn").addEventListener("click", () => {
+      const f = document.getElementById("filter-date");
+      f.value = "";
+      renderTasks();
+    });
 
     // EXPORTAÇÃO
     function exportCSV(tasks, filename) {
-      const headers = ["Data","Título","Canal","Estado","Duração (min)","Criado por","Atualizado por","Notas"];
-      const rows = tasks.map((t) => [
-        t.date || "",
-        t.title || "",
-        t.channel || "",
-        t.status || "",
-        t.duration || "",
-        t.createdByName || "",
-        t.lastUpdatedByName || "",
-        (t.notes || "").replace(/[\r\n]+/g, " "),
-      ]);
-      const csv =
-        "\uFEFF" +
-        [headers, ...rows]
-          .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
-          .join("\r\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const headers = ["Data","Título","Canal","Localização","Categoria","Estado","Duração (min)","Criado por","Atualizado por","Notas"];
+      const rows = tasks.map((t) => [t.date||"",t.title||"",t.channel||"",t.location||"",t.category||"",t.status||"",t.duration||"",t.createdByName||"",t.lastUpdatedByName||"",(t.notes||"").replace(/[\r\n]+/g," ")]);
+      const csv = "\uFEFF" + [headers,...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g,'""')}"`).join(";")).join("\r\n");
+      const blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
+      a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
     }
+    document.getElementById("btn-export-all").addEventListener("click", () => { exportCSV(Array.from(tasksMap.values()),`tarefas-todas-${new Date().toISOString().slice(0,10)}.csv`); });
+    document.getElementById("btn-export-pending").addEventListener("click", () => { exportCSV(Array.from(tasksMap.values()).filter(t=>t.status!=="Concluído"&&t.status!=="Anulado"),`tarefas-pendentes-${new Date().toISOString().slice(0,10)}.csv`); });
+    document.getElementById("btn-export-backup").addEventListener("click", () => { const blob=new Blob([JSON.stringify(Array.from(tasksMap.values()),null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`backup-tarefas-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url); });
 
-    document.getElementById("btn-export-all").addEventListener("click", () => {
-      exportCSV(Array.from(tasksMap.values()), `tarefas-todas-${new Date().toISOString().slice(0,10)}.csv`);
-    });
-
-    document.getElementById("btn-export-pending").addEventListener("click", () => {
-      const pending = Array.from(tasksMap.values()).filter(
-        (t) => t.status !== "Concluído" && t.status !== "Anulado"
-      );
-      exportCSV(pending, `tarefas-pendentes-${new Date().toISOString().slice(0,10)}.csv`);
-    });
-
-    document.getElementById("btn-export-backup").addEventListener("click", () => {
-      const all = Array.from(tasksMap.values());
-      const blob = new Blob([JSON.stringify(all, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `backup-tarefas-${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-  // FILTRO LIMPAR
-    document.getElementById("filter-clear-btn").addEventListener("click", () => {
-      const filterDate = document.getElementById("filter-date");
-      filterDate.value = "";
-      renderTasks();
-    });
     // AUTH STATE
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
@@ -1983,8 +2190,10 @@ async function deleteTask(id, title) {
         loginView.style.display = "block";
         appView.style.display = "none";
         fabAdd.classList.add("hidden");
+        fabAddIdea.classList.add("hidden");
         if (tasksUnsub) tasksUnsub();
         if (collabUnsub) collabUnsub();
+        if (ideasUnsub) ideasUnsub();
         currentCollaborator = null;
         return;
       }
@@ -1995,6 +2204,7 @@ async function deleteTask(id, title) {
       if (!currentCollaborator) return;
       subscribeCollaborators();
       subscribeTasks();
+      subscribeIdeas();
     });
 
     renderCalendar();
