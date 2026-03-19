@@ -933,11 +933,13 @@
           <button id="filter-clear-btn" class="btn btn-ghost btn-sm">Limpar</button>
         </div>
         <div class="status-filters" id="status-filters"></div>
-                <div id="export-buttons" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
           <button id="btn-export-all" class="btn btn-ghost btn-sm">📋 Todas</button>
           <button id="btn-export-pending" class="btn btn-ghost btn-sm">⏳ Pendentes</button>
           <button id="btn-export-backup" class="btn btn-ghost btn-sm">💾 Backup</button>
         </div>
+
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">Ainda não há ações para este período.</div>
       </div>
@@ -1030,6 +1032,12 @@
           <div class="field-label">Nome</div>
           <input type="text" id="collab-name" required placeholder="ex: Bheatriz" />
         </div>
+
+        <div class="field-group">
+          <div class="field-label">Password</div>
+          <input type="password" id="collab-password" required placeholder="mínimo 6 caracteres" autocomplete="new-password" />
+        </div>
+
 <div class="field-group">
     <div class="field-label">Perfil</div>
     <select id="collab-role-input">
@@ -1778,6 +1786,7 @@ async function deleteTask(id, title) {
 
     function closeCollabModal() {
       collabModalBackdrop.style.display = "none";
+      collabForm.reset();
     }
 
     btnAddCollab.addEventListener("click", openCollabModal);
@@ -1795,7 +1804,11 @@ async function deleteTask(id, title) {
 
   if (!email || !name) return;
 
-  const tempPassword = Math.random().toString(36).slice(2, 10) + "!L1";
+  const tempPassword = document.getElementById("collab-password").value.trim();
+  if (tempPassword.length < 6) {
+    alert("A password deve ter pelo menos 6 caracteres.");
+    return;
+  }
 
   try {
     // 1. Criar utilizador no Firebase Auth
@@ -1815,14 +1828,13 @@ async function deleteTask(id, title) {
     });
 
     alert(
-      `✅ Colaborador criado com sucesso!\n\nEmail: ${email}\nPassword temporária: ${tempPassword}\n\nPartilha estas credenciais com ${name}. Na primeira entrada, devem alterar a password.`
+      `✅ Colaborador criado com sucesso!\n\nEmail: ${email}\nPassword: ${tempPassword}\n\nPartilha estas credenciais com ${name}.`
     );
 
     closeCollabModal();
   } catch (err) {
     alert("Erro ao criar colaborador:\n" + err.message);
   } finally {
-    
   }
 });
 
@@ -1851,54 +1863,48 @@ async function deleteTask(id, title) {
       });
     }
 
-    async function ensureCollaboratorDoc(user) {
-      const uid = user.uid;
-      const email = user.email || "";
+   async function ensureCollaboratorDoc(user) {
+  const uid = user.uid;
+  const email = user.email || "";
 
-      // Consulta directa — nunca cria documentos, só verifica
-      const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
-      const snap = await getDocs(q);
+  // Consultar Firestore diretamente (evita race condition com collabsMap)
+  const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
+  const snap = await getDocs(q);
 
-      if (snap.empty) {
-        await signOut(auth);
-        loginView.style.display = "block";
-        appView.style.display = "none";
-        fabAdd.classList.add("hidden");
-        loginErrorEl.textContent =
-          "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
-        currentCollaborator = null;
-        return;
-      }
+  if (snap.empty) {
+    // Utilizador não existe na app — bloquear acesso
+    await signOut(auth);
+    loginErrorEl.textContent =
+      "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
+    return;
+  }
 
-      const docSnap = snap.docs[0];
-      currentCollaborator = { id: docSnap.id, ...docSnap.data() };
+  const docSnap = snap.docs[0];
+  currentCollaborator = { id: docSnap.id, ...docSnap.data() };
 
-      if (currentCollaborator.active === false) {
-        await signOut(auth);
-        loginView.style.display = "block";
-        appView.style.display = "none";
-        fabAdd.classList.add("hidden");
-        loginErrorEl.textContent =
-          "Utilizador inativo. Contacte a Débora para reativar.";
-        currentCollaborator = null;
-        return;
-      }
+  if (currentCollaborator.active === false) {
+    await signOut(auth);
+    loginErrorEl.textContent =
+      "Utilizador inativo. Contacte a Débora para reativar.";
+    return;
+  }
 
-      const initials = (currentCollaborator.name || email || "FL")
-        .split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+  const initials = (currentCollaborator.name || email || "FL")
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
-      userAvatarEl.textContent = initials;
-      userNameEl.textContent = currentCollaborator.name || email;
-      userRoleEl.textContent =
-        currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
+  userAvatarEl.textContent = initials;
+  userNameEl.textContent = currentCollaborator.name || email;
+  userRoleEl.textContent =
+    currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
-      tabColaboradoresBtn.style.display = "inline-block";
-      btnAddCollab.style.display =
-        currentCollaborator.role === "admin" ? "inline-block" : "none";
-
-      // Redesenha lista com role correcto
-      renderCollaborators();
-    }
+  tabColaboradoresBtn.style.display = "inline-block";
+  btnAddCollab.style.display = currentCollaborator.role === "admin" ? "inline-block" : "none";
+  renderCollaborators();
+}
     async function createFirebaseAuthUser(email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`;
   const resp = await fetch(url, {
@@ -1915,11 +1921,6 @@ async function deleteTask(id, title) {
   return data; // contém localId (= uid do novo utilizador)
 }
 
-    // FILTRO LIMPAR
-    document.getElementById("filter-clear-btn").addEventListener("click", () => {
-      document.getElementById("filter-date").value = "";
-      renderTasks();
-    });
 
     // EXPORTAÇÃO
     function exportCSV(tasks, filename) {
@@ -1973,7 +1974,6 @@ async function deleteTask(id, title) {
     // AUTH STATE
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
-
       if (!user) {
         loginView.style.display = "block";
         appView.style.display = "none";
@@ -1983,15 +1983,11 @@ async function deleteTask(id, title) {
         currentCollaborator = null;
         return;
       }
-
       loginView.style.display = "none";
       appView.style.display = "block";
       fabAdd.classList.remove("hidden");
-
-      // PRIMEIRO: saber quem é → só depois ligar os listeners
       await ensureCollaboratorDoc(user);
-      if (!currentCollaborator) return; // bloqueado (inativo ou não autorizado)
-
+      if (!currentCollaborator) return;
       subscribeCollaborators();
       subscribeTasks();
     });
