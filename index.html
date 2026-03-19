@@ -1970,7 +1970,12 @@ async function deleteTask(id, title) {
       a.click();
       URL.revokeObjectURL(url);
     });
-
+  // FILTRO LIMPAR
+    document.getElementById("filter-clear-btn").addEventListener("click", () => {
+      const filterDate = document.getElementById("filter-date");
+      filterDate.value = "";
+      renderTasks();
+    });
     // AUTH STATE
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
