@@ -933,6 +933,11 @@
           <button id="filter-clear-btn" class="btn btn-ghost btn-sm">Limpar</button>
         </div>
         <div class="status-filters" id="status-filters"></div>
+                <div id="export-buttons" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <button id="btn-export-all" class="btn btn-ghost btn-sm">📋 Todas</button>
+          <button id="btn-export-pending" class="btn btn-ghost btn-sm">⏳ Pendentes</button>
+          <button id="btn-export-backup" class="btn btn-ghost btn-sm">💾 Backup</button>
+        </div>
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">Ainda não há ações para este período.</div>
       </div>
@@ -1817,6 +1822,7 @@ async function deleteTask(id, title) {
   } catch (err) {
     alert("Erro ao criar colaborador:\n" + err.message);
   } finally {
+    
   }
 });
 
@@ -1845,48 +1851,54 @@ async function deleteTask(id, title) {
       });
     }
 
-   async function ensureCollaboratorDoc(user) {
-  const uid = user.uid;
-  const email = user.email || "";
+    async function ensureCollaboratorDoc(user) {
+      const uid = user.uid;
+      const email = user.email || "";
 
-  // Consultar Firestore diretamente (evita race condition com collabsMap)
-  const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
-  const snap = await getDocs(q);
+      // Consulta directa — nunca cria documentos, só verifica
+      const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
+      const snap = await getDocs(q);
 
-  if (snap.empty) {
-    // Utilizador não existe na app — bloquear acesso
-    await signOut(auth);
-    loginErrorEl.textContent =
-      "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
-    return;
-  }
+      if (snap.empty) {
+        await signOut(auth);
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        loginErrorEl.textContent =
+          "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
+        currentCollaborator = null;
+        return;
+      }
 
-  const docSnap = snap.docs[0];
-  currentCollaborator = { id: docSnap.id, ...docSnap.data() };
+      const docSnap = snap.docs[0];
+      currentCollaborator = { id: docSnap.id, ...docSnap.data() };
 
-  if (currentCollaborator.active === false) {
-    await signOut(auth);
-    loginErrorEl.textContent =
-      "Utilizador inativo. Contacte a Débora para reativar.";
-    return;
-  }
+      if (currentCollaborator.active === false) {
+        await signOut(auth);
+        loginView.style.display = "block";
+        appView.style.display = "none";
+        fabAdd.classList.add("hidden");
+        loginErrorEl.textContent =
+          "Utilizador inativo. Contacte a Débora para reativar.";
+        currentCollaborator = null;
+        return;
+      }
 
-  const initials = (currentCollaborator.name || email || "FL")
-    .split(" ")
-    .map((p) => p[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+      const initials = (currentCollaborator.name || email || "FL")
+        .split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 
-  userAvatarEl.textContent = initials;
-  userNameEl.textContent = currentCollaborator.name || email;
-  userRoleEl.textContent =
-    currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
+      userAvatarEl.textContent = initials;
+      userNameEl.textContent = currentCollaborator.name || email;
+      userRoleEl.textContent =
+        currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
-  tabColaboradoresBtn.style.display = "inline-block";
-  btnAddCollab.style.display = currentCollaborator.role === "admin" ? "inline-block" : "none";
-  renderCollaborators();
-}
+      tabColaboradoresBtn.style.display = "inline-block";
+      btnAddCollab.style.display =
+        currentCollaborator.role === "admin" ? "inline-block" : "none";
+
+      // Redesenha lista com role correcto
+      renderCollaborators();
+    }
     async function createFirebaseAuthUser(email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`;
   const resp = await fetch(url, {
@@ -1903,9 +1915,65 @@ async function deleteTask(id, title) {
   return data; // contém localId (= uid do novo utilizador)
 }
 
+    // FILTRO LIMPAR
+    document.getElementById("filter-clear-btn").addEventListener("click", () => {
+      document.getElementById("filter-date").value = "";
+      renderTasks();
+    });
+
+    // EXPORTAÇÃO
+    function exportCSV(tasks, filename) {
+      const headers = ["Data","Título","Canal","Estado","Duração (min)","Criado por","Atualizado por","Notas"];
+      const rows = tasks.map((t) => [
+        t.date || "",
+        t.title || "",
+        t.channel || "",
+        t.status || "",
+        t.duration || "",
+        t.createdByName || "",
+        t.lastUpdatedByName || "",
+        (t.notes || "").replace(/[\r\n]+/g, " "),
+      ]);
+      const csv =
+        "\uFEFF" +
+        [headers, ...rows]
+          .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
+          .join("\r\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("btn-export-all").addEventListener("click", () => {
+      exportCSV(Array.from(tasksMap.values()), `tarefas-todas-${new Date().toISOString().slice(0,10)}.csv`);
+    });
+
+    document.getElementById("btn-export-pending").addEventListener("click", () => {
+      const pending = Array.from(tasksMap.values()).filter(
+        (t) => t.status !== "Concluído" && t.status !== "Anulado"
+      );
+      exportCSV(pending, `tarefas-pendentes-${new Date().toISOString().slice(0,10)}.csv`);
+    });
+
+    document.getElementById("btn-export-backup").addEventListener("click", () => {
+      const all = Array.from(tasksMap.values());
+      const blob = new Blob([JSON.stringify(all, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `backup-tarefas-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
     // AUTH STATE
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
+
       if (!user) {
         loginView.style.display = "block";
         appView.style.display = "none";
@@ -1915,11 +1983,15 @@ async function deleteTask(id, title) {
         currentCollaborator = null;
         return;
       }
+
       loginView.style.display = "none";
       appView.style.display = "block";
       fabAdd.classList.remove("hidden");
+
+      // PRIMEIRO: saber quem é → só depois ligar os listeners
       await ensureCollaboratorDoc(user);
-      if (!currentCollaborator) return;
+      if (!currentCollaborator) return; // bloqueado (inativo ou não autorizado)
+
       subscribeCollaborators();
       subscribeTasks();
     });
