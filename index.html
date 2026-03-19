@@ -858,44 +858,16 @@
     </header>
 
     <!-- LOGIN -->
-<section id="login-view">
-  <div class="card">
-    <div class="card-title">Entrar na área interna</div>
-    <div class="card-subtitle">Email e palavra‑passe.</div>
+    <section id="login-view">
+      <div class="card">
+        <div class="card-title">Entrar na área interna</div>
+        <div class="card-subtitle">Email e palavra‑passe da conta Firebase.</div>
 
-    <form id="login-form">
-      <div class="field-group">
-        <div class="field-label">Email profissional</div>
-        <input
-          type="email"
-          id="login-email"
-          autocomplete="email"
-          required
-          placeholder="ex: bheatriz@farmaciadaliga.pt"
-        />
-      </div>
-
-      <div class="field-group">
-        <div class="field-label">Palavra‑passe</div>
-        <input
-          type="password"
-          id="login-password"
-          autocomplete="current-password"
-          required
-          placeholder="••••••••"
-        />
-      </div>
-
-      <button type="submit" class="btn btn-primary">Entrar</button>
-    </form>
-
-    <div id="login-error" class="login-error"></div>
-
-    <p class="login-hint">
-      Contacte a administração da Farmácia da Liga para acesso.
-    </p>
-  </div>
-</section>
+        <form id="login-form">
+          <div class="field-group">
+            <div class="field-label">Email profissional</div>
+            <input type="email" id="login-email" autocomplete="email" required placeholder="ex: bheatriz@farmaciadaliga.pt" />
+          </div>
 
           <div class="field-group">
             <div class="field-label">Palavra‑passe</div>
@@ -961,11 +933,6 @@
           <button id="filter-clear-btn" class="btn btn-ghost btn-sm">Limpar</button>
         </div>
         <div class="status-filters" id="status-filters"></div>
-                <div id="export-buttons" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-          <button id="btn-export-all" class="btn btn-ghost btn-sm">📋 Todas</button>
-          <button id="btn-export-pending" class="btn btn-ghost btn-sm">⏳ Pendentes</button>
-          <button id="btn-export-backup" class="btn btn-ghost btn-sm">💾 Backup</button>
-        </div>
         <div class="tasks-list" id="tasks-list"></div>
         <div id="tasks-empty" class="empty-state hidden">Ainda não há ações para este período.</div>
       </div>
@@ -1041,7 +1008,7 @@
   </div>
 
   <!-- MODAL NOVO COLABORADOR -->
-  <div class="modal-backdrop" id="collab-modal-backdrop" style="display: none;">
+  <div class="modal-backdrop" id="collab-modal-backdrop">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="collab-modal-title">
       <div class="modal-header">
         <div id="collab-modal-title" class="modal-title">Novo colaborador</div>
@@ -1176,7 +1143,6 @@
     const collabForm = document.getElementById("collab-form");
     const collabEmailInput = document.getElementById("collab-email");
     const collabNameInput = document.getElementById("collab-name");
-    const collabPasswordInput = document.getElementById("collab-password");
 const collabRoleInput = document.getElementById("collab-role-input");
     
     // STATE
@@ -1824,11 +1790,7 @@ async function deleteTask(id, title) {
 
   if (!email || !name) return;
 
-const tempPassword = collabPasswordInput.value.trim();
-if (tempPassword.length < 6) {
-  alert("A password deve ter pelo menos 6 caracteres.");
-  return;
-}
+  const tempPassword = Math.random().toString(36).slice(2, 10) + "!L1";
 
   try {
     // 1. Criar utilizador no Firebase Auth
@@ -1855,7 +1817,6 @@ if (tempPassword.length < 6) {
   } catch (err) {
     alert("Erro ao criar colaborador:\n" + err.message);
   } finally {
-    
   }
 });
 
@@ -1884,54 +1845,48 @@ if (tempPassword.length < 6) {
       });
     }
 
-    async function ensureCollaboratorDoc(user) {
-      const uid = user.uid;
-      const email = user.email || "";
+   async function ensureCollaboratorDoc(user) {
+  const uid = user.uid;
+  const email = user.email || "";
 
-      // Consulta directa — nunca cria documentos, só verifica
-      const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
-      const snap = await getDocs(q);
+  // Consultar Firestore diretamente (evita race condition com collabsMap)
+  const q = query(collection(db, "colaboradores"), where("uid", "==", uid));
+  const snap = await getDocs(q);
 
-      if (snap.empty) {
-        await signOut(auth);
-        loginView.style.display = "block";
-        appView.style.display = "none";
-        fabAdd.classList.add("hidden");
-        loginErrorEl.textContent =
-          "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
-        currentCollaborator = null;
-        return;
-      }
+  if (snap.empty) {
+    // Utilizador não existe na app — bloquear acesso
+    await signOut(auth);
+    loginErrorEl.textContent =
+      "Acesso não autorizado. Peça à administração para o adicionar à equipa.";
+    return;
+  }
 
-      const docSnap = snap.docs[0];
-      currentCollaborator = { id: docSnap.id, ...docSnap.data() };
+  const docSnap = snap.docs[0];
+  currentCollaborator = { id: docSnap.id, ...docSnap.data() };
 
-      if (currentCollaborator.active === false) {
-        await signOut(auth);
-        loginView.style.display = "block";
-        appView.style.display = "none";
-        fabAdd.classList.add("hidden");
-        loginErrorEl.textContent =
-          "Utilizador inativo. Contacte a Débora para reativar.";
-        currentCollaborator = null;
-        return;
-      }
+  if (currentCollaborator.active === false) {
+    await signOut(auth);
+    loginErrorEl.textContent =
+      "Utilizador inativo. Contacte a Débora para reativar.";
+    return;
+  }
 
-      const initials = (currentCollaborator.name || email || "FL")
-        .split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+  const initials = (currentCollaborator.name || email || "FL")
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
-      userAvatarEl.textContent = initials;
-      userNameEl.textContent = currentCollaborator.name || email;
-      userRoleEl.textContent =
-        currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
+  userAvatarEl.textContent = initials;
+  userNameEl.textContent = currentCollaborator.name || email;
+  userRoleEl.textContent =
+    currentCollaborator.role === "admin" ? "Administrador" : "Colaborador";
 
-      tabColaboradoresBtn.style.display = "inline-block";
-      btnAddCollab.style.display =
-        currentCollaborator.role === "admin" ? "inline-block" : "none";
-
-      // Redesenha lista com role correcto
-      renderCollaborators();
-    }
+  tabColaboradoresBtn.style.display = "inline-block";
+  btnAddCollab.style.display = currentCollaborator.role === "admin" ? "inline-block" : "none";
+  renderCollaborators();
+}
     async function createFirebaseAuthUser(email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`;
   const resp = await fetch(url, {
@@ -1948,65 +1903,9 @@ if (tempPassword.length < 6) {
   return data; // contém localId (= uid do novo utilizador)
 }
 
-    // FILTRO LIMPAR
-    document.getElementById("filter-clear-btn").addEventListener("click", () => {
-      document.getElementById("filter-date").value = "";
-      renderTasks();
-    });
-
-    // EXPORTAÇÃO
-    function exportCSV(tasks, filename) {
-      const headers = ["Data","Título","Canal","Estado","Duração (min)","Criado por","Atualizado por","Notas"];
-      const rows = tasks.map((t) => [
-        t.date || "",
-        t.title || "",
-        t.channel || "",
-        t.status || "",
-        t.duration || "",
-        t.createdByName || "",
-        t.lastUpdatedByName || "",
-        (t.notes || "").replace(/[\r\n]+/g, " "),
-      ]);
-      const csv =
-        "\uFEFF" +
-        [headers, ...rows]
-          .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
-          .join("\r\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    document.getElementById("btn-export-all").addEventListener("click", () => {
-      exportCSV(Array.from(tasksMap.values()), `tarefas-todas-${new Date().toISOString().slice(0,10)}.csv`);
-    });
-
-    document.getElementById("btn-export-pending").addEventListener("click", () => {
-      const pending = Array.from(tasksMap.values()).filter(
-        (t) => t.status !== "Concluído" && t.status !== "Anulado"
-      );
-      exportCSV(pending, `tarefas-pendentes-${new Date().toISOString().slice(0,10)}.csv`);
-    });
-
-    document.getElementById("btn-export-backup").addEventListener("click", () => {
-      const all = Array.from(tasksMap.values());
-      const blob = new Blob([JSON.stringify(all, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `backup-tarefas-${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
     // AUTH STATE
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
-
       if (!user) {
         loginView.style.display = "block";
         appView.style.display = "none";
@@ -2016,15 +1915,11 @@ if (tempPassword.length < 6) {
         currentCollaborator = null;
         return;
       }
-
       loginView.style.display = "none";
       appView.style.display = "block";
       fabAdd.classList.remove("hidden");
-
-      // PRIMEIRO: saber quem é → só depois ligar os listeners
       await ensureCollaboratorDoc(user);
-      if (!currentCollaborator) return; // bloqueado (inativo ou não autorizado)
-
+      if (!currentCollaborator) return;
       subscribeCollaborators();
       subscribeTasks();
     });
