@@ -1415,7 +1415,7 @@ const collabRoleInput = document.getElementById("collab-role-input");
         if (isToday) dayEl.classList.add("today");
         if (isSelected) dayEl.classList.add("selected");
 
-        const dateStr = date.toISOString().split("T")[0];
+       const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
         const tasksForDay = Array.from(tasksMap.values()).filter((t) => t.date === dateStr);
         const count = tasksForDay.length;
 
@@ -1474,7 +1474,8 @@ const collabRoleInput = document.getElementById("collab-role-input");
       const tasksForDay = Array.from(tasksMap.values()).filter((t) => t.date === dateStr).sort((a, b) => (a.channel || "").localeCompare(b.channel || ""));
 
       dayDetails.style.display = "block";
-      const d = new Date(dateStr);
+     const [y, m, day] = dateStr.split('-').map(Number);
+const d = new Date(y, m - 1, day); // hora local, sem UTC
       dayDetailsTitle.textContent = `${d.toLocaleDateString("pt-PT", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })}`;
 
       dayEventsList.innerHTML = "";
